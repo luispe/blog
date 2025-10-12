@@ -3,9 +3,8 @@
 &lt;a href="#problema" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;Si solo tenés un martillo todos los problemas se parecen a un clavo&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;¿Por qué comienzo con esta conocida frase?, primero quiero dar un poco de historia y luego
 voy a explicar por qué la menciono.&lt;/p&gt;
-&lt;p&gt;En los equipos de infraestructura en el cual llevo trabajando y liderando
-algunos años tuve la gran fortuna de cruzarme con &lt;a href="https://www.linkedin.com/in/juanjosebehrend/"target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt;.
-Desde el minuto cero le escuché decir, promover y defender a capa y espada:&lt;/p&gt;
+&lt;p&gt;En los equipos de infraestructura en el cual llevo trabajando hace
+algunos años tuve la gran fortuna de cruzarme con personas importantes que siempre me dijeron.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;- Nunca caigamos en un equipo de infraestructura que trabaje mediante pedidos por tickets&lt;/em&gt;&lt;/p&gt;
 &lt;h2&gt;Posicionamiento&lt;span class="hx:absolute hx:-mt-20" id="posicionamiento"&gt;&lt;/span&gt;
 &lt;a href="#posicionamiento" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Cuál es el racional detrás de esta posición firme?&lt;/p&gt;
@@ -26,8 +25,8 @@ En caso de que pase, se lo hace al final de la milla &amp;ldquo;cuando ya todo e
 &lt;p&gt;¿A dónde apunto con esto?, que si al responsable de infraestructura le llegan dos tickets
 y tiene que priorizar por cuestiones de capacidad de ejecución, la pregunta obvia:&lt;/p&gt;
 &lt;p&gt;¿que ticket priorizo?&lt;/p&gt;
-&lt;p&gt;Buena suerte cuando estés ahí, porque para los clientes lo de ellos es lo más importante del
-mundo mundial y es lo más importante por sobre cualquier cosa.&lt;/p&gt;
+&lt;p&gt;Buena suerte cuando estés ahí, porque para los clientes (en este caso equipo interno de tecnología)
+lo de ellos es lo más importante del mundo mundial por sobre cualquier cosa.&lt;/p&gt;
 &lt;h3&gt;2. Crecimiento sin sentido&lt;span class="hx:absolute hx:-mt-20" id="2-crecimiento-sin-sentido"&gt;&lt;/span&gt;
 &lt;a href="#2-crecimiento-sin-sentido" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Supongamos que el punto anterior esta resuelto, de este punto que voy
 a explicar a continuación no se zafa.&lt;/p&gt;
@@ -57,7 +56,7 @@ un proyecto creando infraestructura, es imposible que pueda innovar.&lt;/p&gt;
 &lt;p&gt;A lo largo de post expliqué el racional y los puntos mas importantes en los que va a impactar
 una metodología de tickets para gestión de infraestructura.&lt;/p&gt;
 &lt;p&gt;Y quiero dejar en claro que no está mal trabajar por tickets en un equipo de infraestructura,
-&lt;strong&gt;lo que si está definitivamente mal es que la gestión de infraestructura se haga por tickets&lt;/strong&gt;.&lt;/p&gt;
+&lt;strong&gt;lo que si está definitivamente mal es que la gestión de infraestructura y plataforma se haga por tickets&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;¿Y qué tiene que ver la frase del martillo?, que se implementó mal una metodología ágil en
 muchas empresas con los equipos de infraestructura y &amp;ldquo;debemos parar la pelota&amp;rdquo; para reflexionar
 por qué no están funcionando bien las cosas en muchos lugares.&lt;/p&gt;

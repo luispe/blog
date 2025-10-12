@@ -1,0 +1,62 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Reflection</title><link>https://luispe.github.io/blog/tags/reflection/</link><description>Recent content in Reflection on luispe</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 19 Jun 2024 19:10:20 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/tags/reflection/index.xml" rel="self" type="application/rss+xml"/><item><title>The Ticket Hell</title><link>https://luispe.github.io/blog/posts/ticket-hell/</link><pubDate>Wed, 19 Jun 2024 19:10:20 -0300</pubDate><guid>https://luispe.github.io/blog/posts/ticket-hell/</guid><description>
+&lt;h2&gt;Problem&lt;span class="hx:absolute hx:-mt-20" id="problem"&gt;&lt;/span&gt;
+&lt;a href="#problem" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If all you have is a hammer, everything looks like a nail.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Why do I start with this well-known phrase?
+First, I want to give a bit of background, and then I’ll explain why I mention it.&lt;/p&gt;
+&lt;p&gt;Over the years working with infrastructure teams, I’ve had the great fortune of meeting some very insightful people who have always told me:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;“Never let the infrastructure team operate solely through ticket requests.”&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;Position&lt;span class="hx:absolute hx:-mt-20" id="position"&gt;&lt;/span&gt;
+&lt;a href="#position" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;What’s the rationale behind such a strong stance?&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You need an &lt;strong&gt;extremely strong culture&lt;/strong&gt; from end to end to decide which ticket is more important than another.&lt;/li&gt;
+&lt;li&gt;The &lt;strong&gt;infrastructure team must inherently grow&lt;/strong&gt; as the tech and product teams expand to new features.&lt;/li&gt;
+&lt;li&gt;It’s &lt;strong&gt;extremely difficult to keep the infrastructure team motivated.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Innovation is impossible&lt;/strong&gt; in a ticket-driven infrastructure model.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;There are many other reasons, but these are the most relevant ones — let’s go through each.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;1. Extremely Strong Culture&lt;span class="hx:absolute hx:-mt-20" id="1-extremely-strong-culture"&gt;&lt;/span&gt;
+&lt;a href="#1-extremely-strong-culture" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Infrastructure and QA teams are rarely included in roadmap and sprint planning.
+If they are, it usually happens at the very end — “when everything’s already cooked.”&lt;/p&gt;
+&lt;p&gt;So, when the infrastructure lead receives two tickets and needs to prioritize based on execution capacity, the obvious question arises:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Which ticket should I prioritize?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Good luck with that — because for every internal team (your “clients”), their request will always be &lt;strong&gt;the most important thing in the world.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;2. Meaningless Growth&lt;span class="hx:absolute hx:-mt-20" id="2-meaningless-growth"&gt;&lt;/span&gt;
+&lt;a href="#2-meaningless-growth" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let’s assume the previous issue is somehow solved.
+You still can’t escape this one.&lt;/p&gt;
+&lt;p&gt;Why do we say the infrastructure team &lt;em&gt;must inherently grow&lt;/em&gt;?&lt;/p&gt;
+&lt;p&gt;If you fall into the pattern of having infrastructure handle all ticket requests, then as the company launches more products and features, you’ll need &lt;strong&gt;more infrastructure engineers&lt;/strong&gt; to handle the growing ticket demand.&lt;/p&gt;
+&lt;p&gt;Congratulations — you’ve created an &lt;strong&gt;execution bottleneck.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The “solution”?&lt;/strong&gt; Hire more infrastructure people.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;3. Motivation&lt;span class="hx:absolute hx:-mt-20" id="3-motivation"&gt;&lt;/span&gt;
+&lt;a href="#3-motivation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let’s assume points 1 and 2 are solved.&lt;/p&gt;
+&lt;p&gt;But&amp;hellip; are infrastructure engineers human?
+(They are, last I checked.)&lt;/p&gt;
+&lt;p&gt;It’s hard to stay motivated in a role that &lt;strong&gt;should be driven by creativity&lt;/strong&gt; but instead is reduced to &lt;strong&gt;just closing tickets&lt;/strong&gt; — with no room for questioning or discussion.&lt;/p&gt;
+&lt;p&gt;What happens next?
+High turnover in the infrastructure team and growing frustration among product or tech teams.
+And if those teams happen to be toxic, they might even start labeling infrastructure as &lt;em&gt;slow&lt;/em&gt; or &lt;em&gt;a blocker.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;And what can I say about that?
+&lt;strong&gt;Keep calm — and here’s a big hug.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;4. Innovation&lt;span class="hx:absolute hx:-mt-20" id="4-innovation"&gt;&lt;/span&gt;
+&lt;a href="#4-innovation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Finally, even if the previous three points were somehow resolved, &lt;strong&gt;innovation is still impossible.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Why?
+Because a team that only closes tickets — that only participates reactively in projects to “build infrastructure” — &lt;strong&gt;will never have the space to innovate.&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2&gt;Back to the Beginning&lt;span class="hx:absolute hx:-mt-20" id="back-to-the-beginning"&gt;&lt;/span&gt;
+&lt;a href="#back-to-the-beginning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If all you have is a hammer, everything looks like a nail.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Throughout this post, I’ve explained the reasoning and main consequences of running infrastructure management through tickets.&lt;/p&gt;
+&lt;p&gt;And I want to be clear:
+Working &lt;em&gt;with&lt;/em&gt; tickets in an infrastructure team isn’t necessarily wrong.
+&lt;strong&gt;What’s absolutely wrong is managing infrastructure and platform operations &lt;em&gt;through&lt;/em&gt; tickets.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;So what does the “hammer” metaphor have to do with this?&lt;/p&gt;
+&lt;p&gt;It means that many companies &lt;strong&gt;misapplied agile methodologies&lt;/strong&gt; to their infrastructure teams.
+It’s time to &lt;strong&gt;pause and reflect&lt;/strong&gt; on why things aren’t working well in so many places.&lt;/p&gt;
+&lt;p&gt;How can we avoid it?&lt;/p&gt;
+&lt;p&gt;We must &lt;strong&gt;inject a product mindset into infrastructure teams&lt;/strong&gt; — offering &lt;strong&gt;high-quality abstractions and user experiences&lt;/strong&gt; over the underlying platform chaos, enabling product engineering teams to become &lt;strong&gt;self-sufficient&lt;/strong&gt; in managing their software and its infrastructure.&lt;/p&gt;
+&lt;p&gt;I hope my experience helps you rethink how to build culture and work processes for infrastructure teams within your company.&lt;/p&gt;
+&lt;p&gt;If you have questions or want to discuss any of this, I’d love to connect.&lt;/p&gt;
+&lt;p&gt;See you soon! 👋🏽&lt;/p&gt;</description></item></channel></rss>
