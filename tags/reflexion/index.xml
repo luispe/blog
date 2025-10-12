@@ -1,234 +1,234 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Reflexion</title><link>https://luispe.github.io/blog/tags/reflexion/</link><description>Recent content in Reflexion on luispe</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 19 Jun 2024 19:10:20 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/tags/reflexion/index.xml" rel="self" type="application/rss+xml"/><item><title>The ticket Hell</title><link>https://luispe.github.io/blog/posts/ticket-hell/</link><pubDate>Wed, 19 Jun 2024 19:10:20 -0300</pubDate><guid>https://luispe.github.io/blog/posts/ticket-hell/</guid><description>
-&lt;h2>Problem&lt;span class="hx-absolute -hx-mt-20" id="problem">&lt;/span>
-&lt;a href="#problem" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;em>If you only have a hammer, all problems look like a nail.&lt;/em>&lt;/p>
-&lt;p>Why do I start with this well-known phrase?,
-first I want to give a little history and then I will explain why I mention it.&lt;/p>
-&lt;p>In the infrastructure teams in which I have been working and leading for
-some years I had the great fortune to cross paths with &lt;a href="https://www.linkedin.com/in/juanjosebehrend/" target="_blank" rel="noopener">Juanjo&lt;/a>.
-From minute zero I heard him say, promote and defend him to the hilt:&lt;/p>
-&lt;p>&lt;em>- Never fall into an infrastructure team that works by ticketing orders&lt;/em>&lt;/p>
-&lt;h2>Positioning&lt;span class="hx-absolute -hx-mt-20" id="positioning">&lt;/span>
-&lt;a href="#positioning" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>What is the rationale behind this firm position?&lt;/p>
-&lt;ol>
-&lt;li>You have to have an extremely strong end-to-end culture to be able
-to determine which ticket is more important than another.&lt;/li>
-&lt;li>The infrastructure team inherently has to grow if the technology
-and product team expands into new functionality.&lt;/li>
-&lt;li>It is extremely difficult to keep the infrastructure team motivated.&lt;/li>
-&lt;li>It is impossible to innovate from the infrastructure team.&lt;/li>
-&lt;/ol>
-&lt;p>There are several other reasons, but at this point I consider
-them to be the most important and I will explain each one of them.&lt;/p>
-&lt;h3>1. Extremely strong culture&lt;span class="hx-absolute -hx-mt-20" id="1-extremely-strong-culture">&lt;/span>
-&lt;a href="#1-extremely-strong-culture" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;p>Both infrastructure and QA teams are not usually involved in the roadmap
+&lt;h2&gt;Problem&lt;span class="hx:absolute hx:-mt-20" id="problem"&gt;&lt;/span&gt;
+&lt;a href="#problem" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If you only have a hammer, all problems look like a nail.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Why do I start with this well-known phrase?,
+first I want to give a little history and then I will explain why I mention it.&lt;/p&gt;
+&lt;p&gt;In the infrastructure teams in which I have been working and leading for
+some years I had the great fortune to cross paths with &lt;a href="https://www.linkedin.com/in/juanjosebehrend/"target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt;.
+From minute zero I heard him say, promote and defend him to the hilt:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;- Never fall into an infrastructure team that works by ticketing orders&lt;/em&gt;&lt;/p&gt;
+&lt;h2&gt;Positioning&lt;span class="hx:absolute hx:-mt-20" id="positioning"&gt;&lt;/span&gt;
+&lt;a href="#positioning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;What is the rationale behind this firm position?&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You have to have an extremely strong end-to-end culture to be able
+to determine which ticket is more important than another.&lt;/li&gt;
+&lt;li&gt;The infrastructure team inherently has to grow if the technology
+and product team expands into new functionality.&lt;/li&gt;
+&lt;li&gt;It is extremely difficult to keep the infrastructure team motivated.&lt;/li&gt;
+&lt;li&gt;It is impossible to innovate from the infrastructure team.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;There are several other reasons, but at this point I consider
+them to be the most important and I will explain each one of them.&lt;/p&gt;
+&lt;h3&gt;1. Extremely strong culture&lt;span class="hx:absolute hx:-mt-20" id="1-extremely-strong-culture"&gt;&lt;/span&gt;
+&lt;a href="#1-extremely-strong-culture" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Both infrastructure and QA teams are not usually involved in the roadmap
 and technology and product sprint. In case it happens, it is done at the end of the mile
-&amp;ldquo;when everything is already cooked&amp;rdquo;.&lt;/p>
-&lt;p>Where am I going with this?, that if the infrastructure manager
+&amp;ldquo;when everything is already cooked&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Where am I going with this?, that if the infrastructure manager
 gets two tickets and has to prioritize due to execution capacity issues,
-the obvious question:&lt;/p>
-&lt;p>which ticket do I prioritize?&lt;/p>
-&lt;p>Good luck when you are there, because for customers theirs is the most important
-thing in the world, and it is the most important thing above anything else.&lt;/p>
-&lt;h3>2. Growth without sense&lt;span class="hx-absolute -hx-mt-20" id="2-growth-without-sense">&lt;/span>
-&lt;a href="#2-growth-without-sense" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;p>Let us suppose that the previous point is solved, this point that I am
-going to explain next will not escape.&lt;/p>
-&lt;p>Why do we say that infrastructure equipment inherently has to grow?&lt;/p>
-&lt;p>If we fall into tickets that only the infrastructure team solves,
+the obvious question:&lt;/p&gt;
+&lt;p&gt;which ticket do I prioritize?&lt;/p&gt;
+&lt;p&gt;Good luck when you are there, because for customers theirs is the most important
+thing in the world, and it is the most important thing above anything else.&lt;/p&gt;
+&lt;h3&gt;2. Growth without sense&lt;span class="hx:absolute hx:-mt-20" id="2-growth-without-sense"&gt;&lt;/span&gt;
+&lt;a href="#2-growth-without-sense" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let us suppose that the previous point is solved, this point that I am
+going to explain next will not escape.&lt;/p&gt;
+&lt;p&gt;Why do we say that infrastructure equipment inherently has to grow?&lt;/p&gt;
+&lt;p&gt;If we fall into tickets that only the infrastructure team solves,
 the more products and functionalities the company has, the more people
-are needed from the infrastructure team to attack the demand for tickets.&lt;/p>
-&lt;p>Congratulations, you have created an execution funnel.&lt;/p>
-&lt;p>Solution? hire more talent for the infrastructure team.&lt;/p>
-&lt;h3>3. Motivation&lt;span class="hx-absolute -hx-mt-20" id="3-motivation">&lt;/span>
-&lt;a href="#3-motivation" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;p>Assume that points 1 and 2 are solved.&lt;/p>
-&lt;p>The members of the infrastructure team are human, right?&lt;/p>
-&lt;p>I say this because it is difficult to maintain motivation if &amp;ndash;in a job that is highly creativity-driven&amp;ndash;
-we limit team members to &amp;ldquo;closing tickets&amp;rdquo; without any room for discussion or double-questioning.&lt;/p>
-&lt;p>What can happen, high turnover in the infra team and a discomfort in the technology teams that,
-if they are toxic, can accuse the infra team of blocking or bad experience in infrastructure management.&lt;/p>
-&lt;p>What can I tell you about the latter, Keep Calm and I leave you a big hug.&lt;/p>
-&lt;h3>4. Innovation&lt;span class="hx-absolute -hx-mt-20" id="4-innovation">&lt;/span>
-&lt;a href="#4-innovation" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;p>Finally, if we have solved the previous 3 points, it is impossible to innovate, plain and simple.&lt;/p>
-&lt;p>Why? A team that works simply closing tickets, focused only on participating
-in a project by creating infrastructure, cannot possibly innovate.&lt;/p>
-&lt;h2>Let&amp;rsquo;s go back to the beginning&lt;span class="hx-absolute -hx-mt-20" id="lets-go-back-to-the-beginning">&lt;/span>
-&lt;a href="#lets-go-back-to-the-beginning" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>&lt;em>If you only have a hammer, all problems look like a nail.&lt;/em>&lt;/p>
-&lt;p>Throughout the post I explained the rationale and the most
-important points that a ticketing methodology for infrastructure management will impact.&lt;/p>
-&lt;p>And I want to make it clear that it is not wrong to work by tickets
-in an infrastructure team, &lt;strong>what is definitely wrong is that infrastructure management is done by tickets&lt;/strong>.&lt;/p>
-&lt;p>And what does the hammer phrase? have to do with the fact that an agile methodology
+are needed from the infrastructure team to attack the demand for tickets.&lt;/p&gt;
+&lt;p&gt;Congratulations, you have created an execution funnel.&lt;/p&gt;
+&lt;p&gt;Solution? hire more talent for the infrastructure team.&lt;/p&gt;
+&lt;h3&gt;3. Motivation&lt;span class="hx:absolute hx:-mt-20" id="3-motivation"&gt;&lt;/span&gt;
+&lt;a href="#3-motivation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Assume that points 1 and 2 are solved.&lt;/p&gt;
+&lt;p&gt;The members of the infrastructure team are human, right?&lt;/p&gt;
+&lt;p&gt;I say this because it is difficult to maintain motivation if &amp;ndash;in a job that is highly creativity-driven&amp;ndash;
+we limit team members to &amp;ldquo;closing tickets&amp;rdquo; without any room for discussion or double-questioning.&lt;/p&gt;
+&lt;p&gt;What can happen, high turnover in the infra team and a discomfort in the technology teams that,
+if they are toxic, can accuse the infra team of blocking or bad experience in infrastructure management.&lt;/p&gt;
+&lt;p&gt;What can I tell you about the latter, Keep Calm and I leave you a big hug.&lt;/p&gt;
+&lt;h3&gt;4. Innovation&lt;span class="hx:absolute hx:-mt-20" id="4-innovation"&gt;&lt;/span&gt;
+&lt;a href="#4-innovation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Finally, if we have solved the previous 3 points, it is impossible to innovate, plain and simple.&lt;/p&gt;
+&lt;p&gt;Why? A team that works simply closing tickets, focused only on participating
+in a project by creating infrastructure, cannot possibly innovate.&lt;/p&gt;
+&lt;h2&gt;Let&amp;rsquo;s go back to the beginning&lt;span class="hx:absolute hx:-mt-20" id="lets-go-back-to-the-beginning"&gt;&lt;/span&gt;
+&lt;a href="#lets-go-back-to-the-beginning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If you only have a hammer, all problems look like a nail.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Throughout the post I explained the rationale and the most
+important points that a ticketing methodology for infrastructure management will impact.&lt;/p&gt;
+&lt;p&gt;And I want to make it clear that it is not wrong to work by tickets
+in an infrastructure team, &lt;strong&gt;what is definitely wrong is that infrastructure management is done by tickets&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;And what does the hammer phrase? have to do with the fact that an agile methodology
 was poorly implemented in many companies with the infrastructure teams
-and &amp;ldquo;we must stop the ball&amp;rdquo; to reflect on why things are not working well in many places.&lt;/p>
-&lt;p>And how can we avoid it?&lt;/p>
-&lt;p>We must inject a product mindset into infrastructure teams, provide abstractions
+and &amp;ldquo;we must stop the ball&amp;rdquo; to reflect on why things are not working well in many places.&lt;/p&gt;
+&lt;p&gt;And how can we avoid it?&lt;/p&gt;
+&lt;p&gt;We must inject a product mindset into infrastructure teams, provide abstractions
 with top-level experiences of the underlying platform chaos so that
-product technology teams are self-sufficient in managing the software and associated infrastructure.&lt;/p>
-&lt;p>I hope my experience will make you rethink how to form culture and work processes
+product technology teams are self-sufficient in managing the software and associated infrastructure.&lt;/p&gt;
+&lt;p&gt;I hope my experience will make you rethink how to form culture and work processes
 for infrastructure teams in the company if you have questions or
-need to discuss anything of what I wrote I am happy to meet you :)&lt;/p>
-&lt;p>¡Have a good time! 👋🏽&lt;/p></description></item><item><title>Anniversaries</title><link>https://luispe.github.io/blog/posts/career/</link><pubDate>Fri, 02 Sep 2022 19:11:03 -0300</pubDate><guid>https://luispe.github.io/blog/posts/career/</guid><description>
-&lt;p>Anniversaries, be it a birthday, the end of the year or whatever, generally lead one to reflect.&lt;/p>
-&lt;p>This case would not be the exception, what is the anniversary, less than a month ago i completed
-one year in my current company (&lt;a href="https://www.linkedin.com/company/pomelo-latam/mycompany/" target="_blank" rel="noopener">Pomelo&lt;/a>),
+need to discuss anything of what I wrote I am happy to meet you :)&lt;/p&gt;
+&lt;p&gt;¡Have a good time! 👋🏽&lt;/p&gt;</description></item><item><title>Anniversaries</title><link>https://luispe.github.io/blog/posts/career/</link><pubDate>Fri, 02 Sep 2022 19:11:03 -0300</pubDate><guid>https://luispe.github.io/blog/posts/career/</guid><description>
+&lt;p&gt;Anniversaries, be it a birthday, the end of the year or whatever, generally lead one to reflect.&lt;/p&gt;
+&lt;p&gt;This case would not be the exception, what is the anniversary, less than a month ago i completed
+one year in my current company (&lt;a href="https://www.linkedin.com/company/pomelo-latam/mycompany/"target="_blank" rel="noopener"&gt;Pomelo&lt;/a&gt;),
 August 29, 2022 the promotions in the company were made public, I am part of the people who were promoted,
-I wanted to write some conclusions that I have drawn from these 365 days, two teams and a promotion.&lt;/p>
-&lt;h2>Pillars&lt;span class="hx-absolute -hx-mt-20" id="pillars">&lt;/span>
-&lt;a href="#pillars" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Those who know me whether in my work or in my personal life, hear me talk about three principles
-with which I try to mobilize myself and i search around me:&lt;/p>
-&lt;ol>
-&lt;li>Trust&lt;/li>
-&lt;li>Humility&lt;/li>
-&lt;li>Respect&lt;/li>
-&lt;/ol>
-&lt;h3>Trust&lt;span class="hx-absolute -hx-mt-20" id="trust">&lt;/span>
-&lt;a href="#trust" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h3>&lt;p>I will try to explain what this pillar means to me.&lt;/p>
-&lt;p>In one of &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/" target="_blank" rel="noopener">my first publications&lt;/a> where I talk about
+I wanted to write some conclusions that I have drawn from these 365 days, two teams and a promotion.&lt;/p&gt;
+&lt;h2&gt;Pillars&lt;span class="hx:absolute hx:-mt-20" id="pillars"&gt;&lt;/span&gt;
+&lt;a href="#pillars" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Those who know me whether in my work or in my personal life, hear me talk about three principles
+with which I try to mobilize myself and i search around me:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Trust&lt;/li&gt;
+&lt;li&gt;Humility&lt;/li&gt;
+&lt;li&gt;Respect&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Trust&lt;span class="hx:absolute hx:-mt-20" id="trust"&gt;&lt;/span&gt;
+&lt;a href="#trust" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;I will try to explain what this pillar means to me.&lt;/p&gt;
+&lt;p&gt;In one of &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;my first publications&lt;/a&gt; where I talk about
 mistakes and learnings, I talk about the fact that moving up should not be the only or main goal, there are much,
-much more important things and confidence is one of them.&lt;/p>
-&lt;p>Ok luispi, but what does that have to do with trust?, here we go.&lt;/p>
-&lt;h4>Beginnings&lt;span class="hx-absolute -hx-mt-20" id="beginnings">&lt;/span>
-&lt;a href="#beginnings" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>My first approach to Pomelo was through &lt;a href="https://www.linkedin.com/in/marumoran/" target="_blank" rel="noopener">Maru&lt;/a>, we already knew each other,
+much more important things and confidence is one of them.&lt;/p&gt;
+&lt;p&gt;Ok luispi, but what does that have to do with trust?, here we go.&lt;/p&gt;
+&lt;h4&gt;Beginnings&lt;span class="hx:absolute hx:-mt-20" id="beginnings"&gt;&lt;/span&gt;
+&lt;a href="#beginnings" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;My first approach to Pomelo was through &lt;a href="https://www.linkedin.com/in/marumoran/"target="_blank" rel="noopener"&gt;Maru&lt;/a&gt;, we already knew each other,
 Maru was the one who did the hiring process when I joined MercadoLibre, then we were close to meet again
 in Naranja X, but the impasse served well to meet again professionally in Pomelo,
-I tell this precisely because of the term of &lt;strong>trust&lt;/strong>.&lt;/p>
-&lt;p>Do you think Maru would have trusted me not just once, but twice, I don&amp;rsquo;t think so, she is an absolutely
+I tell this precisely because of the term of &lt;strong&gt;trust&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Do you think Maru would have trusted me not just once, but twice, I don&amp;rsquo;t think so, she is an absolutely
 admirable person in building technology teams, and that trust we have in each other makes her trust me again and again
-and call me back:&lt;/p>
-&lt;ul>
-&lt;li>Maru trusts me again and again and calls me back.&lt;/li>
-&lt;li>On my side, I take that trust and build (or try to build) the best possible work context.&lt;/li>
-&lt;/ul>
-&lt;h4>Meeting and mismatching&lt;span class="hx-absolute -hx-mt-20" id="meeting-and-mismatching">&lt;/span>
-&lt;a href="#meeting-and-mismatching" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>In the more than 365 days that I have been in Pomelo I worked almost half of the time in the Processor team,
-I met again with familiar faces and met some new ones, I will name them, first the anecdote.&lt;/p>
-&lt;p>I was at the Processor for a little more than 5 months, we reached the milestone (madness) of having
+and call me back:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Maru trusts me again and again and calls me back.&lt;/li&gt;
+&lt;li&gt;On my side, I take that trust and build (or try to build) the best possible work context.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Meeting and mismatching&lt;span class="hx:absolute hx:-mt-20" id="meeting-and-mismatching"&gt;&lt;/span&gt;
+&lt;a href="#meeting-and-mismatching" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;In the more than 365 days that I have been in Pomelo I worked almost half of the time in the Processor team,
+I met again with familiar faces and met some new ones, I will name them, first the anecdote.&lt;/p&gt;
+&lt;p&gt;I was at the Processor for a little more than 5 months, we reached the milestone (madness) of having
 the processor up and running and then in mid-January 2022 I moved to the infra team.
 Here two pillars were played, trust and respect, why I say this, the guys knew where I wanted to direct
-my career and supported me 100%.&lt;/p>
-&lt;p>However, 7 months later they showed me that they are people in which I will trust infinitely beyond Pomelo,
-these people are: &lt;a href="https://www.linkedin.com/in/victoria-rodr%C3%ADguez-brizi-61639a55/" target="_blank" rel="noopener">Brizi&lt;/a>,
-&lt;a href="https://www.linkedin.com/in/damian-tundis/" target="_blank" rel="noopener">Dami&lt;/a> and &lt;a href="https://www.linkedin.com/in/nsarfati/" target="_blank" rel="noopener">Nico&lt;/a>,
-I will not tell the details they know what I mean, but I wanted to thank them publicly ❤️.&lt;/p>
-&lt;h4>With you, to the war with a toothpick&lt;span class="hx-absolute -hx-mt-20" id="with-you-to-the-war-with-a-toothpick">&lt;/span>
-&lt;a href="#with-you-to-the-war-with-a-toothpick" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h4>&lt;p>I talked about my first stage in Pomelo, let&amp;rsquo;s move on to the second, &amp;ldquo;Migration to the Infrastructure team&amp;rdquo;.&lt;/p>
-&lt;p>From January to this part and from minute zero &lt;a href="https://www.linkedin.com/in/juanjosebehrend/" target="_blank" rel="noopener">Juanjo&lt;/a> and &lt;a href="https://www.linkedin.com/in/gustavo-adrian-gimenez-4894589b/" target="_blank" rel="noopener">Gus&lt;/a>
+my career and supported me 100%.&lt;/p&gt;
+&lt;p&gt;However, 7 months later they showed me that they are people in which I will trust infinitely beyond Pomelo,
+these people are: &lt;a href="https://www.linkedin.com/in/victoria-rodr%C3%ADguez-brizi-61639a55/"target="_blank" rel="noopener"&gt;Brizi&lt;/a&gt;,
+&lt;a href="https://www.linkedin.com/in/damian-tundis/"target="_blank" rel="noopener"&gt;Dami&lt;/a&gt; and &lt;a href="https://www.linkedin.com/in/nsarfati/"target="_blank" rel="noopener"&gt;Nico&lt;/a&gt;,
+I will not tell the details they know what I mean, but I wanted to thank them publicly ❤️.&lt;/p&gt;
+&lt;h4&gt;With you, to the war with a toothpick&lt;span class="hx:absolute hx:-mt-20" id="with-you-to-the-war-with-a-toothpick"&gt;&lt;/span&gt;
+&lt;a href="#with-you-to-the-war-with-a-toothpick" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;I talked about my first stage in Pomelo, let&amp;rsquo;s move on to the second, &amp;ldquo;Migration to the Infrastructure team&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;From January to this part and from minute zero &lt;a href="https://www.linkedin.com/in/juanjosebehrend/"target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt; and &lt;a href="https://www.linkedin.com/in/gustavo-adrian-gimenez-4894589b/"target="_blank" rel="noopener"&gt;Gus&lt;/a&gt;
 and knowing me, I would say nothing, gave me the space to create a space for debates and cross-examination.
 They listened to my proposals, made them their own, and together we carried them forward,
 they made parts of theirs I took them as my own and so surrounded by a pile of people with a
-human quality of another planet we did and we are doing incredible things.&lt;/p>
-&lt;p>What is the point of all this, that getting promoted is not the main or only goal, building trust around
+human quality of another planet we did and we are doing incredible things.&lt;/p&gt;
+&lt;p&gt;What is the point of all this, that getting promoted is not the main or only goal, building trust around
 you is countless times more important and is, at least in the values I pursue and seek, infinitely superior
-to any position we hold or obtain. any position we hold or obtain.&lt;/p>
-&lt;p>For now I do not want to bore or extend, soon I will write about the other two pillars that I feel
-indispensable to walk through life, humility and respect.&lt;/p></description></item><item><title>Technical debt</title><link>https://luispe.github.io/blog/posts/technical-debt/</link><pubDate>Sat, 02 Jul 2022 16:36:17 -0300</pubDate><guid>https://luispe.github.io/blog/posts/technical-debt/</guid><description>
-&lt;p>In the following post we will rethink a concept commonly encountered and endorsed
-in the technology industry, technical debt.&lt;/p>
-&lt;h2>Different yardstick&lt;span class="hx-absolute -hx-mt-20" id="different-yardstick">&lt;/span>
-&lt;a href="#different-yardstick" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>Let&amp;rsquo;s imagine that we need to paint the exterior of our house, and we decide to hire a professional to do the job.&lt;/p>
-&lt;p>After consulting several quotes we decided to hire the services of &amp;ldquo;x&amp;rdquo; to take care of the job.&lt;/p>
-&lt;p>After a few days &amp;ldquo;x&amp;rdquo; tells us:&lt;/p>
-&lt;p>- The work is finished.&lt;/p>
-&lt;p>We stood at the front of the house and noticed that around the window frames it is unpainted in some cases.&lt;/p>
-&lt;p>Noticing this, we ask &amp;ldquo;x&amp;rdquo; why he did not paint around the window frames, to which he responds:&lt;/p>
-&lt;p>- Sorry, it is a technical debt that I can attack in the future.&lt;/p>
-&lt;p>How would you feel if you encountered such a situation?&lt;/p>
-&lt;p>Why in the context of technology do we endorse having technical debt?&lt;/p>
-&lt;h2>Rethink&lt;span class="hx-absolute -hx-mt-20" id="rethink">&lt;/span>
-&lt;a href="#rethink" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>In technology, it is very common to encounter this scenario, and unfortunately we naturalize it and as
-I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/" target="_blank" rel="noopener">previous publication&lt;/a>
+to any position we hold or obtain. any position we hold or obtain.&lt;/p&gt;
+&lt;p&gt;For now I do not want to bore or extend, soon I will write about the other two pillars that I feel
+indispensable to walk through life, humility and respect.&lt;/p&gt;</description></item><item><title>Technical debt</title><link>https://luispe.github.io/blog/posts/technical-debt/</link><pubDate>Sat, 02 Jul 2022 16:36:17 -0300</pubDate><guid>https://luispe.github.io/blog/posts/technical-debt/</guid><description>
+&lt;p&gt;In the following post we will rethink a concept commonly encountered and endorsed
+in the technology industry, technical debt.&lt;/p&gt;
+&lt;h2&gt;Different yardstick&lt;span class="hx:absolute hx:-mt-20" id="different-yardstick"&gt;&lt;/span&gt;
+&lt;a href="#different-yardstick" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s imagine that we need to paint the exterior of our house, and we decide to hire a professional to do the job.&lt;/p&gt;
+&lt;p&gt;After consulting several quotes we decided to hire the services of &amp;ldquo;x&amp;rdquo; to take care of the job.&lt;/p&gt;
+&lt;p&gt;After a few days &amp;ldquo;x&amp;rdquo; tells us:&lt;/p&gt;
+&lt;p&gt;- The work is finished.&lt;/p&gt;
+&lt;p&gt;We stood at the front of the house and noticed that around the window frames it is unpainted in some cases.&lt;/p&gt;
+&lt;p&gt;Noticing this, we ask &amp;ldquo;x&amp;rdquo; why he did not paint around the window frames, to which he responds:&lt;/p&gt;
+&lt;p&gt;- Sorry, it is a technical debt that I can attack in the future.&lt;/p&gt;
+&lt;p&gt;How would you feel if you encountered such a situation?&lt;/p&gt;
+&lt;p&gt;Why in the context of technology do we endorse having technical debt?&lt;/p&gt;
+&lt;h2&gt;Rethink&lt;span class="hx:absolute hx:-mt-20" id="rethink"&gt;&lt;/span&gt;
+&lt;a href="#rethink" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In technology, it is very common to encounter this scenario, and unfortunately we naturalize it and as
+I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;previous publication&lt;/a&gt;
 where I talk among other things about the importance of documenting and testing, it is something common that
 I always see as &amp;ldquo;technical debt&amp;rdquo;, rethinking the example of painting the house I think it exposes
-how we can have &amp;ldquo;different yardsticks&amp;rdquo; to measure the same situation in different contexts.&lt;/p>
-&lt;p>Why is technical debt harmful?&lt;/p>
-&lt;ul>
-&lt;li>In test context: it is extremely difficult to make changes without exploding everything.&lt;/li>
-&lt;li>In context of documentation: it is extremely difficult to add functionality because the lack of
-documentation causes us to waste an enormous amount of time trying to understand how things are built.&lt;/li>
-&lt;li>In a team context: having technical debt means that the knowledge stays with the people and we should always,
-always encourage knowledge to be distributed.&lt;/li>
-&lt;/ul>
-&lt;h2>Conclusions&lt;span class="hx-absolute -hx-mt-20" id="conclusions">&lt;/span>
-&lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;p>The technical debt is very exhausting for the teams and where today we think we are gaining time,
-I assure you that soon, very soon, we will lose agility and speed in the development.&lt;/p>
-&lt;p>It can be avoided in most cases, and we do not accept it as a matter of course.&lt;/p>
-&lt;p>Finally, I hope that we will rethink together the &amp;ldquo;technical debt&amp;rdquo; and that we will be uncomfortable with it.&lt;/p>
-&lt;p>Thank you for reading! 👋🏽&lt;/p></description></item><item><title>You learn from your mistakes, and if you share them, you grow.</title><link>https://luispe.github.io/blog/posts/mistakes-and-learnings/</link><pubDate>Sun, 05 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/posts/mistakes-and-learnings/</guid><description>
-&lt;p>In our society in general and in technology in particular, we have the strange habit of publishing success
-stories (opinion of the writer, wrongly called &lt;strong>successful case&lt;/strong>) and few, if any, occasions where
-mistakes are shared (opinion of the writer, wrongly called &lt;strong>failure&lt;/strong>).&lt;/p>
-&lt;p>As you might be suspecting below I am going to share some mistakes, which I learned from them and even more how much
-I grew and understood about the industry by sharing them.&lt;/p>
-&lt;h2>Lesson 1:&lt;span class="hx-absolute -hx-mt-20" id="lesson-1">&lt;/span>
-&lt;a href="#lesson-1" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;blockquote>
-&lt;p>Write a step-by-step, share it, validate and re-validate it before executing anything&lt;/p>
-&lt;/blockquote>
-&lt;p>My first productive development was in 2012 (?) approximately, it was a website for a company that needed to publish
-its product catalog, I list technologies to have some context:&lt;/p>
-&lt;ul>
-&lt;li>digitalocean, just released, in addition to the droplets, I don&amp;rsquo;t know how many more products I had in my portfolio&lt;/li>
-&lt;li>angular js (angular 1)&lt;/li>
-&lt;li>I think nodeJS for the backend&lt;/li>
-&lt;/ul>
-&lt;p>This development was done with one of the people I respect and admire the most, Victor De Grandis -Vitor-.&lt;/p>
-&lt;p>My experience configuring servers was null, I had the delirious idea of telling Vitor:&lt;/p>
-&lt;p>_my friend, can I set up the server, and then you try to break it?&lt;/p>
-&lt;p>Then I started to make several configurations, among them, I started to play with the ports, until I proudly told him:&lt;/p>
-&lt;p>&lt;em>Vitor, try to see what happens&lt;/em>.&lt;/p>
-&lt;p>After a while I receive a message,&lt;/p>
-&lt;p>&lt;em>my friend, could it be that you closed port 22?&lt;/em>&lt;/p>
-&lt;p>Beautiful, I left the house, locked the door and threw the key into a pond.&lt;/p>
-&lt;p>As the digitalocean people are prepared for people like this writer, they have a feature that if accessed
-from the web (I have no idea how to solve it from behind) you can run a terminal in the browser and access the droplet.&lt;/p>
-&lt;p>I reconfigured the ports, and the rest is history.&lt;/p>
-&lt;h2>Lesson 2:&lt;span class="hx-absolute -hx-mt-20" id="lesson-2">&lt;/span>
-&lt;a href="#lesson-2" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;blockquote>
-&lt;p>Document knowledge, no matter how trivial we consider it, and invite others to do the same.
-In addition to avoiding several &amp;ldquo;knowledge transfer&amp;rdquo; meetings, we will save several arrobas, remind you anything?&lt;/p>
-&lt;p>@fulanito may be able to help you&lt;/p>
-&lt;/blockquote>
-&lt;p>In another team that I had the fortune to work in, small in number of people but from which I learned a lot,
-a lot from each one of them, unfortunately the adventure was very short in time.&lt;/p>
-&lt;p>What I did find very strange as one by one people were leaving the team is that we were losing a lot of knowledge
+how we can have &amp;ldquo;different yardsticks&amp;rdquo; to measure the same situation in different contexts.&lt;/p&gt;
+&lt;p&gt;Why is technical debt harmful?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;In test context: it is extremely difficult to make changes without exploding everything.&lt;/li&gt;
+&lt;li&gt;In context of documentation: it is extremely difficult to add functionality because the lack of
+documentation causes us to waste an enormous amount of time trying to understand how things are built.&lt;/li&gt;
+&lt;li&gt;In a team context: having technical debt means that the knowledge stays with the people and we should always,
+always encourage knowledge to be distributed.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The technical debt is very exhausting for the teams and where today we think we are gaining time,
+I assure you that soon, very soon, we will lose agility and speed in the development.&lt;/p&gt;
+&lt;p&gt;It can be avoided in most cases, and we do not accept it as a matter of course.&lt;/p&gt;
+&lt;p&gt;Finally, I hope that we will rethink together the &amp;ldquo;technical debt&amp;rdquo; and that we will be uncomfortable with it.&lt;/p&gt;
+&lt;p&gt;Thank you for reading! 👋🏽&lt;/p&gt;</description></item><item><title>You learn from your mistakes, and if you share them, you grow.</title><link>https://luispe.github.io/blog/posts/mistakes-and-learnings/</link><pubDate>Sun, 05 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/posts/mistakes-and-learnings/</guid><description>
+&lt;p&gt;In our society in general and in technology in particular, we have the strange habit of publishing success
+stories (opinion of the writer, wrongly called &lt;strong&gt;successful case&lt;/strong&gt;) and few, if any, occasions where
+mistakes are shared (opinion of the writer, wrongly called &lt;strong&gt;failure&lt;/strong&gt;).&lt;/p&gt;
+&lt;p&gt;As you might be suspecting below I am going to share some mistakes, which I learned from them and even more how much
+I grew and understood about the industry by sharing them.&lt;/p&gt;
+&lt;h2&gt;Lesson 1:&lt;span class="hx:absolute hx:-mt-20" id="lesson-1"&gt;&lt;/span&gt;
+&lt;a href="#lesson-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Write a step-by-step, share it, validate and re-validate it before executing anything&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;My first productive development was in 2012 (?) approximately, it was a website for a company that needed to publish
+its product catalog, I list technologies to have some context:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;digitalocean, just released, in addition to the droplets, I don&amp;rsquo;t know how many more products I had in my portfolio&lt;/li&gt;
+&lt;li&gt;angular js (angular 1)&lt;/li&gt;
+&lt;li&gt;I think nodeJS for the backend&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This development was done with one of the people I respect and admire the most, Victor De Grandis -Vitor-.&lt;/p&gt;
+&lt;p&gt;My experience configuring servers was null, I had the delirious idea of telling Vitor:&lt;/p&gt;
+&lt;p&gt;_my friend, can I set up the server, and then you try to break it?&lt;/p&gt;
+&lt;p&gt;Then I started to make several configurations, among them, I started to play with the ports, until I proudly told him:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Vitor, try to see what happens&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;After a while I receive a message,&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;my friend, could it be that you closed port 22?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Beautiful, I left the house, locked the door and threw the key into a pond.&lt;/p&gt;
+&lt;p&gt;As the digitalocean people are prepared for people like this writer, they have a feature that if accessed
+from the web (I have no idea how to solve it from behind) you can run a terminal in the browser and access the droplet.&lt;/p&gt;
+&lt;p&gt;I reconfigured the ports, and the rest is history.&lt;/p&gt;
+&lt;h2&gt;Lesson 2:&lt;span class="hx:absolute hx:-mt-20" id="lesson-2"&gt;&lt;/span&gt;
+&lt;a href="#lesson-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Document knowledge, no matter how trivial we consider it, and invite others to do the same.
+In addition to avoiding several &amp;ldquo;knowledge transfer&amp;rdquo; meetings, we will save several arrobas, remind you anything?&lt;/p&gt;
+&lt;p&gt;@fulanito may be able to help you&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;In another team that I had the fortune to work in, small in number of people but from which I learned a lot,
+a lot from each one of them, unfortunately the adventure was very short in time.&lt;/p&gt;
+&lt;p&gt;What I did find very strange as one by one people were leaving the team is that we were losing a lot of knowledge
 to the point of stopping engines (literally) and going weeks without delivering features to production because
-we had to sit down and figure out how to leave that local line of code and expose it to the internet.&lt;/p>
-&lt;p>What mistakes did I detect and what did I learn?&lt;/p>
-&lt;p>Document knowledge, however trivial we may consider it, document it.&lt;/p>
-&lt;p>Or perhaps, and I invite you to think for a few seconds, did you find yourself one or more times holding
-&amp;ldquo;knowledge transfer&amp;rdquo; meetings because someone was leaving the team?&lt;/p>
-&lt;p>Or was it you who was leaving him?&lt;/p>
-&lt;h2>Lesson 3:&lt;span class="hx-absolute -hx-mt-20" id="lesson-3">&lt;/span>
-&lt;a href="#lesson-3" class="subheading-anchor" aria-label="Permalink for this section">&lt;/a>&lt;/h2>&lt;blockquote>
-&lt;p>Job promotions should not be the only or the main objective, but the guide should be to share and acquire knowledge.&lt;/p>
-&lt;p>Lesson 3 bis:&lt;/p>
-&lt;p>Thinking and testing before implementing anything is a fundamental guide to understanding the behavior
-of our systems or the domain knowledge we have so far. Always, and let&amp;rsquo;s repeat, &lt;strong>always&lt;/strong>, it is a gain in time.&lt;/p>
-&lt;/blockquote>
-&lt;p>Finally, and in another place I worked, I met one of the best problem solvers,
-&lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener">Juan Moreno&lt;/a>, what is better for me, simple solutions to complex problems.&lt;/p>
-&lt;p>After this small parenthesis and dedication to the one who today is one of my sources
-of consultation, reference and mentor, I am going to try to explain teaching number 3 and 3 bis.&lt;/p>
-&lt;p>In pre-pandemic times, I used to - a habit I still have from afar - start early, having a couple of hours &amp;ldquo;alone&amp;rdquo;
-allows me to focus and prioritize as much as possible the things I want to do and have committed to do.&lt;/p>
-&lt;p>One of those mornings and as a consequence of a functionality that we were developing in the team,
+we had to sit down and figure out how to leave that local line of code and expose it to the internet.&lt;/p&gt;
+&lt;p&gt;What mistakes did I detect and what did I learn?&lt;/p&gt;
+&lt;p&gt;Document knowledge, however trivial we may consider it, document it.&lt;/p&gt;
+&lt;p&gt;Or perhaps, and I invite you to think for a few seconds, did you find yourself one or more times holding
+&amp;ldquo;knowledge transfer&amp;rdquo; meetings because someone was leaving the team?&lt;/p&gt;
+&lt;p&gt;Or was it you who was leaving him?&lt;/p&gt;
+&lt;h2&gt;Lesson 3:&lt;span class="hx:absolute hx:-mt-20" id="lesson-3"&gt;&lt;/span&gt;
+&lt;a href="#lesson-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;Job promotions should not be the only or the main objective, but the guide should be to share and acquire knowledge.&lt;/p&gt;
+&lt;p&gt;Lesson 3 bis:&lt;/p&gt;
+&lt;p&gt;Thinking and testing before implementing anything is a fundamental guide to understanding the behavior
+of our systems or the domain knowledge we have so far. Always, and let&amp;rsquo;s repeat, &lt;strong&gt;always&lt;/strong&gt;, it is a gain in time.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Finally, and in another place I worked, I met one of the best problem solvers,
+&lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;Juan Moreno&lt;/a&gt;, what is better for me, simple solutions to complex problems.&lt;/p&gt;
+&lt;p&gt;After this small parenthesis and dedication to the one who today is one of my sources
+of consultation, reference and mentor, I am going to try to explain teaching number 3 and 3 bis.&lt;/p&gt;
+&lt;p&gt;In pre-pandemic times, I used to - a habit I still have from afar - start early, having a couple of hours &amp;ldquo;alone&amp;rdquo;
+allows me to focus and prioritize as much as possible the things I want to do and have committed to do.&lt;/p&gt;
+&lt;p&gt;One of those mornings and as a consequence of a functionality that we were developing in the team,
 the leader arrived a little angry (to be kind) and grabbed the first ones he found from the team,
 thus being able to vent his anger because he had &amp;ldquo;looked bad&amp;rdquo; to his superiors because of all the casuistry
-there was a case that broke.&lt;/p>
-&lt;p>Famous &lt;em>Take a breath&lt;/em> and after a few minutes I joined him alone, I asked him a question:&lt;/p>
-&lt;p>&lt;em>how many people are involved in this functionality?&lt;/em>&lt;/p>
-&lt;p>He understood with the question that he should have waited and told the whole team responsible what had happened
-and not grabbed the first people who crossed his path.&lt;/p>
-&lt;p>Finally, I told him that I understood but did not share his anger or how he had handled it.&lt;/p>
-&lt;p>I want to clarify that my intention is not to judge, but to share that I learned from that mistake, again:&lt;/p>
-&lt;blockquote>
-&lt;p>Job promotions should not be the only or main goal, you run the risk of being under enormous
-pressure not to rise to the occasion. Sharing and acquiring knowledge should be the guide.&lt;/p>
-&lt;p>Thinking and testing before implementing anything is the fundamental guide to understanding the behavior
+there was a case that broke.&lt;/p&gt;
+&lt;p&gt;Famous &lt;em&gt;Take a breath&lt;/em&gt; and after a few minutes I joined him alone, I asked him a question:&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;how many people are involved in this functionality?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;He understood with the question that he should have waited and told the whole team responsible what had happened
+and not grabbed the first people who crossed his path.&lt;/p&gt;
+&lt;p&gt;Finally, I told him that I understood but did not share his anger or how he had handled it.&lt;/p&gt;
+&lt;p&gt;I want to clarify that my intention is not to judge, but to share that I learned from that mistake, again:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Job promotions should not be the only or main goal, you run the risk of being under enormous
+pressure not to rise to the occasion. Sharing and acquiring knowledge should be the guide.&lt;/p&gt;
+&lt;p&gt;Thinking and testing before implementing anything is the fundamental guide to understanding the behavior
 of our systems or the domain knowledge we have so far.
-Always, and let&amp;rsquo;s repeat, &lt;strong>always&lt;/strong>, it is a gain in time.&lt;/p>
-&lt;/blockquote>
-&lt;p>To conclude, I understand that I will continue to make mistakes and share the experience they left me with,
-that does not make me any worse or better than anyone else.&lt;/p>
-&lt;p>I am convinced that it is a healthy way of going through life where the &amp;ldquo;normal&amp;rdquo; thing to do is to be &amp;ldquo;successful&amp;rdquo;
+Always, and let&amp;rsquo;s repeat, &lt;strong&gt;always&lt;/strong&gt;, it is a gain in time.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;To conclude, I understand that I will continue to make mistakes and share the experience they left me with,
+that does not make me any worse or better than anyone else.&lt;/p&gt;
+&lt;p&gt;I am convinced that it is a healthy way of going through life where the &amp;ldquo;normal&amp;rdquo; thing to do is to be &amp;ldquo;successful&amp;rdquo;
 or as I like to make parallels with soccer, &amp;ldquo;playing for the stands&amp;rdquo;, but at the end of the day
-it is only an appearance.&lt;/p>
-&lt;p>Thank you for reading! 👋🏽&lt;/p></description></item></channel></rss>
+it is only an appearance.&lt;/p&gt;
+&lt;p&gt;Thank you for reading! 👋🏽&lt;/p&gt;</description></item></channel></rss>
