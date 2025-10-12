@@ -1,110 +1,111 @@
 ---
-title: "The ticket Hell"
-description: "Applying a ticketing methodology can destroy the infrastructure team and your company?"
+title: "The Ticket Hell"
+description: "Applying a ticket-based methodology can destroy your infrastructure team — and maybe your company too."
 date: 2024-06-19T19:10:20-03:00
-tags: ["reflexion"]
+tags: ["reflection"]
 toc: true
 ---
+
 ## Problem
 
-_If you only have a hammer, all problems look like a nail._
+_If all you have is a hammer, everything looks like a nail._
 
-Why do I start with this well-known phrase?, 
-first I want to give a little history and then I will explain why I mention it.
+Why do I start with this well-known phrase?
+First, I want to give a bit of background, and then I’ll explain why I mention it.
 
-In the infrastructure teams in which I have been working and leading for 
-some years I had the great fortune to cross paths with [Juanjo](https://www.linkedin.com/in/juanjosebehrend/). 
-From minute zero I heard him say, promote and defend him to the hilt:
+Over the years working with infrastructure teams, I’ve had the great fortune of meeting some very insightful people who have always told me:
 
-_- Never fall into an infrastructure team that works by ticketing orders_
+_“Never let the infrastructure team operate solely through ticket requests.”_
 
-## Positioning
+## Position
 
-What is the rationale behind this firm position?
+What’s the rationale behind such a strong stance?
 
-1. You have to have an extremely strong end-to-end culture to be able 
-to determine which ticket is more important than another.
-2. The infrastructure team inherently has to grow if the technology 
-and product team expands into new functionality.
-3. It is extremely difficult to keep the infrastructure team motivated.
-4. It is impossible to innovate from the infrastructure team.
+1. You need an **extremely strong culture** from end to end to decide which ticket is more important than another.
+2. The **infrastructure team must inherently grow** as the tech and product teams expand to new features.
+3. It’s **extremely difficult to keep the infrastructure team motivated.**
+4. **Innovation is impossible** in a ticket-driven infrastructure model.
 
-There are several other reasons, but at this point I consider 
-them to be the most important and I will explain each one of them.
+There are many other reasons, but these are the most relevant ones — let’s go through each.
 
-### 1. Extremely strong culture
+---
 
-Both infrastructure and QA teams are not usually involved in the roadmap 
-and technology and product sprint.  In case it happens, it is done at the end of the mile 
-"when everything is already cooked".
+### 1. Extremely Strong Culture
 
-Where am I going with this?, that if the infrastructure manager 
-gets two tickets and has to prioritize due to execution capacity issues, 
-the obvious question:
+Infrastructure and QA teams are rarely included in roadmap and sprint planning.
+If they are, it usually happens at the very end — “when everything’s already cooked.”
 
-which ticket do I prioritize?
+So, when the infrastructure lead receives two tickets and needs to prioritize based on execution capacity, the obvious question arises:
 
-Good luck when you are there, because for customers theirs is the most important 
-thing in the world, and it is the most important thing above anything else.
+**Which ticket should I prioritize?**
 
-### 2. Growth without sense
+Good luck with that — because for every internal team (your “clients”), their request will always be **the most important thing in the world.**
 
-Let us suppose that the previous point is solved, this point that I am 
-going to explain next will not escape.
+---
 
-Why do we say that infrastructure equipment inherently has to grow?
+### 2. Meaningless Growth
 
-If we fall into tickets that only the infrastructure team solves, 
-the more products and functionalities the company has, the more people 
-are needed from the infrastructure team to attack the demand for tickets.
+Let’s assume the previous issue is somehow solved.
+You still can’t escape this one.
 
-Congratulations, you have created an execution funnel.
+Why do we say the infrastructure team *must inherently grow*?
 
-Solution? hire more talent for the infrastructure team.
+If you fall into the pattern of having infrastructure handle all ticket requests, then as the company launches more products and features, you’ll need **more infrastructure engineers** to handle the growing ticket demand.
+
+Congratulations — you’ve created an **execution bottleneck.**
+
+**The “solution”?** Hire more infrastructure people.
+
+---
 
 ### 3. Motivation
 
-Assume that points 1 and 2 are solved.
+Let’s assume points 1 and 2 are solved.
 
-The members of the infrastructure team are human, right?
+But... are infrastructure engineers human?
+(They are, last I checked.)
 
-I say this because it is difficult to maintain motivation if --in a job that is highly creativity-driven--
-we limit team members to "closing tickets" without any room for discussion or double-questioning.
+It’s hard to stay motivated in a role that **should be driven by creativity** but instead is reduced to **just closing tickets** — with no room for questioning or discussion.
 
-What can happen, high turnover in the infra team and a discomfort in the technology teams that, 
-if they are toxic, can accuse the infra team of blocking or bad experience in infrastructure management.
+What happens next?
+High turnover in the infrastructure team and growing frustration among product or tech teams.
+And if those teams happen to be toxic, they might even start labeling infrastructure as *slow* or *a blocker.*
 
-What can I tell you about the latter, Keep Calm and I leave you a big hug.
+And what can I say about that?
+**Keep calm — and here’s a big hug.**
+
+---
 
 ### 4. Innovation
 
-Finally, if we have solved the previous 3 points, it is impossible to innovate, plain and simple.
+Finally, even if the previous three points were somehow resolved, **innovation is still impossible.**
 
-Why? A team that works simply closing tickets, focused only on participating 
-in a project by creating infrastructure, cannot possibly innovate.
+Why?
+Because a team that only closes tickets — that only participates reactively in projects to “build infrastructure” — **will never have the space to innovate.**
 
-## Let's go back to the beginning
+---
 
-_If you only have a hammer, all problems look like a nail._
+## Back to the Beginning
 
-Throughout the post I explained the rationale and the most 
-important points that a ticketing methodology for infrastructure management will impact.
+_If all you have is a hammer, everything looks like a nail._
 
-And I want to make it clear that it is not wrong to work by tickets 
-in an infrastructure team, **what is definitely wrong is that infrastructure management is done by tickets**.
+Throughout this post, I’ve explained the reasoning and main consequences of running infrastructure management through tickets.
 
-And what does the hammer phrase? have to do with the fact that an agile methodology 
-was poorly implemented in many companies with the infrastructure teams 
-and "we must stop the ball" to reflect on why things are not working well in many places.
+And I want to be clear:
+Working *with* tickets in an infrastructure team isn’t necessarily wrong.
+**What’s absolutely wrong is managing infrastructure and platform operations *through* tickets.**
 
-And how can we avoid it?
+So what does the “hammer” metaphor have to do with this?
 
-We must inject a product mindset into infrastructure teams, provide abstractions 
-with top-level experiences of the underlying platform chaos so that 
-product technology teams are self-sufficient in managing the software and associated infrastructure.
+It means that many companies **misapplied agile methodologies** to their infrastructure teams.
+It’s time to **pause and reflect** on why things aren’t working well in so many places.
 
-I hope my experience will make you rethink how to form culture and work processes 
-for infrastructure teams in the company if you have questions or 
-need to discuss anything of what I wrote I am happy to meet you :)
+How can we avoid it?
 
-¡Have a good time! 👋🏽
+We must **inject a product mindset into infrastructure teams** — offering **high-quality abstractions and user experiences** over the underlying platform chaos, enabling product engineering teams to become **self-sufficient** in managing their software and its infrastructure.
+
+I hope my experience helps you rethink how to build culture and work processes for infrastructure teams within your company.
+
+If you have questions or want to discuss any of this, I’d love to connect.
+
+See you soon! 👋🏽

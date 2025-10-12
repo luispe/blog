@@ -12,9 +12,8 @@ _Si solo tenés un martillo todos los problemas se parecen a un clavo_
 ¿Por qué comienzo con esta conocida frase?, primero quiero dar un poco de historia y luego
 voy a explicar por qué la menciono.
 
-En los equipos de infraestructura en el cual llevo trabajando y liderando
-algunos años tuve la gran fortuna de cruzarme con [Juanjo](https://www.linkedin.com/in/juanjosebehrend/).
-Desde el minuto cero le escuché decir, promover y defender a capa y espada:
+En los equipos de infraestructura en el cual llevo trabajando hace
+algunos años tuve la gran fortuna de cruzarme con personas importantes que siempre me dijeron.
 
 _- Nunca caigamos en un equipo de infraestructura que trabaje mediante pedidos por tickets_
 
@@ -35,7 +34,7 @@ en explicar cada uno de ellos.
 ### 1. Cultura extremadamente fuerte
 
 Tanto a los equipos de infraestructura como a los de QA no se los suele involucrar en el armado
-de roadmap y sprint de tecnología y producto. 
+de roadmap y sprint de tecnología y producto.
 En caso de que pase, se lo hace al final de la milla "cuando ya todo está cocinado".
 
 ¿A dónde apunto con esto?, que si al responsable de infraestructura le llegan dos tickets
@@ -43,12 +42,12 @@ y tiene que priorizar por cuestiones de capacidad de ejecución, la pregunta obv
 
 ¿que ticket priorizo?
 
-Buena suerte cuando estés ahí, porque para los clientes lo de ellos es lo más importante del
-mundo mundial y es lo más importante por sobre cualquier cosa.
+Buena suerte cuando estés ahí, porque para los clientes (en este caso equipo interno de tecnología)
+lo de ellos es lo más importante del mundo mundial por sobre cualquier cosa.
 
 ### 2. Crecimiento sin sentido
 
-Supongamos que el punto anterior esta resuelto, de este punto que voy 
+Supongamos que el punto anterior esta resuelto, de este punto que voy
 a explicar a continuación no se zafa.
 
 ¿Por qué decimos que el equipo de infraestructura inherentemente tiene que crecer?
@@ -94,7 +93,7 @@ A lo largo de post expliqué el racional y los puntos mas importantes en los que
 una metodología de tickets para gestión de infraestructura.
 
 Y quiero dejar en claro que no está mal trabajar por tickets en un equipo de infraestructura,
-**lo que si está definitivamente mal es que la gestión de infraestructura se haga por tickets**.
+**lo que si está definitivamente mal es que la gestión de infraestructura y plataforma se haga por tickets**.
 
 ¿Y qué tiene que ver la frase del martillo?, que se implementó mal una metodología ágil en
 muchas empresas con los equipos de infraestructura y "debemos parar la pelota" para reflexionar
@@ -103,8 +102,8 @@ por qué no están funcionando bien las cosas en muchos lugares.
 ¿Y cómo podemos evitarlo?
 
 Debemos inyectar una mentalidad de producto a los equipos de infraestructura, ofrecer
-abstracciones con experiencias de primer nivel del caos de la plataforma subyacente para que 
-los equipos de tecnología de producto sean autosuficientes en la gestión del software 
+abstracciones con experiencias de primer nivel del caos de la plataforma subyacente para que
+los equipos de tecnología de producto sean autosuficientes en la gestión del software
 y la infraestructura asociada.
 
 Espero que mi experiencia te haga repensar como formar cultura y procesos
