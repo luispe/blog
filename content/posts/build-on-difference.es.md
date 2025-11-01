@@ -22,7 +22,7 @@ ambos de experiencias e industrias diferentes pero con una
 misma visión profunda sobre lo que necesitaba Akua.
 
 Deje enlace de su linkedin, pero a muy breve --e irrespetuoso resumen--
-Ger viene con una expriencia desde el mas bajo nivel en infraestructura
+Ger viene con una experiencia desde el mas bajo nivel en infraestructura
 hasta llegar a constuir el equipo y la plataforma en Sate (para los amigos),
 [Satellogic](https://www.linkedin.com/company/satellogic/) si nos ponemos
 mas serios.
@@ -91,7 +91,7 @@ Una vez que elegimos nuestra herramienta de backend pasamos a la siguiente
 fase de definición de nuetro IDP, la capa de presentación.
 
 Como dice el título acá pudimos debatir desde las diferencias que íbamos a
-ofrecer, Ger desde su experiencia con equipos extremandamente técnico y que
+ofrecer, Ger desde su experiencia con equipos extremandamente técnicos y que
 tienen una necesidad de control de absolutamente todo proponía ofrecer las
 abstracciones de los productos de plataforma y que nuestros desarrolladores
 usen en sus proyectos dicha abstracción --aka iban a tener que saber manejar pulumi--;
