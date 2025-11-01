@@ -58,14 +58,14 @@ func main() {
 ```
 
 A simple vista funciona. Pero si ejecutamos el binario y lo detenemos
-con `ctrl + c`, el proceso muere abruptamente.\
+con `ctrl + c`, el proceso muere abruptamente.
 Cualquier request en curso se corta, los recursos abiertos
 (conexexiones, archivos, etc.) no se liberan y no hay oportunidad de
 realizar tareas de limpieza.
 
 ## Propuesta/aprendizaje
 
-La solución es implementar un **graceful shutdown** usando los paquetes
+La solución es implementar **graceful shutdown** usando los paquetes
 `context` y `os/signal`.
 
 ``` go
