@@ -43,12 +43,12 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;A simple vista funciona. Pero si ejecutamos el binario y lo detenemos
-con &lt;code&gt;ctrl + c&lt;/code&gt;, el proceso muere abruptamente.&lt;br&gt;
+con &lt;code&gt;ctrl + c&lt;/code&gt;, el proceso muere abruptamente.
 Cualquier request en curso se corta, los recursos abiertos
 (conexexiones, archivos, etc.) no se liberan y no hay oportunidad de
 realizar tareas de limpieza.&lt;/p&gt;
 &lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar un &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
 &lt;code&gt;context&lt;/code&gt; y &lt;code&gt;os/signal&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;

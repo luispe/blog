@@ -1,0 +1,75 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Platform-Engineering</title><link>https://luispe.github.io/blog/tags/platform-engineering/</link><description>Recent content in Platform-Engineering on luispe</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 01 Nov 2025 00:00:00 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/tags/platform-engineering/index.xml" rel="self" type="application/rss+xml"/><item><title>Building from Differences</title><link>https://luispe.github.io/blog/posts/build-on-difference/</link><pubDate>Sat, 01 Nov 2025 00:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/posts/build-on-difference/</guid><description>
+&lt;p&gt;In this post, I’ll try to share our experience building the IDP at Akua — the challenges we faced, where we stand today, and what lies ahead for the platform.&lt;/p&gt;
+&lt;p&gt;Together with &lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;Ger&lt;/a&gt;, who at this point I can confidently call a friend since the early days of Akua, we built our internal developer platform. We come from different backgrounds and industries but share the same deep vision of what Akua needed.&lt;/p&gt;
+&lt;p&gt;I left a link to his LinkedIn, but to make a &lt;strong&gt;very short (and somewhat unfair) summary&lt;/strong&gt;, Ger comes from a background that spans from the lowest levels of infrastructure all the way to building the team and platform at Sate (for friends), or &lt;a href="https://www.linkedin.com/company/satellogic/"target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; if we’re being formal.&lt;/p&gt;
+&lt;p&gt;As for me, I started my career as a product developer, and already during my time at Viacom (Telefé) I developed a strong curiosity for infrastructure. At Pomelo I had the opportunity to work full-time helping to build the IDP, and at Akua, together with “my buddy,” we designed and executed it from scratch — something I’m incredibly proud of.&lt;/p&gt;
+&lt;h2&gt;The First Days and First Steps&lt;span class="hx:absolute hx:-mt-20" id="the-first-days-and-first-steps"&gt;&lt;/span&gt;
+&lt;a href="#the-first-days-and-first-steps" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;We started with a blank sheet — literally. There was absolutely nothing at Akua. Just an empty AWS account, but that was the least of our worries.
+Here’s a short list of our “mantras,” which we still uphold and make sure remain true to this day:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The operation and maintenance of our platform must tend to zero.&lt;/li&gt;
+&lt;li&gt;Whatever we develop must be testable locally — and it shouldn’t be a pain to do so.&lt;/li&gt;
+&lt;li&gt;If it works in development, it must work in production (or any other environment).&lt;/li&gt;
+&lt;li&gt;Everything should be self-discoverable — no hardcoding.&lt;/li&gt;
+&lt;li&gt;Simplicity above all.&lt;/li&gt;
+&lt;li&gt;Break the inertia of past experiences.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Building the Foundations&lt;span class="hx:absolute hx:-mt-20" id="building-the-foundations"&gt;&lt;/span&gt;
+&lt;a href="#building-the-foundations" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We partnered with Binbash to execute our PCI-compliant network design while Ger and I evaluated which tool would best fit our infrastructure management needs for the IDP. To be fully transparent, we analyzed three options. We discarded one right away, and with the remaining two, we ran quick proof-of-concepts to decide which one to keep.&lt;/p&gt;
+&lt;p&gt;The three tools we evaluated were:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Terraform CDK&lt;/strong&gt; — we ruled this one out from day zero. Why? Terraform was heading in a non–open-source direction, and at that time the Terraform CDK project lacked solid documentation — something that both Ger and I can’t stand due to how we work.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Crossplane&lt;/strong&gt; — it’s tempting to use, but the moment you need to add any logic to a product your platform provides, you’re in trouble. And let’s be honest — YAML is far too fragile to entrust it with managing your platform’s products.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Pulumi&lt;/strong&gt; — as you might’ve guessed, this was our choice. It gave us the flexibility to implement any logic we wanted, abstracted away state management complexity, had excellent documentation, and a strong community adoption. That last point was key — it meant that if we grew the team in the future, new members wouldn’t face something completely unfamiliar. Finally, and importantly, Pulumi allows the implementation of &lt;strong&gt;dynamic resources&lt;/strong&gt; — meaning if a resource isn’t natively supported, you can implement the Pulumi interface and manage it yourself. In our case (if I remember correctly), we did this twice: once for Typesense and once for New Relic deployment markers.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;To clarify — neither Ger nor I had used Pulumi in production before. We knew and had tested it, but hadn’t used it at scale yet.&lt;/p&gt;
+&lt;p&gt;Once we chose our backend tool, we moved to the next phase: defining the &lt;strong&gt;presentation layer&lt;/strong&gt; of our IDP.&lt;/p&gt;
+&lt;p&gt;As the title of this post suggests, this was where we debated from our differences.
+Ger, coming from highly technical teams with a need for total control, proposed that we expose the platform’s abstractions and have developers use them directly in their projects — meaning they’d need to know how to handle Pulumi.
+My perspective was that Akua’s developers wouldn’t feel comfortable dealing with platform tooling — instead, we should provide a &lt;strong&gt;presentation layer (a portal)&lt;/strong&gt; from which they could design their project’s architecture, deploy it, and manage it.&lt;/p&gt;
+&lt;p&gt;Just like with our backend choice, two major options appeared here: &lt;strong&gt;Backstage&lt;/strong&gt; and &lt;strong&gt;Port.io&lt;/strong&gt;. There are others, of course, but we always aim for tools with strong industry adoption — so that anyone joining later doesn’t find something obscure.&lt;/p&gt;
+&lt;p&gt;In this case, we chose &lt;strong&gt;Port.io&lt;/strong&gt;. Why?
+Backstage would’ve forced us to build components on top of it — and at that moment, we didn’t want to touch any frontend work. It’s not our strength, and doing so would have meant significant time diversion we couldn’t afford.&lt;/p&gt;
+&lt;p&gt;Port.io wasn’t a fallback — quite the opposite. I like to describe Port as &lt;em&gt;the Notion of platforms&lt;/em&gt;. Its &lt;strong&gt;Blueprints&lt;/strong&gt; system lets you design your platform around your needs, not the other way around. The UI is elegant, supports SSO, offers RBAC (still improving), and includes features like &lt;strong&gt;Scorecards&lt;/strong&gt;, &lt;strong&gt;Self-Service Actions&lt;/strong&gt;, &lt;strong&gt;Automations&lt;/strong&gt;, and &lt;strong&gt;dashboards&lt;/strong&gt; that can be created in just a few clicks — making it the perfect choice for our platform’s presentation layer.&lt;/p&gt;
+&lt;h3&gt;Technology Stack&lt;span class="hx:absolute hx:-mt-20" id="technology-stack"&gt;&lt;/span&gt;
+&lt;a href="#technology-stack" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We developed a custom &lt;strong&gt;Helm chart&lt;/strong&gt; for our applications. Over time, it evolved — now it supports deploying either a microservice or a &lt;strong&gt;monorepo&lt;/strong&gt;, meaning a single project can deploy multiple Kubernetes services without needing separate GitLab projects.&lt;/p&gt;
+&lt;p&gt;Our Helm chart (as designed from day zero) is &lt;strong&gt;unique&lt;/strong&gt;, follows &lt;strong&gt;semver&lt;/strong&gt;, and product developers can choose any version they need depending on the functionality required.&lt;/p&gt;
+&lt;p&gt;Again, our philosophy here was to &lt;strong&gt;centralize tooling and evolution&lt;/strong&gt;, avoiding cognitive load on our internal customers.
+So, the Helm chart is shared — each project defines its own &lt;code&gt;values.yaml&lt;/code&gt;, which is used at deployment time for the specific application(s).&lt;/p&gt;
+&lt;p&gt;For our CI/CD and application lifecycle management, we use &lt;strong&gt;GitLab&lt;/strong&gt;. Ger’s deep experience here was invaluable — we run private runners that synchronize application resources without needing AWS credentials distributed in GitLab (which would be a major security risk).&lt;/p&gt;
+&lt;p&gt;Speaking of GitLab, we also know from experience how challenging it is to propagate pipeline changes across projects. That’s why we use &lt;strong&gt;centralized pipelines&lt;/strong&gt;, where projects simply &lt;code&gt;include&lt;/code&gt; them — they don’t need to worry about anything else. When something new is needed, it’s added to the central pipeline and immediately available to everyone. As always, versioned with semver to ensure safe evolution.&lt;/p&gt;
+&lt;p&gt;As I might have mentioned, our application workloads run on &lt;strong&gt;Kubernetes&lt;/strong&gt; — specifically &lt;strong&gt;EKS on Fargate&lt;/strong&gt;. This was Ger’s proposal, and thankfully, we were able to convince everyone necessary to go down that path.&lt;/p&gt;
+&lt;p&gt;The advantages?
+Minimal Kubernetes operations, trivial upgrades, PCI compliance, and more.&lt;/p&gt;
+&lt;p&gt;Of course, there are tradeoffs — you can’t deploy DaemonSets, for example. But that doesn’t worry us too much because (returning to our mantra of simplicity), our EKS clusters have very few installed components:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kong&lt;/li&gt;
+&lt;li&gt;Metrics Server&lt;/li&gt;
+&lt;li&gt;External DNS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;And yes — there must be a &lt;em&gt;very strong justification and benefit&lt;/em&gt; to install anything else.&lt;/p&gt;
+&lt;h4&gt;Wait — what about secrets?&lt;span class="hx:absolute hx:-mt-20" id="wait--what-about-secrets"&gt;&lt;/span&gt;
+&lt;a href="#wait--what-about-secrets" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;We developed a workflow using &lt;strong&gt;Parameter Store&lt;/strong&gt;, which allows us to deploy and make secrets available to applications flexibly. If a secret isn’t managed by our infra-lib, the security team can add it to Parameter Store and it automatically becomes available to the apps.&lt;/p&gt;
+&lt;h4&gt;Security — Auth and Authz?&lt;span class="hx:absolute hx:-mt-20" id="security--auth-and-authz"&gt;&lt;/span&gt;
+&lt;a href="#security--auth-and-authz" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;From day zero, we’ve used &lt;strong&gt;IRSA (IAM Roles for Service Accounts)&lt;/strong&gt; with &lt;strong&gt;tag-based permissions&lt;/strong&gt; (I’ll mention our tagging strategy shortly).
+If a given AWS resource doesn’t support tags (like S3), our infra-lib can self-discover the resource and assign the required permissions automatically.&lt;/p&gt;
+&lt;p&gt;Speaking of tags — in a previous post someone criticized that “a platform without FinOps can’t be called a real platform.”
+Well, since day one, every single infrastructure resource we create includes &lt;strong&gt;centralized tagging&lt;/strong&gt; managed by our infra-lib. This will allow us to easily implement &lt;strong&gt;billing&lt;/strong&gt; for our IDP in the future.
+As a side note: our infrastructure costs are &lt;em&gt;much lower&lt;/em&gt; than we predicted, thanks to correct per-environment configuration in our infra-lib.&lt;/p&gt;
+&lt;p&gt;Continuing on the security topic — access to resources like databases is managed via &lt;strong&gt;security group rules&lt;/strong&gt; between apps and DBs. Likewise, traffic between applications is blocked at the network level, even within the same namespace. This allows us to establish service-to-service access policies managed by &lt;strong&gt;Kong&lt;/strong&gt;, which can be configured easily from our &lt;strong&gt;Port.io&lt;/strong&gt; portal.&lt;/p&gt;
+&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;There’s still a lot more to cover — how we implemented scorecards, day-2 actions, or single-tenant deployments — but I’ll save that for another post.&lt;/p&gt;
+&lt;p&gt;To wrap up, I want to reflect on a few points.&lt;/p&gt;
+&lt;p&gt;As I mentioned, we didn’t always agree on everything. But we managed to build an internal developer platform &lt;strong&gt;from our differences&lt;/strong&gt;, always respecting each other’s opinions.
+We created a workflow that led us to build &lt;strong&gt;solid, future-proof solutions&lt;/strong&gt;, and to be honest — were all the ideas Ger’s? Were they mine?
+Not at all. As I said, we built a process where we &lt;strong&gt;designed&lt;/strong&gt;, &lt;strong&gt;evaluated multiple alternatives and cases&lt;/strong&gt;, and then &lt;strong&gt;implemented&lt;/strong&gt;.
+At the end of the day, it’s truly a team effort — what matters most is our platform and the people behind it.&lt;/p&gt;
+&lt;p&gt;Dear Ger — thank you deeply for your generosity and openness in teaching me so much.
+I hope I’ve left my mark on you too. It’s an honor and a real pleasure to have built this platform together — and, most importantly, the friendship we’ve built along the way. That’s for life.&lt;/p&gt;
+&lt;p&gt;Until next time 👋🏽&lt;/p&gt;</description></item></channel></rss>

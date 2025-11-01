@@ -52,39 +52,7 @@ human quality of another planet we did and we are doing incredible things.&lt;/p
 you is countless times more important and is, at least in the values I pursue and seek, infinitely superior
 to any position we hold or obtain. any position we hold or obtain.&lt;/p&gt;
 &lt;p&gt;For now I do not want to bore or extend, soon I will write about the other two pillars that I feel
-indispensable to walk through life, humility and respect.&lt;/p&gt;</description></item><item><title>Technical debt</title><link>https://luispe.github.io/blog/posts/technical-debt/</link><pubDate>Sat, 02 Jul 2022 16:36:17 -0300</pubDate><guid>https://luispe.github.io/blog/posts/technical-debt/</guid><description>
-&lt;p&gt;In the following post we will rethink a concept commonly encountered and endorsed
-in the technology industry, technical debt.&lt;/p&gt;
-&lt;h2&gt;Different yardstick&lt;span class="hx:absolute hx:-mt-20" id="different-yardstick"&gt;&lt;/span&gt;
-&lt;a href="#different-yardstick" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s imagine that we need to paint the exterior of our house, and we decide to hire a professional to do the job.&lt;/p&gt;
-&lt;p&gt;After consulting several quotes we decided to hire the services of &amp;ldquo;x&amp;rdquo; to take care of the job.&lt;/p&gt;
-&lt;p&gt;After a few days &amp;ldquo;x&amp;rdquo; tells us:&lt;/p&gt;
-&lt;p&gt;- The work is finished.&lt;/p&gt;
-&lt;p&gt;We stood at the front of the house and noticed that around the window frames it is unpainted in some cases.&lt;/p&gt;
-&lt;p&gt;Noticing this, we ask &amp;ldquo;x&amp;rdquo; why he did not paint around the window frames, to which he responds:&lt;/p&gt;
-&lt;p&gt;- Sorry, it is a technical debt that I can attack in the future.&lt;/p&gt;
-&lt;p&gt;How would you feel if you encountered such a situation?&lt;/p&gt;
-&lt;p&gt;Why in the context of technology do we endorse having technical debt?&lt;/p&gt;
-&lt;h2&gt;Rethink&lt;span class="hx:absolute hx:-mt-20" id="rethink"&gt;&lt;/span&gt;
-&lt;a href="#rethink" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In technology, it is very common to encounter this scenario, and unfortunately we naturalize it and as
-I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;previous publication&lt;/a&gt;
-where I talk among other things about the importance of documenting and testing, it is something common that
-I always see as &amp;ldquo;technical debt&amp;rdquo;, rethinking the example of painting the house I think it exposes
-how we can have &amp;ldquo;different yardsticks&amp;rdquo; to measure the same situation in different contexts.&lt;/p&gt;
-&lt;p&gt;Why is technical debt harmful?&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;In test context: it is extremely difficult to make changes without exploding everything.&lt;/li&gt;
-&lt;li&gt;In context of documentation: it is extremely difficult to add functionality because the lack of
-documentation causes us to waste an enormous amount of time trying to understand how things are built.&lt;/li&gt;
-&lt;li&gt;In a team context: having technical debt means that the knowledge stays with the people and we should always,
-always encourage knowledge to be distributed.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
-&lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The technical debt is very exhausting for the teams and where today we think we are gaining time,
-I assure you that soon, very soon, we will lose agility and speed in the development.&lt;/p&gt;
-&lt;p&gt;It can be avoided in most cases, and we do not accept it as a matter of course.&lt;/p&gt;
-&lt;p&gt;Finally, I hope that we will rethink together the &amp;ldquo;technical debt&amp;rdquo; and that we will be uncomfortable with it.&lt;/p&gt;
-&lt;p&gt;Thank you for reading! 👋🏽&lt;/p&gt;</description></item><item><title>You learn from your mistakes, and if you share them, you grow.</title><link>https://luispe.github.io/blog/posts/mistakes-and-learnings/</link><pubDate>Sun, 05 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/posts/mistakes-and-learnings/</guid><description>
+indispensable to walk through life, humility and respect.&lt;/p&gt;</description></item><item><title>You learn from your mistakes, and if you share them, you grow.</title><link>https://luispe.github.io/blog/posts/mistakes-and-learnings/</link><pubDate>Sun, 05 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/posts/mistakes-and-learnings/</guid><description>
 &lt;p&gt;In our society in general and in technology in particular, we have the strange habit of publishing success
 stories (opinion of the writer, wrongly called &lt;strong&gt;successful case&lt;/strong&gt;) and few, if any, occasions where
 mistakes are shared (opinion of the writer, wrongly called &lt;strong&gt;failure&lt;/strong&gt;).&lt;/p&gt;
