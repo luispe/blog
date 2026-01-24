@@ -10,35 +10,59 @@ title: Two Clicks
 toc: true
 ---
 
-Today I'm going to paraphrase quite a bit, starting with the title from a great friend with whom I worked together and I'm sure we'll meet again professionally, [el chavito](https://www.linkedin.com/in/geryepes/); I learned this phrase from him and I think in this post I'll talk a bit about it and about when motivation vanishes; can it be recovered? is the challenge worth it? what did I learn along the way?
+Today I'm going to paraphrase quite a bit, starting with the title from a
+great friend with whom I worked together and I'm sure we'll meet again professionally,
+[el chavito](https://www.linkedin.com/in/geryepes/); I heard the phrase from him for
+the first time, and I think in this post I'll talk a bit about it and about when
+motivation vanishes; can it be recovered? is the challenge worth it? what did I learn along the way?
 
 > _They're finishing off my brain in bites, drinking the juice from my heart_
 >
 >       Yo caníbal, Indio Solari, Patricio rey y sus redonditos de ricota.
 
-It's worth clarifying to avoid trouble - I'm not talking about any particular company, I'm talking about conversations with friends where anecdotes always come up to share.
+It's worth clarifying to avoid trouble - I'm not talking about any particular company,
+I'm talking about conversations with friends where anecdotes always come up to share.
 
-If something motivates you, I'm not talking to you and maybe instead of hating me, take advantage of it to ask yourself some questions.
+If something motivates you, I'm not talking to you and maybe instead of hating me,
+take advantage of it to ask yourself some questions.
 
 Disclaimer made, why do I quote "Los Redondos"?
 
-There are companies that culturally disguise themselves as "cool" when in reality some people believe and openly say that the people who work at their company are "blood bags" that must be squeezed to the last drop and then when there's nothing left, discarded.
+There are companies that culturally disguise themselves as "cool" when in reality
+some people believe and openly say that the people who work at their company are
+"blood bags" that must be squeezed to the last drop and then when there's nothing left, discarded.
 
-When I heard that anecdote, the first thing I felt was deep rage, then with a bit of distance I asked myself, what's wrong with all this? in fact, is there anything wrong with all this?
+When I heard that anecdote, the first thing I felt was deep rage, then with a bit
+of distance I asked myself, what's wrong with all this? in fact, is there anything wrong with all this?
 
-To begin, I thought about the lack of honesty, disguising yourself as a cool culture when you're really the complete opposite has no justification whatsoever.
+To begin, I thought about the lack of honesty, disguising yourself as a cool culture
+when you're really the complete opposite has no justification whatsoever.
 
-The second thing I reflected on is, we also make a serious mistake, giving everything for the company and not stopping to detect red flags, we need to learn to diversify our energies because it's very likely that in companies of this caliber what comes back is a slap in the face and it's harder to realize that this idealization of the company is not what it really is, and that hurts more than the slap itself.
+The second thing I reflected on is, we also make a serious mistake, giving everything
+for the company and not stopping to detect red flags, we need to learn to diversify
+our energies because it's very likely that in companies of this caliber what comes back
+is a slap in the face and it's harder to realize that this idealization of the company
+is not what it really is, and that hurts more than the slap itself.
 
-The idealization topic deserves more attention, but I'll leave it for another time because I want to address other things next.
+The idealization topic deserves more attention, but I'll leave it for another
+time because I want to address other things next.
 
 ---
 
-The other day talking with a great friend [Vitor](https://www.linkedin.com/in/victor-de-grandis-0a1202ab/), and besides being a great friend, he's one of those three or four people I admire in technology for everything I learned from him.
+The other day talking with a great friend [Vitor](https://www.linkedin.com/in/victor-de-grandis-0a1202ab/),
+and besides being a great friend, he's one of those three or four people
+I admire in technology for everything I learned from him.
 
-He writes to me a bit worried, that it caused him tremendous sadness, all the hype of having to use AI yes or yes because just by using it you'll go faster, and that what he liked most about the profession is sitting down to think about the solution, approach different hypotheses, make some designs and then in code see that it works is tremendous pleasure; and if the default is AI first, all that is lost and with it _"the juice from your heart"_, as far as the profession is concerned.
+He writes to me a bit worried, that it caused him tremendous sadness, all the hype of having
+to use AI yes or yes because just by using it you'll go faster, and that what he liked
+most about the profession is sitting down to think about the solution, approach different hypotheses,
+make some designs and then in code see that it works is tremendous pleasure;
+and if the default is AI first, all that is lost and with it _"the juice from your heart"_,
+as far as the profession is concerned.
 
-And careful, am I saying not to use AI? no, not even close to thinking that way, I'd be shooting myself in the foot and giving a huge advantage in an increasingly complicated job market and would harm the company where I work; what I want to say is the following:
+And careful, am I saying not to use AI? no, not even close to thinking that way,
+I'd be shooting myself in the foot and giving a huge advantage in an increasingly
+complicated job market and would harm the company where I work; what I want to say is the following:
 
 - If you're good at solving problems, you have a huge advantage because you can polish solutions to be maintainable over time and at a speed that would be quite difficult without AI.
 - If you're mediocre at solving problems, you'll continue being the same but adding bugs to production faster.

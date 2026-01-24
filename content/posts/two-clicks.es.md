@@ -14,7 +14,7 @@ Hoy voy a parafrasear bastante, en el caso del título a un gran
 amigo con quien supimos laburar juntos y sin dudas creo que
 volveremos a encontrarnos laboralmente,
 [el chavito](https://www.linkedin.com/in/geryepes/);
-de él conocí la frase y creo que en la publicación
+de él escuche la frase por primera vez y creo que en la publicación
 hablaré un poco de ella y de cuando la motivación se esfuma;
 ¿puede recuperarse?, ¿vale la pena el desafío? ¿qué aprendí en el camino?.
 
