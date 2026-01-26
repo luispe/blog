@@ -42,7 +42,7 @@ luego con un poco de distancia me hice la pregunta, ¿qué está mal de todo est
 de hecho, ¿hay algo mal en todo esto?.
 
 Para comenzar pensé en la falta de sinceridad, disfrazarse de cultura copada
-cuando en realidad sos todo lo contrario no tiene justificación por ningún lado.
+cuando en realidad son todo lo contrario no tiene justificación por ningún lado.
 
 Lo segundo que reflexioné es, nosotros también cometemos un grave error,
 dejar todo por la compañía y no detenernos a detectar "red flags",
