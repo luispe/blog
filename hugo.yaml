@@ -31,11 +31,11 @@ hasCJKLanguage: true
 defaultContentLanguage: en
 languages:
   en:
-    languageName: English
+    label: English
     weight: 1
   es:
-    languageName: Español
-    languageCode: es
+    label: Español
+    locale: es
     weight: 2
 
 menu:
