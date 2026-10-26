@@ -2,9 +2,9 @@
 &lt;p&gt;The following publication could be said to be a continuation of another one where we talk
 about how having lightweight images helps us in many aspects,
 if you still could not read it here I leave you
-&lt;a href="https://luispe.github.io/blog/posts/lightweight-container-image/"target="_blank" rel="noopener"&gt;the access&lt;/a&gt;.&lt;/p&gt;
+&lt;a href="https://luispe.github.io/blog/posts/lightweight-container-image/" target="_blank" rel="noopener"&gt;the access&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Today we are going to make a small, but important improvement, and we are going to find out why we are doing it.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;As the last proposal in the post I shared earlier we stayed at this point:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -46,6 +46,8 @@ if you still could not read it here I leave you
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -58,7 +60,7 @@ places and not find surprises when we start the application that is contained in
 I invite you to think for a few seconds / minutes or as long as we need.&lt;/p&gt;
 &lt;p&gt;Can an image enhancement be made for the Golang application?&lt;/p&gt;
 &lt;p&gt;The answer is yes, let&amp;rsquo;s get to work!&lt;/p&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Golang has one feature that is really powerful, and I&amp;rsquo;m not talking about goroutines,
 and that is the great virtue of being able to cross-compile.&lt;/p&gt;
 &lt;p&gt;What is cross-compilation?, it is the feature of being able to compile
@@ -119,6 +121,8 @@ the computation is linux as OS and with amd64 architecture.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -134,6 +138,8 @@ GOARCH=amd64&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -153,7 +159,7 @@ we can rest assured that we are shortening the margin of mishaps.&lt;/p&gt;
 &lt;p&gt;¡Have a good time! 👋🏽&lt;/p&gt;</description></item><item><title>Size matters</title><link>https://luispe.github.io/blog/posts/lightweight-container-image/</link><pubDate>Sat, 11 Jun 2022 17:49:18 -0300</pubDate><guid>https://luispe.github.io/blog/posts/lightweight-container-image/</guid><description>
 &lt;p&gt;In the following post I am going to share with you some tips and best practices to develop our container images,
 as an example we are going to create an image for an app in Golang, but the following tips apply to any language, let&amp;rsquo;s go!&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;To make our container images as small as possible in terms of weight (megabytes, gigabytes, etc.)
 is not a matter of taste, it helps us in many ways, here are some of them:&lt;/p&gt;
 &lt;ul&gt;
@@ -168,7 +174,7 @@ is going to initialize with a higher speed.&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;To give a few examples.&lt;/p&gt;
-&lt;h2&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lets-start"&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
 &lt;a href="#lets-start" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let us imagine that we have the following Dockerfile to create our container image e.g:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -200,6 +206,8 @@ is going to initialize with a higher speed.&lt;/li&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -215,8 +223,8 @@ title="Copy code"
 &lt;p&gt;To give an example &lt;code&gt;RUN go build -o ./myapp ./path/to/main&lt;/code&gt; where &lt;code&gt;./path/to/main&lt;/code&gt; should be the main of
 your Golang app&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
-&lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Let&amp;rsquo;s go with the first proposal.&lt;span class="hx:absolute hx:-mt-20" id="lets-go-with-the-first-proposal"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3 data-hextra-search-id="lets-go-with-the-first-proposal"&gt;Let&amp;rsquo;s go with the first proposal.&lt;span class="hx:absolute hx:-mt-20" id="lets-go-with-the-first-proposal"&gt;&lt;/span&gt;
 &lt;a href="#lets-go-with-the-first-proposal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;It is always a good practice to use &lt;code&gt;-alpine&lt;/code&gt; images, by convention in the container universe when we make available
 an &lt;code&gt;-alpine&lt;/code&gt; image we are indicating to the client that it is an image reduced in size and the one we should use in
 our Dockerfile, among other things.&lt;/p&gt;
@@ -249,6 +257,8 @@ our Dockerfile, among other things.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -263,10 +273,10 @@ title="Copy code"
 &lt;p&gt;It&amp;rsquo;s an excellent approach, but let&amp;rsquo;s rethink: do you have to have an image with all of Golang inside
 the container weighing about 331 MB to make available a binary that weighs a few megabytes?&lt;/p&gt;
 &lt;p&gt;The answer is clearly, no.&lt;/p&gt;
-&lt;h3&gt;Second proposal&lt;span class="hx:absolute hx:-mt-20" id="second-proposal"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="second-proposal"&gt;Second proposal&lt;span class="hx:absolute hx:-mt-20" id="second-proposal"&gt;&lt;/span&gt;
 &lt;a href="#second-proposal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The container technology has an excellent feature, that for our case, will help us to build a very light
 container image, in case you didn&amp;rsquo;t know, I&amp;rsquo;m talking about Multistage, I share with you the
-&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/"target="_blank" rel="noopener"&gt;official documentation&lt;/a&gt;
+&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/" target="_blank" rel="noopener"&gt;official documentation&lt;/a&gt;
 to deepen about this feature.&lt;/p&gt;
 &lt;p&gt;What does Multistage consist of? It is about building images in stages so that we can share data between each
 one of them, and we will obtain a final image of a very small size.&lt;/p&gt;
@@ -313,6 +323,8 @@ and a second stage where we are going to make it available for use.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;

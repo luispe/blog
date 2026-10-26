@@ -1,8 +1,201 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Idp</title><link>https://luispe.github.io/blog/es/tags/idp/</link><description>Recent content in Idp on luispe</description><generator>Hugo -- gohugo.io</generator><language>es</language><lastBuildDate>Sat, 01 Nov 2025 00:00:00 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/es/tags/idp/index.xml" rel="self" type="application/rss+xml"/><item><title>Construir desde las diferencias</title><link>https://luispe.github.io/blog/es/posts/build-on-difference/</link><pubDate>Sat, 01 Nov 2025 00:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/build-on-difference/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Idp</title><link>https://luispe.github.io/blog/es/tags/idp/</link><description>Recent content in Idp on luispe</description><generator>Hugo -- gohugo.io</generator><language>es</language><lastBuildDate>Mon, 26 Oct 2026 14:00:00 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/es/tags/idp/index.xml" rel="self" type="application/rss+xml"/><item><title>Pasado, presente y futuro de la Plataforma interna de Akua</title><link>https://luispe.github.io/blog/es/posts/past-present-and-future-idp/</link><pubDate>Mon, 26 Oct 2026 14:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/past-present-and-future-idp/</guid><description>
+&lt;p&gt;Hoy quiero contarles un poco del pasado, el presente y el futuro que ambicionamos para el IDP en Akua.&lt;/p&gt;
+&lt;p&gt;Para arrancar voy a traer una frase que escuché en la peli Kung Fu Panda&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;ldquo;El ayer es historia, el mañana es un misterio, el hoy es un regalo, por eso se llama presente&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Por qué la traigo? porque como comenté en la descripción de la publicación pasaron muchas cosas
+desde aquel junio del 2024 donde con mi entonces compañero y dupla de equipo German Yepes
+comenzamos a diseñar la plataforma interna de desarrollo para Akua.&lt;/p&gt;
+&lt;p&gt;En el presente mientras escribo esto comparto equipo con Cristan Ortega (Cris) y Jeremy Bacher (Jere),
+en un pasado como les comenté formé dupla con el chavito, quien decidió seguir camino fuera de Akua
+allá por diciembre del 2025, y en el camino también supo estar con nosotros don Guille Pijuan que sigue
+en Akua haciendo de las suyas en el equipo de CX (Customer Experience).&lt;/p&gt;
+&lt;p&gt;Hace un tiempo (casi dos años) contamos un poco del &lt;a href="https://akua.la/en/blog/idp---por-que-cuando-y-como" target="_blank" rel="noopener"&gt;IDP&lt;/a&gt;; hoy
+vengo a contarles de un proyecto en particular, Good Bye AWS DMS (Database Migration Service).&lt;/p&gt;
+&lt;p&gt;Hoy arranca una &amp;ldquo;Trilogía de BlogPost de la Plataforma&amp;rdquo;, para arrancar me toca a mí estar acá escribiendo
+y pronto tendremos a Cris y a Jere contando diferentes desafíos técnicos que nos enorgullece compartirles.&lt;/p&gt;
+&lt;p&gt;Comencemos.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="el-ayer-es-historia-aws-dms"&gt;El ayer es historia: AWS DMS&lt;span class="hx:absolute hx:-mt-20" id="el-ayer-es-historia-aws-dms"&gt;&lt;/span&gt;
+&lt;a href="#el-ayer-es-historia-aws-dms" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Antes de meternos en el barro, un poco de contexto de cómo se mueven los datos en Akua: cada proyecto tiene su propia base Aurora PostgreSQL y cada tenant tiene su warehouse, el ODS (Operational Data Store), donde se juntan las bases de todos los proyectos para que quien necesite consultar esos datos lo haga ahí y no contra la base productiva del proyecto.&lt;/p&gt;
+&lt;p&gt;Para llevar los datos de un lado al otro usábamos AWS DMS Serverless, que en el papel es justo lo que necesitás: hace una carga inicial y después se queda replicando los cambios en tiempo real –aka CDC, Change Data Capture–. En el papel.&lt;/p&gt;
+&lt;p&gt;En la práctica DMS fallaba, y lo que más nos dolía no era que fallara (todo falla tarde o temprano) sino &lt;strong&gt;cómo&lt;/strong&gt; fallaba: en silencio. Dejo un punteo de lo que encontramos el día que nos pusimos a mirar en serio:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Replicaciones muertas sin que nadie se entere&lt;/strong&gt;, 8 replicaciones en estado &lt;code&gt;failed&lt;/code&gt; durante meses; sin un ruido, nada.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El &amp;ldquo;running&amp;rdquo; que no corría&lt;/strong&gt;, tablas en &lt;code&gt;Table error&lt;/code&gt; mientras la replicación decía estar &lt;code&gt;running&lt;/code&gt;, osea la consola te decía que todo estaba bárbaro y la tabla hacía rato que no recibía un dato.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Duplicados por doquier&lt;/strong&gt;, un warehouse con filas duplicadas entre 80 y 100 veces. Sí, leíste bien, de 80 a 100 veces 😅.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Y encima caro&lt;/strong&gt;, alrededor de USD 7.400 por mes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Y por qué puede duplicar? DMS guarda su &amp;ldquo;hasta dónde repliqué&amp;rdquo; (el checkpoint) por un lado y escribe los datos por otro; si algo se corta entre una cosa y la otra, al volver puede reaplicar lo que ya había escrito. Guarden este detalle porque es justamente lo que resolvimos distinto.&lt;/p&gt;
+&lt;p&gt;Si se acuerdan de nuestros mantras de &lt;a href="https://luispe.github.io/blog/es/posts/build-on-difference/" target="_blank" rel="noopener"&gt;Construir desde las diferencias&lt;/a&gt;, el primero dice que la operación y mantenimiento de nuestra plataforma debe tender a cero; con DMS pasaba exactamente lo contrario, había que operarlo hasta para enterarse de que estaba roto.&lt;/p&gt;
+&lt;p&gt;Así que nos hicimos la pregunta incómoda, y si lo construimos nosotros? Atenti, no es una decisión que se toma a la ligera, todo lo que construís después lo tenés que mantener; pero cuando la herramienta de turno te dice que está todo bien mientras por debajo se está prendiendo fuego, la cuenta empieza a cerrar bastante rápido.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="el-hoy-es-un-regalo-data-replicator"&gt;El hoy es un regalo: data-replicator&lt;span class="hx:absolute hx:-mt-20" id="el-hoy-es-un-regalo-data-replicator"&gt;&lt;/span&gt;
+&lt;a href="#el-hoy-es-un-regalo-data-replicator" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El data-replicator es un proceso escrito en Rust –el porqué de Rust da para su propia publicación– que copia las bases Aurora PostgreSQL de cada proyecto al ODS de su tenant y las mantiene al día en tiempo real.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;Aurora del proyecto ──pgoutput (slot lógico)──▶ data-replicator ──SQL──▶ ODS del tenant
+publication 1 pod por tenant schema public_&amp;lt;p&amp;gt;
+usuario dedicado 1 tarea por pipeline &amp;#43; origin por pipeline&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;La arquitectura es simple a propósito (otro de los mantras, la simpleza ante todo): &lt;strong&gt;un pod por tenant&lt;/strong&gt; en Fargate que corre todas los pipelines de ese tenant, donde un pipeline es una base de origen. Ese pod cuesta unos USD 72 por mes. Si un pipeline se rompe las demás ni se enteran, cada uno corre aislado y supervisado por separado.&lt;/p&gt;
+&lt;h4 data-hextra-search-id="un-momento-qué-es-un-slot"&gt;Un momento, qué es un slot?&lt;span class="hx:absolute hx:-mt-20" id="un-momento-qué-es-un-slot"&gt;&lt;/span&gt;
+&lt;a href="#un-momento-qu%c3%a9-es-un-slot" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Para quien nunca se peleó con la replicación lógica de PostgreSQL, un mini glosario:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Publication&lt;/strong&gt;, define qué tablas de la base se publican; en nuestro caso todas (&lt;code&gt;FOR ALL TABLES&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;pgoutput&lt;/strong&gt;, el plugin nativo de PostgreSQL que lee el WAL y emite las transacciones como mensajes (Begin, Insert, Update, Delete, Commit…).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Slot&lt;/strong&gt;, un cursor persistente en el origen que retiene el WAL hasta que el consumidor confirma que lo procesó. Ojo con esto: si nadie lo consume, el disco crece y crece.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LSN&lt;/strong&gt;, la posición dentro del WAL; el &amp;ldquo;por dónde voy&amp;rdquo;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 data-hextra-search-id="la-vida-de-un-pipeline"&gt;La vida de un pipeline&lt;span class="hx:absolute hx:-mt-20" id="la-vida-de-un-pipeline"&gt;&lt;/span&gt;
+&lt;a href="#la-vida-de-un-pipeline" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Cada pipeline pasa por cuatro etapas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Bootstrap&lt;/strong&gt;, se conecta al origen con un usuario dedicado y al ODS, verifica que exista la publication –la crea la plataforma en el deploy del proyecto, no el pod– y que ninguna tabla esté sin primary key. Esto último no es un capricho: en PostgreSQL si publicás una tabla sin &lt;em&gt;replica identity&lt;/em&gt; los UPDATE y DELETE de la aplicación sobre esa tabla empiezan a fallar, así que el gate está para cuidar al proyecto, no al replicador.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Full load consistente&lt;/strong&gt;, crea el slot exportando un snapshot y copia cada tabla &lt;strong&gt;bajo ese snapshot&lt;/strong&gt; con &lt;code&gt;COPY&lt;/code&gt;. Del lado del ODS el &lt;code&gt;TRUNCATE&lt;/code&gt;, los datos y la marca de estado van en una única transacción por tabla: o la tabla queda completa y &lt;code&gt;active&lt;/code&gt;, o no queda nada. Nada de tablas a medio cargar.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CDC&lt;/strong&gt;, arranca exactamente desde el punto consistente del slot, así que entre la carga inicial y los cambios no hay huecos ni duplicados. Cada transacción del origen se aplica como una transacción en el ODS, con statements preparados y &lt;em&gt;pipelineados&lt;/em&gt; –se mandan de a 500 sin esperar respuesta–, así una transacción chica cuesta un round-trip y no seis.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reinicio&lt;/strong&gt;, reutiliza el slot existente y retoma desde el último commit aplicado. Sin full load, salvo que el bootstrap haya quedado a medias.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 data-hextra-search-id="exactly-once-o-la-garantía-que-dms-no-da"&gt;Exactly-once, o la garantía que DMS no da&lt;span class="hx:absolute hx:-mt-20" id="exactly-once-o-la-garantía-que-dms-no-da"&gt;&lt;/span&gt;
+&lt;a href="#exactly-once-o-la-garant%c3%ada-que-dms-no-da" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá está el corazón del asunto y lo que nos hace sacar pecho. ¿Se acuerdan del checkpoint que DMS guarda por separado? Nosotros hacemos que &lt;strong&gt;los datos y la posición se commiteen juntos&lt;/strong&gt;, en la misma transacción del ODS, usando los &lt;em&gt;replication origins&lt;/em&gt; de PostgreSQL:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- simplificado: una vez por sesión, el applier se ata al origin de su pipeline
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pg_replication_origin_session_setup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;origin de un pipeline&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- por cada transacción que llega del origen
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;BEGIN&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pg_replication_origin_xact_setup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;end_lsn&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;commit_ts&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;...;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;UPDATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;...;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;DELETE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;...;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- datos y &amp;#34;hasta dónde llegué&amp;#34;, juntos o nada&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;¿Qué significa esto en la práctica? Que si le metés un &lt;code&gt;kill -9&lt;/code&gt; al pod a mitad de una transacción, o se aplicó todo o no se aplicó nada; y al volver retoma exactamente desde el último commit, salteando lo que ya estaba aplicado. Lo validamos rompiendo cosas a propósito en dev, rewinds del slot y failovers de Aurora incluidos.&lt;/p&gt;
+&lt;p&gt;Nada es gratis, claro, y esto trae su letra chica:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Un replication origin por pipeline&lt;/strong&gt; en el ODS, lo que nos obligó a subir &lt;code&gt;max_replication_slots&lt;/code&gt; de 20 (el default) a 100. Es un parámetro estático, osea reboot del writer; DMS no lo necesitaba justamente porque guarda su checkpoint aparte.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Un solo applier por pipeline&lt;/strong&gt;, siempre. El Deployment corre con &lt;code&gt;strategy: Recreate&lt;/code&gt; –nada de rolling update con dos pods escribiendo a la vez– y al arrancar hace &lt;em&gt;fencing&lt;/em&gt; de cualquier sesión propia que haya quedado viva. KEDA y HPA están prohibidos en este Deployment, y no es chiste.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 data-hextra-search-id="fallar-en-voz-alta-y-en-chiquito"&gt;Fallar en voz alta y en chiquito&lt;span class="hx:absolute hx:-mt-20" id="fallar-en-voz-alta-y-en-chiquito"&gt;&lt;/span&gt;
+&lt;a href="#fallar-en-voz-alta-y-en-chiquito" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Si DMS fallaba en silencio y a lo grande, acá la idea fue la inversa: fallar en voz alta y lo más acotado posible. Algunos casos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Error determinístico en una tabla&lt;/strong&gt; (un tipo que no encaja, una constraint, una columna que falta), se suspende &lt;strong&gt;solo esa tabla&lt;/strong&gt;, se guarda la razón y salta una alerta P1; el resto del pipeline sigue como si nada.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El origen agrega una columna&lt;/strong&gt;, se replica el &lt;code&gt;ADD COLUMN&lt;/code&gt; automáticamente, y desde el data-replicator con el valor que la fuente materializó para las filas viejas, así un &lt;code&gt;DEFAULT 'x'&lt;/code&gt; deja las filas previas iguales de los dos lados. Si el default es volátil (&lt;code&gt;clock_timestamp()&lt;/code&gt;, &lt;code&gt;nextval()&lt;/code&gt;) esas filas quedan en NULL en el destino y el replicador avisa.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tabla nueva en el origen&lt;/strong&gt;, se detecta en su primer cambio y se copia sola.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El origen dropea una tabla&lt;/strong&gt;, no se propaga (DMS sí lo hacía). La copia queda como historial y decide una persona; borrar datos no es algo que queramos que pase solo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Una tabla destino con otro dueño&lt;/strong&gt;, si otro escritor creó una tabla con nuestro nombre –nos pasó con un DMS que un deploy volvió a levantar– se suspende esa tabla y jamás se escribe encima.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transacciones gigantes&lt;/strong&gt;, se bufferean hasta 64 MB y si son más grandes se aplican por ventanas dentro de la misma transacción del ODS: la memoria la acota la ventana, no la transacción. Confieso que hasta la v0.2.11 del
+data-replicator eso era un tope y la transacción que lo superaba dejaba el pipeline en loop; &lt;a href="https://luispe.github.io/blog/es/posts/mistakes-and-learnings/" target="_blank" rel="noopener"&gt;de los errores se aprende&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Corte de red u ODS reiniciado&lt;/strong&gt;, reconexión con backoff y replay desde el origin. Exactly-once mediante, no hay nada que limpiar.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Y para recuperar una tabla suspendida? un &lt;code&gt;UPDATE&lt;/code&gt; en la tabla de estado del replicador pasándola a &lt;code&gt;reload_requested&lt;/code&gt;, y se encarga solo de hacer una copia fresca por un slot temporal.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="que-el-silencio-también-avise"&gt;Que el silencio también avise&lt;span class="hx:absolute hx:-mt-20" id="que-el-silencio-también-avise"&gt;&lt;/span&gt;
+&lt;a href="#que-el-silencio-tambi%c3%a9n-avise" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Todas las métricas salen por OpenTelemetry a Coralogix con el pipeline como label: estado de cada tabla, lag en segundos y en bytes de WAL retenido, eventos descartados, reconexiones y transacciones aplicadas. Sobre eso montamos tres niveles de alertas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;P1&lt;/strong&gt;, tabla suspendida.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;P2&lt;/strong&gt;, lag alto, pipeline silencioso o eventos descartados.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;P3&lt;/strong&gt;, reconexiones sostenidas o WAL retenido.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Fíjense en &amp;ldquo;pipeline silencioso&amp;rdquo;, es la alerta que nos hubiese ahorrado esos meses de DMS en &lt;code&gt;failed&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Ahora, qué pasa si el que se muere es el pod? un pod muerto no puede avisar que está muerto 😅. Para eso tenemos un backstop desde el origen, una alarma de CloudWatch por cluster que salta si el slot retiene más de 10 GiB durante una hora; esa alarma sobrevive al pod.&lt;/p&gt;
+&lt;p&gt;Y para el día a día, una query que nos dice en un vistazo cómo está un tenant:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- salud de un tenant, en el ODS: no_activas tiene que ser 0
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pipeline&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target_schema&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;count&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;table_name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;FILTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;active&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;activas&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;count&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;table_name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;FILTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;active&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;no_activas&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;_replicator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pipeline_state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;LEFT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;JOIN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;_replicator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;table_state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;USING&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pipeline&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;GROUP&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;BY&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;ORDER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;BY&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 data-hextra-search-id="un-toggle-en-port-y-el-resto-se-autodescubre"&gt;Un toggle en Port y el resto se autodescubre&lt;span class="hx:absolute hx:-mt-20" id="un-toggle-en-port-y-el-resto-se-autodescubre"&gt;&lt;/span&gt;
+&lt;a href="#un-toggle-en-port-y-el-resto-se-autodescubre" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Si leyeron la publicación anterior saben que Port es nuestra capa de presentación, así que acá no podía ser distinto. Cada proyecto tiene una entidad &lt;code&gt;replication&lt;/code&gt; en Port con lo mínimo: si está habilitada, a qué schema escribe y alguna que otra opción, con overrides por tenant y entorno para las diferencias.&lt;/p&gt;
+&lt;p&gt;A partir de ahí:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;El deploy del proyecto&lt;/strong&gt;, si la entidad está habilitada y el replicador existe en el tenant, crea el &lt;em&gt;publisher&lt;/em&gt;: el usuario, la publication, la regla de security group desde el pod y un secret con la conexión. El gate de PK que les comenté más arriba vive acá.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El deploy del data-replicator&lt;/strong&gt;, descubre esos secrets por tag, los cruza con las entidades de Port y arma la configuración de los pipelines. Entidad habilitada sin publisher, o publisher sin entidad, es un warning y sigue.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El core-stack del tenant&lt;/strong&gt;, crea el usuario del lado del ODS y deja &lt;code&gt;max_replication_slots&lt;/code&gt; en 100.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;ldquo;Todo debe autodescubrirse, no &amp;lsquo;harcodiemos&amp;rsquo; nada&amp;rdquo;, ¿les suena? 😉&lt;/p&gt;
+&lt;p&gt;Pausar un pipeline es poner &lt;code&gt;enabled: false&lt;/code&gt;. Eso sí, atenti: borrar la entidad borra el publisher y deja el slot sin consumidor, y ya saben lo que pasa con un slot sin consumidor (sí, la alarma de arriba).&lt;/p&gt;
+&lt;p&gt;Una regla que nos ahorró más de un dolor de cabeza: el deploy del proyecto va &lt;strong&gt;después&lt;/strong&gt; de habilitar la entidad, y se verifica que salió bien mirando que exista el secret del publisher, no porque el pipeline dijo &amp;ldquo;terminó&amp;rdquo;.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="shadow-y-corte-cambiar-el-motor-con-el-auto-andando"&gt;Shadow y corte: cambiar el motor con el auto andando&lt;span class="hx:absolute hx:-mt-20" id="shadow-y-corte-cambiar-el-motor-con-el-auto-andando"&gt;&lt;/span&gt;
+&lt;a href="#shadow-y-corte-cambiar-el-motor-con-el-auto-andando" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;No queríamos un big bang. En los tenants donde DMS seguía vivo, cada pipeline escribe en un schema paralelo, &lt;code&gt;shadow_&amp;lt;proyecto&amp;gt;&lt;/code&gt;, con los mismos nombres de tabla que DMS deja en &lt;code&gt;public&lt;/code&gt;. Así conviven sin pisarse, comparamos paridad con tráfico real y los consumidores pueden construir sus índices sobre el shadow con calma.&lt;/p&gt;
+&lt;p&gt;Cuando todo cierra, el corte es un &lt;strong&gt;rename atómico&lt;/strong&gt; en una sola transacción:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- simplificado; el de verdad vive en nuestro runbook
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;BEGIN&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SCHEMA&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dms_retired_&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;fecha&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;ALTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;public&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;tabla&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SET&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SCHEMA&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dms_retired_&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;fecha&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- lo de DMS, a retiro
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;ALTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;shadow_&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;tabla&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SET&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SCHEMA&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;public&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- lo nuestro, a producción
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- ...por cada tabla, y se actualiza el target_schema del pipeline
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;SET SCHEMA&lt;/code&gt; arrastra índices, constraints y permisos, así que no hay full load, la ventana es de segundos y el rollback es simétrico (el mismo movimiento al revés). Después se cambia el schema destino en Port, se re-sincroniza y el siguiente deploy del proyecto borra su DMS solo: si la entidad &lt;code&gt;replication&lt;/code&gt; está habilitada en &lt;code&gt;public&lt;/code&gt;, el dueño es el replicador y DMS deja de declararse.&lt;/p&gt;
+&lt;p&gt;Al momento de escribir esto (números de principios de octubre) tenemos 23 pipelines corriendo en dev, 114 en producción ya cortadas definitivamente a &lt;code&gt;public&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="el-mañana-es-un-misterio"&gt;El mañana es un misterio&lt;span class="hx:absolute hx:-mt-20" id="el-mañana-es-un-misterio"&gt;&lt;/span&gt;
+&lt;a href="#el-ma%c3%b1ana-es-un-misterio" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Como dice el maestro Oogway, el mañana es un misterio, pero algunas cosas ya las tenemos en el radar:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Terminar los cortes&lt;/strong&gt;, y que se apague el último DMS; ese día va a haber festejo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hot reload de la configuración&lt;/strong&gt;, hoy cambiar la config reinicia el pod; es un reinicio limpio porque todas los pipelines retoman desde su origin, pero queremos montar la config como ConfigMap y recargarla en caliente.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Para ir cerrando quiero dejar algunas reglas que nos quedaron tatuadas en este camino:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;La fuente de verdad del ODS es el ODS&lt;/strong&gt;, no las estadísticas de DMS ni lo que diga una consola.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Todo conteo de una API de AWS que vuelve exactamente 100 es paginación.&lt;/strong&gt; Parece un chiste, pero no lo es 😅.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fallar está bien, fallar en silencio no.&lt;/strong&gt; Mil veces prefiero una tabla suspendida con su razón y una alerta P1 que un &amp;ldquo;running&amp;rdquo; que no corre.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shadow antes que big bang&lt;/strong&gt;, convivir, comparar y recién después cortar y cambiar.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Reemplazar un servicio administrado de AWS por algo propio da vértigo, y está bien que lo dé; pero cuando lo que pagás no te da garantías y encima no te avisa cuando se rompe, construir con garantías claras –exactly-once, fallas acotadas y visibles, un core que se puede revertir– es lo más parecido a hacer las cosas bien y dormir tranquilos.&lt;/p&gt;
+&lt;p&gt;Esto fue el primer capítulo de la trilogía, en las próximas publicaciones Cris y Jere van a contar lo suyo así que estén atentos.&lt;/p&gt;
+&lt;p&gt;Hasta la próxima 👋🏽&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 data-hextra-search-id="fuentes-y-lecturas-recomendadas"&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
+&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/logical-replication.html" target="_blank" rel="noopener"&gt;PostgreSQL: Logical Replication&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/logicaldecoding.html" target="_blank" rel="noopener"&gt;PostgreSQL: Logical Decoding&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/replication-origins.html" target="_blank" rel="noopener"&gt;PostgreSQL: Replication Progress Tracking (replication origins)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener"&gt;PostgreSQL: funciones de gestión de replicación&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/sql-altertable.html" target="_blank" rel="noopener"&gt;PostgreSQL: ALTER TABLE … REPLICA IDENTITY&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Construir desde las diferencias</title><link>https://luispe.github.io/blog/es/posts/build-on-difference/</link><pubDate>Sat, 01 Nov 2025 00:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/build-on-difference/</guid><description>
 &lt;p&gt;En esta publicación voy intentar contar nuestra experiencia
 construyendo el IDP en Akua, que retos sorteamos, estado actual
 y lo que queda para el futuro del IDP.&lt;/p&gt;
-&lt;p&gt;Con &lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; a esta altura me
+&lt;p&gt;Con &lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; a esta altura me
 animo a decir que un amigo, nos unimos desde los inicios de Akua
 con el objetivo de construir la plataforma de desarrollo interna,
 ambos de experiencias e industrias diferentes pero con una
@@ -10,15 +203,15 @@ misma visión profunda sobre lo que necesitaba Akua.&lt;/p&gt;
 &lt;p&gt;Deje enlace de su linkedin, pero a muy breve &amp;ndash;e irrespetuoso resumen&amp;ndash;
 Ger viene con una experiencia desde el más bajo nivel en infraestructura
 hasta llegar a construir el equipo y la plataforma en Sate (para los amigos),
-&lt;a href="https://www.linkedin.com/company/satellogic/"target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; si nos ponemos
+&lt;a href="https://www.linkedin.com/company/satellogic/" target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; si nos ponemos
 más serios.&lt;/p&gt;
 &lt;p&gt;En mi caso arranque mi carrera como desarrollador de producto y ya desde
 mi paso por Viacom (Telefé) comencé a sentir una curiosidad muy fuerte
 por la infraestructura, en Pomelo pude trabajar a tiempo completo ayudando
 a construir el IDP y en Akua ya junto a &amp;ldquo;mi compa&amp;rdquo; lo diseñamos y ejecutamos
 desde cero con todo el orgullo que eso me provoca.&lt;/p&gt;
-&lt;h2&gt;Primeros dias y primeros pasos&lt;span class="hx:absolute hx:-mt-20" id="primeros-dias-y-primeros-pasos"&gt;&lt;/span&gt;
-&lt;a href="#primeros-dias-y-primeros-pasos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Comenzamos con una hoja en blanco, literal, no había absolutamente nada
+&lt;h2 data-hextra-search-id="primeros-dias-y-primeros-pasos"&gt;Primeros dias y primeros pasos&lt;span class="hx:absolute hx:-mt-20" id="primeros-dias-y-primeros-pasos"&gt;&lt;/span&gt;
+&lt;a href="#primeros-dias-y-primeros-pasos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Comenzamos con una hoja en blanco, literal, no había absolutamente nada
 en Akua, una cuenta de AWS pelada pero eso era lo que menos nos preocupaba;
 dejo un punteo de &amp;ldquo;nuestros mantras&amp;rdquo; que hasta el día de hoy seguimos
 manteniendo y velando porque eso siga sucediendo:&lt;/p&gt;
@@ -32,8 +225,8 @@ ciclo de vida por el que pase el software.&lt;/li&gt;
 &lt;li&gt;La simpleza ante todo.&lt;/li&gt;
 &lt;li&gt;Rompamos con la inercia de experiencias previas.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;Armando las bases&lt;span class="hx:absolute hx:-mt-20" id="armando-las-bases"&gt;&lt;/span&gt;
-&lt;a href="#armando-las-bases" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Nos aliamos con Binbash para que ejecute nuestro diseño de redes
+&lt;h3 data-hextra-search-id="armando-las-bases"&gt;Armando las bases&lt;span class="hx:absolute hx:-mt-20" id="armando-las-bases"&gt;&lt;/span&gt;
+&lt;a href="#armando-las-bases" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Nos aliamos con Binbash para que ejecute nuestro diseño de redes
 compliance con PCI, mientras Ger y yo hacíamos una validación
 de que herramienta se iba a adaptar mejor para la gestión de la
 infraestructura de nuestro IDP, para ser absolutamente transparentes
@@ -100,8 +293,8 @@ la UI es exquisita, brinda acceso por SSO, tiene sistema de RBAC (aun bastante m
 y sumado a Scorecards, Self Service actions, Automations y generación de dashboard
 con un par de clicks se convirtió en nuestra herramienta perfecta para la capa
 de presentación de nuestra Plataforma que estábamos buscando.&lt;/p&gt;
-&lt;h3&gt;Stack tecnológico&lt;span class="hx:absolute hx:-mt-20" id="stack-tecnológico"&gt;&lt;/span&gt;
-&lt;a href="#stack-tecnol%c3%b3gico" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Desarrollamos un Helm chart a medida para nuestras aplicaciones, con el tiempo
+&lt;h3 data-hextra-search-id="stack-tecnológico"&gt;Stack tecnológico&lt;span class="hx:absolute hx:-mt-20" id="stack-tecnológico"&gt;&lt;/span&gt;
+&lt;a href="#stack-tecnol%c3%b3gico" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Desarrollamos un Helm chart a medida para nuestras aplicaciones, con el tiempo
 evolucionó y hoy soporta poder desplegar tanto un microservicio o un monorepo con esto
 último nos queremos referir a que con un mismo proyecto se puedan desplegar múltiples
 servicios en kubernetes sin necesidad de tener &amp;ldquo;n&amp;rdquo; proyectos en Gitlab.&lt;/p&gt;
@@ -140,13 +333,13 @@ nuestro cluster de EKS tiene muy muy pocas herramientas o componentes instalados
 &lt;/ul&gt;
 &lt;p&gt;Y si, tienen que haber una justificación y ganancia muy alta para instalar
 más herramientas en nuestros clusters.&lt;/p&gt;
-&lt;h4&gt;Un momento y los secretos?&lt;span class="hx:absolute hx:-mt-20" id="un-momento-y-los-secretos"&gt;&lt;/span&gt;
-&lt;a href="#un-momento-y-los-secretos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desarrollamos un flujo de trabajo con parameter store que nos permite desplegar
+&lt;h4 data-hextra-search-id="un-momento-y-los-secretos"&gt;Un momento y los secretos?&lt;span class="hx:absolute hx:-mt-20" id="un-momento-y-los-secretos"&gt;&lt;/span&gt;
+&lt;a href="#un-momento-y-los-secretos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desarrollamos un flujo de trabajo con parameter store que nos permite desplegar
 y disponibilizar los secretos a las aplicaciones en kubernetes con la flexibilidad
 de que si algún secreto no es manejado por nuestra infra-lib el equipo de seguridad
 lo pueda agregar a parameter store y nuestra infra-lib lo deja disponible en la app.&lt;/p&gt;
-&lt;h4&gt;Seguridad auth y authz?&lt;span class="hx:absolute hx:-mt-20" id="seguridad-auth-y-authz"&gt;&lt;/span&gt;
-&lt;a href="#seguridad-auth-y-authz" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desde el minuto cero para las aplicaciones usamos IRSA (Iam Role for Service Account)
+&lt;h4 data-hextra-search-id="seguridad-auth-y-authz"&gt;Seguridad auth y authz?&lt;span class="hx:absolute hx:-mt-20" id="seguridad-auth-y-authz"&gt;&lt;/span&gt;
+&lt;a href="#seguridad-auth-y-authz" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desde el minuto cero para las aplicaciones usamos IRSA (Iam Role for Service Account)
 y desplegamos permisos por tag (en breve comento nuestra estrategia de tagging),
 y en caso de que el recurso de AWS no lo soporte (s3), nuestra infra-lib tiene
 la habilidad de autodescubrir el recurso y asignar los permisos necesarios.&lt;/p&gt;
@@ -164,8 +357,8 @@ es mediante reglas en los security groups entre la app y la DB, así mismo el ac
 entre aplicaciones está bloqueado a nivel del red aunque estén el mismo namespace,
 esto nos permite establecer reglas de acceso entre servicios que son manejadas por
 Kong y se configuran de forma fácil desde nuestro portal Port.io.&lt;/p&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Resta aún comentar un monton de cosas más: como implementamos scorecards,
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Resta aún comentar un monton de cosas más: como implementamos scorecards,
 acciones del día 2, despliegue de single tenants, publicación de rutas públicas;
 entre otros, pero lo guardo para otra publicación :).&lt;/p&gt;
 &lt;p&gt;Pero para ir finalizando quiero reflexionar sobre algunos asuntos.&lt;/p&gt;

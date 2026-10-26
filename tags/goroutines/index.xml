@@ -5,7 +5,7 @@ developing Go applications: &lt;strong&gt;the graceful shutdown&lt;/strong&gt;.&
 servers, workers, queue consumers, or any concurrent process using
 &lt;em&gt;goroutines&lt;/em&gt;, handling shutdown properly can prevent data loss, hanging
 connections, or erratic behavior.&lt;/p&gt;
-&lt;h2&gt;Preamble&lt;span class="hx:absolute hx:-mt-20" id="preamble"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preamble"&gt;Preamble&lt;span class="hx:absolute hx:-mt-20" id="preamble"&gt;&lt;/span&gt;
 &lt;a href="#preamble" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The concept of graceful shutdown is simple: &lt;strong&gt;give your application time
 to finish what it&amp;rsquo;s doing&lt;/strong&gt; before dying.&lt;/p&gt;
 &lt;p&gt;The problem is that in Go, we often underestimate its complexity. For
@@ -13,7 +13,7 @@ example, we start an HTTP server and a few background &lt;em&gt;goroutines&lt;/e
 assuming that &lt;code&gt;ctrl + c&lt;/code&gt; or a &lt;code&gt;SIGTERM&lt;/code&gt; will magically stop everything
 cleanly.&lt;/p&gt;
 &lt;p&gt;Spoiler: it won&amp;rsquo;t. 😅&lt;/p&gt;
-&lt;h2&gt;Anti-pattern&lt;span class="hx:absolute hx:-mt-20" id="anti-pattern"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="anti-pattern"&gt;Anti-pattern&lt;span class="hx:absolute hx:-mt-20" id="anti-pattern"&gt;&lt;/span&gt;
 &lt;a href="#anti-pattern" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s look at this code:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
@@ -34,6 +34,8 @@ cleanly.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -44,7 +46,7 @@ title="Copy code"
 &lt;code&gt;ctrl + c&lt;/code&gt;, the process dies abruptly.&lt;/p&gt;
 &lt;p&gt;Any ongoing requests are cut off, open resources (connections, files,
 etc.) aren&amp;rsquo;t released, and there&amp;rsquo;s no opportunity to perform cleanup.&lt;/p&gt;
-&lt;h2&gt;Proposal / Learning&lt;span class="hx:absolute hx:-mt-20" id="proposal--learning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposal--learning"&gt;Proposal / Learning&lt;span class="hx:absolute hx:-mt-20" id="proposal--learning"&gt;&lt;/span&gt;
 &lt;a href="#proposal--learning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The solution is to implement a &lt;strong&gt;graceful shutdown&lt;/strong&gt; using Go&amp;rsquo;s
 &lt;code&gt;context&lt;/code&gt; and &lt;code&gt;os/signal&lt;/code&gt; packages.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
@@ -90,6 +92,8 @@ etc.) aren&amp;rsquo;t released, and there&amp;rsquo;s no opportunity to perform
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -98,7 +102,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;p&gt;Now, when the process receives a signal (&lt;code&gt;SIGTERM&lt;/code&gt; or &lt;code&gt;SIGINT&lt;/code&gt;), it has
 time (5 seconds in this case) to finish ongoing requests before closing.&lt;/p&gt;
-&lt;h3&gt;Mind your goroutines&lt;span class="hx:absolute hx:-mt-20" id="mind-your-goroutines"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="mind-your-goroutines"&gt;Mind your goroutines&lt;span class="hx:absolute hx:-mt-20" id="mind-your-goroutines"&gt;&lt;/span&gt;
 &lt;a href="#mind-your-goroutines" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Here&amp;rsquo;s where things get tricky.&lt;/p&gt;
 &lt;p&gt;If you have background &lt;em&gt;goroutines&lt;/em&gt; &amp;mdash;like workers consuming from a
 queue or processing tasks&amp;mdash;, &lt;strong&gt;you need to ensure they also respect the
@@ -113,6 +117,8 @@ cancellation context&lt;/strong&gt;.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -140,6 +146,8 @@ running&amp;hellip; or dies abruptly, leaving half-done work.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -148,7 +156,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;p&gt;When the process receives a signal, &lt;code&gt;cancel()&lt;/code&gt; is called, and all
 &lt;em&gt;goroutines&lt;/em&gt; listening to that context exit gracefully.&lt;/p&gt;
-&lt;h3&gt;Edge cases&lt;span class="hx:absolute hx:-mt-20" id="edge-cases"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="edge-cases"&gt;Edge cases&lt;span class="hx:absolute hx:-mt-20" id="edge-cases"&gt;&lt;/span&gt;
 &lt;a href="#edge-cases" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Blocked goroutines&lt;/strong&gt;: if a &lt;em&gt;goroutine&lt;/em&gt; is waiting on a channel
 that no one closes, shutdown won&amp;rsquo;t complete.&lt;br&gt;
@@ -159,7 +167,7 @@ abort valid tasks. Tune it based on your real workload.&lt;/li&gt;
 statements execute when the &lt;em&gt;goroutine&lt;/em&gt; returns. If it never
 returns, they never run.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Graceful shutdown isn&amp;rsquo;t optional; it&amp;rsquo;s a fundamental part of building
 reliable production services.&lt;/p&gt;
 &lt;p&gt;Using contexts properly and respecting shutdown timeouts is a simple way
@@ -168,15 +176,15 @@ apps.&lt;/p&gt;
 &lt;p&gt;To avoid boring you for now, let&amp;rsquo;s pause here.&lt;/p&gt;
 &lt;p&gt;See you soon! 👋🏽&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Sources and recommended readings&lt;span class="hx:absolute hx:-mt-20" id="sources-and-recommended-readings"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="sources-and-recommended-readings"&gt;Sources and recommended readings&lt;span class="hx:absolute hx:-mt-20" id="sources-and-recommended-readings"&gt;&lt;/span&gt;
 &lt;a href="#sources-and-recommended-readings" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://go.dev/blog/context"target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
+&lt;li&gt;&lt;a href="https://go.dev/blog/context" target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
 Context&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/context"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;context&lt;/code&gt; package docs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;os/signal&lt;/code&gt; package
+&lt;li&gt;&lt;a href="https://pkg.go.dev/context" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;context&lt;/code&gt; package docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;os/signal&lt;/code&gt; package
 docs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;net/http&lt;/code&gt; package docs &amp;mdash;
+&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;net/http&lt;/code&gt; package docs &amp;mdash;
 Server.Shutdown&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling"target="_blank" rel="noopener"&gt;Go Wiki: Signal
+&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling" target="_blank" rel="noopener"&gt;Go Wiki: Signal
 Handling&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>

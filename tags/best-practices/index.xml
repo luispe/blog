@@ -5,7 +5,7 @@ developing Go applications: &lt;strong&gt;the graceful shutdown&lt;/strong&gt;.&
 servers, workers, queue consumers, or any concurrent process using
 &lt;em&gt;goroutines&lt;/em&gt;, handling shutdown properly can prevent data loss, hanging
 connections, or erratic behavior.&lt;/p&gt;
-&lt;h2&gt;Preamble&lt;span class="hx:absolute hx:-mt-20" id="preamble"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preamble"&gt;Preamble&lt;span class="hx:absolute hx:-mt-20" id="preamble"&gt;&lt;/span&gt;
 &lt;a href="#preamble" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The concept of graceful shutdown is simple: &lt;strong&gt;give your application time
 to finish what it&amp;rsquo;s doing&lt;/strong&gt; before dying.&lt;/p&gt;
 &lt;p&gt;The problem is that in Go, we often underestimate its complexity. For
@@ -13,7 +13,7 @@ example, we start an HTTP server and a few background &lt;em&gt;goroutines&lt;/e
 assuming that &lt;code&gt;ctrl + c&lt;/code&gt; or a &lt;code&gt;SIGTERM&lt;/code&gt; will magically stop everything
 cleanly.&lt;/p&gt;
 &lt;p&gt;Spoiler: it won&amp;rsquo;t. 😅&lt;/p&gt;
-&lt;h2&gt;Anti-pattern&lt;span class="hx:absolute hx:-mt-20" id="anti-pattern"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="anti-pattern"&gt;Anti-pattern&lt;span class="hx:absolute hx:-mt-20" id="anti-pattern"&gt;&lt;/span&gt;
 &lt;a href="#anti-pattern" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s look at this code:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
@@ -34,6 +34,8 @@ cleanly.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -44,7 +46,7 @@ title="Copy code"
 &lt;code&gt;ctrl + c&lt;/code&gt;, the process dies abruptly.&lt;/p&gt;
 &lt;p&gt;Any ongoing requests are cut off, open resources (connections, files,
 etc.) aren&amp;rsquo;t released, and there&amp;rsquo;s no opportunity to perform cleanup.&lt;/p&gt;
-&lt;h2&gt;Proposal / Learning&lt;span class="hx:absolute hx:-mt-20" id="proposal--learning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposal--learning"&gt;Proposal / Learning&lt;span class="hx:absolute hx:-mt-20" id="proposal--learning"&gt;&lt;/span&gt;
 &lt;a href="#proposal--learning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The solution is to implement a &lt;strong&gt;graceful shutdown&lt;/strong&gt; using Go&amp;rsquo;s
 &lt;code&gt;context&lt;/code&gt; and &lt;code&gt;os/signal&lt;/code&gt; packages.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
@@ -90,6 +92,8 @@ etc.) aren&amp;rsquo;t released, and there&amp;rsquo;s no opportunity to perform
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -98,7 +102,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;p&gt;Now, when the process receives a signal (&lt;code&gt;SIGTERM&lt;/code&gt; or &lt;code&gt;SIGINT&lt;/code&gt;), it has
 time (5 seconds in this case) to finish ongoing requests before closing.&lt;/p&gt;
-&lt;h3&gt;Mind your goroutines&lt;span class="hx:absolute hx:-mt-20" id="mind-your-goroutines"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="mind-your-goroutines"&gt;Mind your goroutines&lt;span class="hx:absolute hx:-mt-20" id="mind-your-goroutines"&gt;&lt;/span&gt;
 &lt;a href="#mind-your-goroutines" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Here&amp;rsquo;s where things get tricky.&lt;/p&gt;
 &lt;p&gt;If you have background &lt;em&gt;goroutines&lt;/em&gt; &amp;mdash;like workers consuming from a
 queue or processing tasks&amp;mdash;, &lt;strong&gt;you need to ensure they also respect the
@@ -113,6 +117,8 @@ cancellation context&lt;/strong&gt;.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -140,6 +146,8 @@ running&amp;hellip; or dies abruptly, leaving half-done work.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -148,7 +156,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;p&gt;When the process receives a signal, &lt;code&gt;cancel()&lt;/code&gt; is called, and all
 &lt;em&gt;goroutines&lt;/em&gt; listening to that context exit gracefully.&lt;/p&gt;
-&lt;h3&gt;Edge cases&lt;span class="hx:absolute hx:-mt-20" id="edge-cases"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="edge-cases"&gt;Edge cases&lt;span class="hx:absolute hx:-mt-20" id="edge-cases"&gt;&lt;/span&gt;
 &lt;a href="#edge-cases" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Blocked goroutines&lt;/strong&gt;: if a &lt;em&gt;goroutine&lt;/em&gt; is waiting on a channel
 that no one closes, shutdown won&amp;rsquo;t complete.&lt;br&gt;
@@ -159,7 +167,7 @@ abort valid tasks. Tune it based on your real workload.&lt;/li&gt;
 statements execute when the &lt;em&gt;goroutine&lt;/em&gt; returns. If it never
 returns, they never run.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Graceful shutdown isn&amp;rsquo;t optional; it&amp;rsquo;s a fundamental part of building
 reliable production services.&lt;/p&gt;
 &lt;p&gt;Using contexts properly and respecting shutdown timeouts is a simple way
@@ -168,25 +176,25 @@ apps.&lt;/p&gt;
 &lt;p&gt;To avoid boring you for now, let&amp;rsquo;s pause here.&lt;/p&gt;
 &lt;p&gt;See you soon! 👋🏽&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Sources and recommended readings&lt;span class="hx:absolute hx:-mt-20" id="sources-and-recommended-readings"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="sources-and-recommended-readings"&gt;Sources and recommended readings&lt;span class="hx:absolute hx:-mt-20" id="sources-and-recommended-readings"&gt;&lt;/span&gt;
 &lt;a href="#sources-and-recommended-readings" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://go.dev/blog/context"target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
+&lt;li&gt;&lt;a href="https://go.dev/blog/context" target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
 Context&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/context"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;context&lt;/code&gt; package docs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;os/signal&lt;/code&gt; package
+&lt;li&gt;&lt;a href="https://pkg.go.dev/context" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;context&lt;/code&gt; package docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;os/signal&lt;/code&gt; package
 docs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;net/http&lt;/code&gt; package docs &amp;mdash;
+&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;net/http&lt;/code&gt; package docs &amp;mdash;
 Server.Shutdown&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling"target="_blank" rel="noopener"&gt;Go Wiki: Signal
+&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling" target="_blank" rel="noopener"&gt;Go Wiki: Signal
 Handling&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Interfaces and "copy paste"</title><link>https://luispe.github.io/blog/posts/interfaces-correct-use/</link><pubDate>Mon, 20 Jun 2022 10:47:02 -0300</pubDate><guid>https://luispe.github.io/blog/posts/interfaces-correct-use/</guid><description>
 &lt;p&gt;In the following post I want to share a common mistake I used to make in my Golang projects.
 And as the title and description says, today we are going to talk about interfaces.&lt;/p&gt;
 &lt;p&gt;You will probably come across some references to another post I did on
-&lt;a href="https://luispe.github.io/blog/posts/hexagonal-architecture/"target="_blank" rel="noopener"&gt;hexagonal architecture&lt;/a&gt;, I think part of the misuse
+&lt;a href="https://luispe.github.io/blog/posts/hexagonal-architecture/" target="_blank" rel="noopener"&gt;hexagonal architecture&lt;/a&gt;, I think part of the misuse
 of interfaces is the consequence of following &amp;ldquo;medium&amp;rdquo; publications to the letter and not taking the time
 to understand the underlying concept.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;If there is something that we have to admit in the Golang ecosystem, it is the kink that we sometimes give ourselves
 with some/several issues. To give an example on how to name variables (which is a topic I want to talk about soon)
 and in today&amp;rsquo;s case with interfaces.&lt;/p&gt;
@@ -221,6 +229,8 @@ in the next post we will review a fake project and refactor it to make good use 
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -258,6 +268,8 @@ title="Copy code"
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -271,7 +283,7 @@ I also made the same mistake.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Go interfaces generally belong to the package that uses values of the interface type,
 not to the package that implements those values.&lt;/em&gt; 🫠&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;The implementation package must return concrete types (usually pointer or struct): that way,
 new methods can be added to implementations without requiring extensive refactoring.&lt;/em&gt;&lt;/p&gt;
@@ -301,6 +313,8 @@ structure and not the interface.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -346,6 +360,8 @@ return concrete types (usually a pointer or a structure).&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -357,9 +373,9 @@ title="Copy code"
 we inject the interface so that it can be consumed in the service methods.&lt;/p&gt;
 &lt;p&gt;As with the repository layer our &lt;code&gt;NewService()&lt;/code&gt; now returns a structure and not an interface.&lt;/p&gt;
 &lt;p&gt;Finally, we add the &lt;code&gt;Create&lt;/code&gt; method to our &lt;code&gt;Service&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;With these subtle but powerful changes our &lt;code&gt;producer&lt;/code&gt; now has enormous flexibility.&lt;/p&gt;
-&lt;p&gt;Finally, I want to thank my friend and mentor &lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; who shared with me
+&lt;p&gt;Finally, I want to thank my friend and mentor &lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; who shared with me
 this anti pattern and made me rethink and improve, once again, in this software development.&lt;/p&gt;
 &lt;p&gt;So as not to bore you and for the moment let&amp;rsquo;s take a break.&lt;/p&gt;
 &lt;p&gt;Soon we will continue with small publications where we will try to rethink other anti-patterns.&lt;/p&gt;
@@ -367,15 +383,15 @@ this anti pattern and made me rethink and improve, once again, in this software 
 &lt;hr&gt;
 &lt;p&gt;Sources:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces"target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/"target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces" target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/" target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>When context matters</title><link>https://luispe.github.io/blog/posts/when-the-context-matter/</link><pubDate>Tue, 14 Jun 2022 18:45:35 -0300</pubDate><guid>https://luispe.github.io/blog/posts/when-the-context-matter/</guid><description>
 &lt;p&gt;The following publication could be said to be a continuation of another one where we talk
 about how having lightweight images helps us in many aspects,
 if you still could not read it here I leave you
-&lt;a href="https://luispe.github.io/blog/posts/lightweight-container-image/"target="_blank" rel="noopener"&gt;the access&lt;/a&gt;.&lt;/p&gt;
+&lt;a href="https://luispe.github.io/blog/posts/lightweight-container-image/" target="_blank" rel="noopener"&gt;the access&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Today we are going to make a small, but important improvement, and we are going to find out why we are doing it.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;As the last proposal in the post I shared earlier we stayed at this point:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -417,6 +433,8 @@ if you still could not read it here I leave you
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -429,7 +447,7 @@ places and not find surprises when we start the application that is contained in
 I invite you to think for a few seconds / minutes or as long as we need.&lt;/p&gt;
 &lt;p&gt;Can an image enhancement be made for the Golang application?&lt;/p&gt;
 &lt;p&gt;The answer is yes, let&amp;rsquo;s get to work!&lt;/p&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Golang has one feature that is really powerful, and I&amp;rsquo;m not talking about goroutines,
 and that is the great virtue of being able to cross-compile.&lt;/p&gt;
 &lt;p&gt;What is cross-compilation?, it is the feature of being able to compile
@@ -490,6 +508,8 @@ the computation is linux as OS and with amd64 architecture.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -505,6 +525,8 @@ GOARCH=amd64&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -524,7 +546,7 @@ we can rest assured that we are shortening the margin of mishaps.&lt;/p&gt;
 &lt;p&gt;¡Have a good time! 👋🏽&lt;/p&gt;</description></item><item><title>Size matters</title><link>https://luispe.github.io/blog/posts/lightweight-container-image/</link><pubDate>Sat, 11 Jun 2022 17:49:18 -0300</pubDate><guid>https://luispe.github.io/blog/posts/lightweight-container-image/</guid><description>
 &lt;p&gt;In the following post I am going to share with you some tips and best practices to develop our container images,
 as an example we are going to create an image for an app in Golang, but the following tips apply to any language, let&amp;rsquo;s go!&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;To make our container images as small as possible in terms of weight (megabytes, gigabytes, etc.)
 is not a matter of taste, it helps us in many ways, here are some of them:&lt;/p&gt;
 &lt;ul&gt;
@@ -539,7 +561,7 @@ is going to initialize with a higher speed.&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;To give a few examples.&lt;/p&gt;
-&lt;h2&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lets-start"&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
 &lt;a href="#lets-start" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let us imagine that we have the following Dockerfile to create our container image e.g:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -571,6 +593,8 @@ is going to initialize with a higher speed.&lt;/li&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -586,8 +610,8 @@ title="Copy code"
 &lt;p&gt;To give an example &lt;code&gt;RUN go build -o ./myapp ./path/to/main&lt;/code&gt; where &lt;code&gt;./path/to/main&lt;/code&gt; should be the main of
 your Golang app&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
-&lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Let&amp;rsquo;s go with the first proposal.&lt;span class="hx:absolute hx:-mt-20" id="lets-go-with-the-first-proposal"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3 data-hextra-search-id="lets-go-with-the-first-proposal"&gt;Let&amp;rsquo;s go with the first proposal.&lt;span class="hx:absolute hx:-mt-20" id="lets-go-with-the-first-proposal"&gt;&lt;/span&gt;
 &lt;a href="#lets-go-with-the-first-proposal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;It is always a good practice to use &lt;code&gt;-alpine&lt;/code&gt; images, by convention in the container universe when we make available
 an &lt;code&gt;-alpine&lt;/code&gt; image we are indicating to the client that it is an image reduced in size and the one we should use in
 our Dockerfile, among other things.&lt;/p&gt;
@@ -620,6 +644,8 @@ our Dockerfile, among other things.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -634,10 +660,10 @@ title="Copy code"
 &lt;p&gt;It&amp;rsquo;s an excellent approach, but let&amp;rsquo;s rethink: do you have to have an image with all of Golang inside
 the container weighing about 331 MB to make available a binary that weighs a few megabytes?&lt;/p&gt;
 &lt;p&gt;The answer is clearly, no.&lt;/p&gt;
-&lt;h3&gt;Second proposal&lt;span class="hx:absolute hx:-mt-20" id="second-proposal"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="second-proposal"&gt;Second proposal&lt;span class="hx:absolute hx:-mt-20" id="second-proposal"&gt;&lt;/span&gt;
 &lt;a href="#second-proposal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The container technology has an excellent feature, that for our case, will help us to build a very light
 container image, in case you didn&amp;rsquo;t know, I&amp;rsquo;m talking about Multistage, I share with you the
-&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/"target="_blank" rel="noopener"&gt;official documentation&lt;/a&gt;
+&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/" target="_blank" rel="noopener"&gt;official documentation&lt;/a&gt;
 to deepen about this feature.&lt;/p&gt;
 &lt;p&gt;What does Multistage consist of? It is about building images in stages so that we can share data between each
 one of them, and we will obtain a final image of a very small size.&lt;/p&gt;
@@ -684,6 +710,8 @@ and a second stage where we are going to make it available for use.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -701,7 +729,7 @@ I wrote correctly 9 megabytes 😎.&lt;/p&gt;
 &lt;p&gt;This is the first of a series where we will review different development patterns that I made
 mistakes and what is currently and what I understand so far, the best way to apply it.&lt;/p&gt;
 &lt;p&gt;As the title of the publication says, today I want to talk about hexagonal architecture.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I have been noticing a lot of &amp;ldquo;hype&amp;rdquo; around the hexagonal architecture and I would like to be clear about it,
 I am not against it, on the contrary, I think it is an excellent pattern.&lt;/p&gt;
 &lt;p&gt;But I think we fall into the mistake of applying the publishing recipes of &amp;ldquo;medium&amp;rdquo; and not only end up
@@ -713,9 +741,9 @@ something beautiful in the language of Go(lang) is the intentionality in the nam
 &lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;A good package name means that nothing else is needed to express the intentionality of the package.&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;I share and recommend you to read the following &lt;a href="https://go.dev/blog/package-names"target="_blank" rel="noopener"&gt;official publication&lt;/a&gt;,
+&lt;p&gt;I share and recommend you to read the following &lt;a href="https://go.dev/blog/package-names" target="_blank" rel="noopener"&gt;official publication&lt;/a&gt;,
 personal opinion, applies to any language.&lt;/p&gt;
-&lt;h2&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lets-start"&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
 &lt;a href="#lets-start" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Anti pattern&lt;/p&gt;
 &lt;p&gt;Annotation in our domain model e.g &lt;code&gt;json&lt;/code&gt;.&lt;/p&gt;
@@ -730,6 +758,8 @@ personal opinion, applies to any language.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -737,7 +767,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Before reading on, I invite you to take a few seconds/minutes to reflect on why this is an anti-pattern.&lt;/p&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Our model should be presentation and data layer agnostic, therefore, it should not contain any annotations.
 We should map the data to our model and vice versa, here is an example of what a rest HTTP controller
 would look like e.g.:&lt;/p&gt;
@@ -764,6 +794,8 @@ would look like e.g.:&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -781,6 +813,8 @@ to the domain model when we call the service and vice versa.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;

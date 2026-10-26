@@ -1,8 +1,201 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Inicio</title><link>https://luispe.github.io/blog/es/</link><description>Recent content in Inicio on luispe</description><generator>Hugo -- gohugo.io</generator><language>es</language><atom:link href="https://luispe.github.io/blog/es/index.xml" rel="self" type="application/rss+xml"/><item><title>Dos clicks</title><link>https://luispe.github.io/blog/es/posts/two-clicks/</link><pubDate>Sat, 24 Jan 2026 14:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/two-clicks/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Inicio</title><link>https://luispe.github.io/blog/es/</link><description>Recent content in Inicio on luispe</description><generator>Hugo -- gohugo.io</generator><language>es</language><atom:link href="https://luispe.github.io/blog/es/index.xml" rel="self" type="application/rss+xml"/><item><title>Pasado, presente y futuro de la Plataforma interna de Akua</title><link>https://luispe.github.io/blog/es/posts/past-present-and-future-idp/</link><pubDate>Mon, 26 Oct 2026 14:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/past-present-and-future-idp/</guid><description>
+&lt;p&gt;Hoy quiero contarles un poco del pasado, el presente y el futuro que ambicionamos para el IDP en Akua.&lt;/p&gt;
+&lt;p&gt;Para arrancar voy a traer una frase que escuché en la peli Kung Fu Panda&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;ldquo;El ayer es historia, el mañana es un misterio, el hoy es un regalo, por eso se llama presente&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Por qué la traigo? porque como comenté en la descripción de la publicación pasaron muchas cosas
+desde aquel junio del 2024 donde con mi entonces compañero y dupla de equipo German Yepes
+comenzamos a diseñar la plataforma interna de desarrollo para Akua.&lt;/p&gt;
+&lt;p&gt;En el presente mientras escribo esto comparto equipo con Cristan Ortega (Cris) y Jeremy Bacher (Jere),
+en un pasado como les comenté formé dupla con el chavito, quien decidió seguir camino fuera de Akua
+allá por diciembre del 2025, y en el camino también supo estar con nosotros don Guille Pijuan que sigue
+en Akua haciendo de las suyas en el equipo de CX (Customer Experience).&lt;/p&gt;
+&lt;p&gt;Hace un tiempo (casi dos años) contamos un poco del &lt;a href="https://akua.la/en/blog/idp---por-que-cuando-y-como" target="_blank" rel="noopener"&gt;IDP&lt;/a&gt;; hoy
+vengo a contarles de un proyecto en particular, Good Bye AWS DMS (Database Migration Service).&lt;/p&gt;
+&lt;p&gt;Hoy arranca una &amp;ldquo;Trilogía de BlogPost de la Plataforma&amp;rdquo;, para arrancar me toca a mí estar acá escribiendo
+y pronto tendremos a Cris y a Jere contando diferentes desafíos técnicos que nos enorgullece compartirles.&lt;/p&gt;
+&lt;p&gt;Comencemos.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="el-ayer-es-historia-aws-dms"&gt;El ayer es historia: AWS DMS&lt;span class="hx:absolute hx:-mt-20" id="el-ayer-es-historia-aws-dms"&gt;&lt;/span&gt;
+&lt;a href="#el-ayer-es-historia-aws-dms" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Antes de meternos en el barro, un poco de contexto de cómo se mueven los datos en Akua: cada proyecto tiene su propia base Aurora PostgreSQL y cada tenant tiene su warehouse, el ODS (Operational Data Store), donde se juntan las bases de todos los proyectos para que quien necesite consultar esos datos lo haga ahí y no contra la base productiva del proyecto.&lt;/p&gt;
+&lt;p&gt;Para llevar los datos de un lado al otro usábamos AWS DMS Serverless, que en el papel es justo lo que necesitás: hace una carga inicial y después se queda replicando los cambios en tiempo real –aka CDC, Change Data Capture–. En el papel.&lt;/p&gt;
+&lt;p&gt;En la práctica DMS fallaba, y lo que más nos dolía no era que fallara (todo falla tarde o temprano) sino &lt;strong&gt;cómo&lt;/strong&gt; fallaba: en silencio. Dejo un punteo de lo que encontramos el día que nos pusimos a mirar en serio:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Replicaciones muertas sin que nadie se entere&lt;/strong&gt;, 8 replicaciones en estado &lt;code&gt;failed&lt;/code&gt; durante meses; sin un ruido, nada.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El &amp;ldquo;running&amp;rdquo; que no corría&lt;/strong&gt;, tablas en &lt;code&gt;Table error&lt;/code&gt; mientras la replicación decía estar &lt;code&gt;running&lt;/code&gt;, osea la consola te decía que todo estaba bárbaro y la tabla hacía rato que no recibía un dato.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Duplicados por doquier&lt;/strong&gt;, un warehouse con filas duplicadas entre 80 y 100 veces. Sí, leíste bien, de 80 a 100 veces 😅.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Y encima caro&lt;/strong&gt;, alrededor de USD 7.400 por mes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Y por qué puede duplicar? DMS guarda su &amp;ldquo;hasta dónde repliqué&amp;rdquo; (el checkpoint) por un lado y escribe los datos por otro; si algo se corta entre una cosa y la otra, al volver puede reaplicar lo que ya había escrito. Guarden este detalle porque es justamente lo que resolvimos distinto.&lt;/p&gt;
+&lt;p&gt;Si se acuerdan de nuestros mantras de &lt;a href="https://luispe.github.io/blog/es/posts/build-on-difference/" target="_blank" rel="noopener"&gt;Construir desde las diferencias&lt;/a&gt;, el primero dice que la operación y mantenimiento de nuestra plataforma debe tender a cero; con DMS pasaba exactamente lo contrario, había que operarlo hasta para enterarse de que estaba roto.&lt;/p&gt;
+&lt;p&gt;Así que nos hicimos la pregunta incómoda, y si lo construimos nosotros? Atenti, no es una decisión que se toma a la ligera, todo lo que construís después lo tenés que mantener; pero cuando la herramienta de turno te dice que está todo bien mientras por debajo se está prendiendo fuego, la cuenta empieza a cerrar bastante rápido.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="el-hoy-es-un-regalo-data-replicator"&gt;El hoy es un regalo: data-replicator&lt;span class="hx:absolute hx:-mt-20" id="el-hoy-es-un-regalo-data-replicator"&gt;&lt;/span&gt;
+&lt;a href="#el-hoy-es-un-regalo-data-replicator" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El data-replicator es un proceso escrito en Rust –el porqué de Rust da para su propia publicación– que copia las bases Aurora PostgreSQL de cada proyecto al ODS de su tenant y las mantiene al día en tiempo real.&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;pre&gt;&lt;code&gt;Aurora del proyecto ──pgoutput (slot lógico)──▶ data-replicator ──SQL──▶ ODS del tenant
+publication 1 pod por tenant schema public_&amp;lt;p&amp;gt;
+usuario dedicado 1 tarea por pipeline &amp;#43; origin por pipeline&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;La arquitectura es simple a propósito (otro de los mantras, la simpleza ante todo): &lt;strong&gt;un pod por tenant&lt;/strong&gt; en Fargate que corre todas los pipelines de ese tenant, donde un pipeline es una base de origen. Ese pod cuesta unos USD 72 por mes. Si un pipeline se rompe las demás ni se enteran, cada uno corre aislado y supervisado por separado.&lt;/p&gt;
+&lt;h4 data-hextra-search-id="un-momento-qué-es-un-slot"&gt;Un momento, qué es un slot?&lt;span class="hx:absolute hx:-mt-20" id="un-momento-qué-es-un-slot"&gt;&lt;/span&gt;
+&lt;a href="#un-momento-qu%c3%a9-es-un-slot" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Para quien nunca se peleó con la replicación lógica de PostgreSQL, un mini glosario:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Publication&lt;/strong&gt;, define qué tablas de la base se publican; en nuestro caso todas (&lt;code&gt;FOR ALL TABLES&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;pgoutput&lt;/strong&gt;, el plugin nativo de PostgreSQL que lee el WAL y emite las transacciones como mensajes (Begin, Insert, Update, Delete, Commit…).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Slot&lt;/strong&gt;, un cursor persistente en el origen que retiene el WAL hasta que el consumidor confirma que lo procesó. Ojo con esto: si nadie lo consume, el disco crece y crece.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LSN&lt;/strong&gt;, la posición dentro del WAL; el &amp;ldquo;por dónde voy&amp;rdquo;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 data-hextra-search-id="la-vida-de-un-pipeline"&gt;La vida de un pipeline&lt;span class="hx:absolute hx:-mt-20" id="la-vida-de-un-pipeline"&gt;&lt;/span&gt;
+&lt;a href="#la-vida-de-un-pipeline" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Cada pipeline pasa por cuatro etapas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Bootstrap&lt;/strong&gt;, se conecta al origen con un usuario dedicado y al ODS, verifica que exista la publication –la crea la plataforma en el deploy del proyecto, no el pod– y que ninguna tabla esté sin primary key. Esto último no es un capricho: en PostgreSQL si publicás una tabla sin &lt;em&gt;replica identity&lt;/em&gt; los UPDATE y DELETE de la aplicación sobre esa tabla empiezan a fallar, así que el gate está para cuidar al proyecto, no al replicador.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Full load consistente&lt;/strong&gt;, crea el slot exportando un snapshot y copia cada tabla &lt;strong&gt;bajo ese snapshot&lt;/strong&gt; con &lt;code&gt;COPY&lt;/code&gt;. Del lado del ODS el &lt;code&gt;TRUNCATE&lt;/code&gt;, los datos y la marca de estado van en una única transacción por tabla: o la tabla queda completa y &lt;code&gt;active&lt;/code&gt;, o no queda nada. Nada de tablas a medio cargar.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CDC&lt;/strong&gt;, arranca exactamente desde el punto consistente del slot, así que entre la carga inicial y los cambios no hay huecos ni duplicados. Cada transacción del origen se aplica como una transacción en el ODS, con statements preparados y &lt;em&gt;pipelineados&lt;/em&gt; –se mandan de a 500 sin esperar respuesta–, así una transacción chica cuesta un round-trip y no seis.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reinicio&lt;/strong&gt;, reutiliza el slot existente y retoma desde el último commit aplicado. Sin full load, salvo que el bootstrap haya quedado a medias.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 data-hextra-search-id="exactly-once-o-la-garantía-que-dms-no-da"&gt;Exactly-once, o la garantía que DMS no da&lt;span class="hx:absolute hx:-mt-20" id="exactly-once-o-la-garantía-que-dms-no-da"&gt;&lt;/span&gt;
+&lt;a href="#exactly-once-o-la-garant%c3%ada-que-dms-no-da" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá está el corazón del asunto y lo que nos hace sacar pecho. ¿Se acuerdan del checkpoint que DMS guarda por separado? Nosotros hacemos que &lt;strong&gt;los datos y la posición se commiteen juntos&lt;/strong&gt;, en la misma transacción del ODS, usando los &lt;em&gt;replication origins&lt;/em&gt; de PostgreSQL:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- simplificado: una vez por sesión, el applier se ata al origin de su pipeline
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pg_replication_origin_session_setup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;origin de un pipeline&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- por cada transacción que llega del origen
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;BEGIN&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;pg_replication_origin_xact_setup&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;end_lsn&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;&amp;lt;commit_ts&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;...;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;UPDATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;...;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;DELETE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;...;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- datos y &amp;#34;hasta dónde llegué&amp;#34;, juntos o nada&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;¿Qué significa esto en la práctica? Que si le metés un &lt;code&gt;kill -9&lt;/code&gt; al pod a mitad de una transacción, o se aplicó todo o no se aplicó nada; y al volver retoma exactamente desde el último commit, salteando lo que ya estaba aplicado. Lo validamos rompiendo cosas a propósito en dev, rewinds del slot y failovers de Aurora incluidos.&lt;/p&gt;
+&lt;p&gt;Nada es gratis, claro, y esto trae su letra chica:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Un replication origin por pipeline&lt;/strong&gt; en el ODS, lo que nos obligó a subir &lt;code&gt;max_replication_slots&lt;/code&gt; de 20 (el default) a 100. Es un parámetro estático, osea reboot del writer; DMS no lo necesitaba justamente porque guarda su checkpoint aparte.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Un solo applier por pipeline&lt;/strong&gt;, siempre. El Deployment corre con &lt;code&gt;strategy: Recreate&lt;/code&gt; –nada de rolling update con dos pods escribiendo a la vez– y al arrancar hace &lt;em&gt;fencing&lt;/em&gt; de cualquier sesión propia que haya quedado viva. KEDA y HPA están prohibidos en este Deployment, y no es chiste.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 data-hextra-search-id="fallar-en-voz-alta-y-en-chiquito"&gt;Fallar en voz alta y en chiquito&lt;span class="hx:absolute hx:-mt-20" id="fallar-en-voz-alta-y-en-chiquito"&gt;&lt;/span&gt;
+&lt;a href="#fallar-en-voz-alta-y-en-chiquito" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Si DMS fallaba en silencio y a lo grande, acá la idea fue la inversa: fallar en voz alta y lo más acotado posible. Algunos casos:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Error determinístico en una tabla&lt;/strong&gt; (un tipo que no encaja, una constraint, una columna que falta), se suspende &lt;strong&gt;solo esa tabla&lt;/strong&gt;, se guarda la razón y salta una alerta P1; el resto del pipeline sigue como si nada.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El origen agrega una columna&lt;/strong&gt;, se replica el &lt;code&gt;ADD COLUMN&lt;/code&gt; automáticamente, y desde el data-replicator con el valor que la fuente materializó para las filas viejas, así un &lt;code&gt;DEFAULT 'x'&lt;/code&gt; deja las filas previas iguales de los dos lados. Si el default es volátil (&lt;code&gt;clock_timestamp()&lt;/code&gt;, &lt;code&gt;nextval()&lt;/code&gt;) esas filas quedan en NULL en el destino y el replicador avisa.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tabla nueva en el origen&lt;/strong&gt;, se detecta en su primer cambio y se copia sola.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El origen dropea una tabla&lt;/strong&gt;, no se propaga (DMS sí lo hacía). La copia queda como historial y decide una persona; borrar datos no es algo que queramos que pase solo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Una tabla destino con otro dueño&lt;/strong&gt;, si otro escritor creó una tabla con nuestro nombre –nos pasó con un DMS que un deploy volvió a levantar– se suspende esa tabla y jamás se escribe encima.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Transacciones gigantes&lt;/strong&gt;, se bufferean hasta 64 MB y si son más grandes se aplican por ventanas dentro de la misma transacción del ODS: la memoria la acota la ventana, no la transacción. Confieso que hasta la v0.2.11 del
+data-replicator eso era un tope y la transacción que lo superaba dejaba el pipeline en loop; &lt;a href="https://luispe.github.io/blog/es/posts/mistakes-and-learnings/" target="_blank" rel="noopener"&gt;de los errores se aprende&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Corte de red u ODS reiniciado&lt;/strong&gt;, reconexión con backoff y replay desde el origin. Exactly-once mediante, no hay nada que limpiar.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Y para recuperar una tabla suspendida? un &lt;code&gt;UPDATE&lt;/code&gt; en la tabla de estado del replicador pasándola a &lt;code&gt;reload_requested&lt;/code&gt;, y se encarga solo de hacer una copia fresca por un slot temporal.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="que-el-silencio-también-avise"&gt;Que el silencio también avise&lt;span class="hx:absolute hx:-mt-20" id="que-el-silencio-también-avise"&gt;&lt;/span&gt;
+&lt;a href="#que-el-silencio-tambi%c3%a9n-avise" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Todas las métricas salen por OpenTelemetry a Coralogix con el pipeline como label: estado de cada tabla, lag en segundos y en bytes de WAL retenido, eventos descartados, reconexiones y transacciones aplicadas. Sobre eso montamos tres niveles de alertas:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;P1&lt;/strong&gt;, tabla suspendida.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;P2&lt;/strong&gt;, lag alto, pipeline silencioso o eventos descartados.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;P3&lt;/strong&gt;, reconexiones sostenidas o WAL retenido.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Fíjense en &amp;ldquo;pipeline silencioso&amp;rdquo;, es la alerta que nos hubiese ahorrado esos meses de DMS en &lt;code&gt;failed&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Ahora, qué pasa si el que se muere es el pod? un pod muerto no puede avisar que está muerto 😅. Para eso tenemos un backstop desde el origen, una alarma de CloudWatch por cluster que salta si el slot retiene más de 10 GiB durante una hora; esa alarma sobrevive al pod.&lt;/p&gt;
+&lt;p&gt;Y para el día a día, una query que nos dice en un vistazo cómo está un tenant:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- salud de un tenant, en el ODS: no_activas tiene que ser 0
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pipeline&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;target_schema&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;count&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;table_name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;FILTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;active&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;activas&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;count&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;table_name&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;FILTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="k"&gt;state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;active&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;no_activas&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;_replicator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;pipeline_state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;LEFT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;JOIN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;_replicator&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;table_state&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;t&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;USING&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;pipeline&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;GROUP&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;BY&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;ORDER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;BY&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 data-hextra-search-id="un-toggle-en-port-y-el-resto-se-autodescubre"&gt;Un toggle en Port y el resto se autodescubre&lt;span class="hx:absolute hx:-mt-20" id="un-toggle-en-port-y-el-resto-se-autodescubre"&gt;&lt;/span&gt;
+&lt;a href="#un-toggle-en-port-y-el-resto-se-autodescubre" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Si leyeron la publicación anterior saben que Port es nuestra capa de presentación, así que acá no podía ser distinto. Cada proyecto tiene una entidad &lt;code&gt;replication&lt;/code&gt; en Port con lo mínimo: si está habilitada, a qué schema escribe y alguna que otra opción, con overrides por tenant y entorno para las diferencias.&lt;/p&gt;
+&lt;p&gt;A partir de ahí:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;El deploy del proyecto&lt;/strong&gt;, si la entidad está habilitada y el replicador existe en el tenant, crea el &lt;em&gt;publisher&lt;/em&gt;: el usuario, la publication, la regla de security group desde el pod y un secret con la conexión. El gate de PK que les comenté más arriba vive acá.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El deploy del data-replicator&lt;/strong&gt;, descubre esos secrets por tag, los cruza con las entidades de Port y arma la configuración de los pipelines. Entidad habilitada sin publisher, o publisher sin entidad, es un warning y sigue.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;El core-stack del tenant&lt;/strong&gt;, crea el usuario del lado del ODS y deja &lt;code&gt;max_replication_slots&lt;/code&gt; en 100.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;ldquo;Todo debe autodescubrirse, no &amp;lsquo;harcodiemos&amp;rsquo; nada&amp;rdquo;, ¿les suena? 😉&lt;/p&gt;
+&lt;p&gt;Pausar un pipeline es poner &lt;code&gt;enabled: false&lt;/code&gt;. Eso sí, atenti: borrar la entidad borra el publisher y deja el slot sin consumidor, y ya saben lo que pasa con un slot sin consumidor (sí, la alarma de arriba).&lt;/p&gt;
+&lt;p&gt;Una regla que nos ahorró más de un dolor de cabeza: el deploy del proyecto va &lt;strong&gt;después&lt;/strong&gt; de habilitar la entidad, y se verifica que salió bien mirando que exista el secret del publisher, no porque el pipeline dijo &amp;ldquo;terminó&amp;rdquo;.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="shadow-y-corte-cambiar-el-motor-con-el-auto-andando"&gt;Shadow y corte: cambiar el motor con el auto andando&lt;span class="hx:absolute hx:-mt-20" id="shadow-y-corte-cambiar-el-motor-con-el-auto-andando"&gt;&lt;/span&gt;
+&lt;a href="#shadow-y-corte-cambiar-el-motor-con-el-auto-andando" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;No queríamos un big bang. En los tenants donde DMS seguía vivo, cada pipeline escribe en un schema paralelo, &lt;code&gt;shadow_&amp;lt;proyecto&amp;gt;&lt;/code&gt;, con los mismos nombres de tabla que DMS deja en &lt;code&gt;public&lt;/code&gt;. Así conviven sin pisarse, comparamos paridad con tráfico real y los consumidores pueden construir sus índices sobre el shadow con calma.&lt;/p&gt;
+&lt;p&gt;Cuando todo cierra, el corte es un &lt;strong&gt;rename atómico&lt;/strong&gt; en una sola transacción:&lt;/p&gt;
+&lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
+&lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- simplificado; el de verdad vive en nuestro runbook
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;BEGIN&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SCHEMA&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dms_retired_&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;fecha&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;ALTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;public&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;tabla&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SET&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SCHEMA&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;dms_retired_&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;fecha&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- lo de DMS, a retiro
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;ALTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;shadow_&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;p&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;tabla&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SET&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;SCHEMA&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;public&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="c1"&gt;-- lo nuestro, a producción
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- ...por cada tabla, y se actualiza el target_schema del pipeline
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COMMIT&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class="hextra-code-copy-btn-container hx:opacity-0 hx:transition hx:group-hover/code:opacity-100 hx:flex hx:gap-1 hx:absolute hx:m-[11px] hx:right-0 hx:top-0"&gt;
+&lt;button
+class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
+title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
+&gt;
+&lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
+&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;SET SCHEMA&lt;/code&gt; arrastra índices, constraints y permisos, así que no hay full load, la ventana es de segundos y el rollback es simétrico (el mismo movimiento al revés). Después se cambia el schema destino en Port, se re-sincroniza y el siguiente deploy del proyecto borra su DMS solo: si la entidad &lt;code&gt;replication&lt;/code&gt; está habilitada en &lt;code&gt;public&lt;/code&gt;, el dueño es el replicador y DMS deja de declararse.&lt;/p&gt;
+&lt;p&gt;Al momento de escribir esto (números de principios de octubre) tenemos 23 pipelines corriendo en dev, 114 en producción ya cortadas definitivamente a &lt;code&gt;public&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="el-mañana-es-un-misterio"&gt;El mañana es un misterio&lt;span class="hx:absolute hx:-mt-20" id="el-mañana-es-un-misterio"&gt;&lt;/span&gt;
+&lt;a href="#el-ma%c3%b1ana-es-un-misterio" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Como dice el maestro Oogway, el mañana es un misterio, pero algunas cosas ya las tenemos en el radar:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Terminar los cortes&lt;/strong&gt;, y que se apague el último DMS; ese día va a haber festejo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hot reload de la configuración&lt;/strong&gt;, hoy cambiar la config reinicia el pod; es un reinicio limpio porque todas los pipelines retoman desde su origin, pero queremos montar la config como ConfigMap y recargarla en caliente.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Para ir cerrando quiero dejar algunas reglas que nos quedaron tatuadas en este camino:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;La fuente de verdad del ODS es el ODS&lt;/strong&gt;, no las estadísticas de DMS ni lo que diga una consola.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Todo conteo de una API de AWS que vuelve exactamente 100 es paginación.&lt;/strong&gt; Parece un chiste, pero no lo es 😅.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fallar está bien, fallar en silencio no.&lt;/strong&gt; Mil veces prefiero una tabla suspendida con su razón y una alerta P1 que un &amp;ldquo;running&amp;rdquo; que no corre.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shadow antes que big bang&lt;/strong&gt;, convivir, comparar y recién después cortar y cambiar.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Reemplazar un servicio administrado de AWS por algo propio da vértigo, y está bien que lo dé; pero cuando lo que pagás no te da garantías y encima no te avisa cuando se rompe, construir con garantías claras –exactly-once, fallas acotadas y visibles, un core que se puede revertir– es lo más parecido a hacer las cosas bien y dormir tranquilos.&lt;/p&gt;
+&lt;p&gt;Esto fue el primer capítulo de la trilogía, en las próximas publicaciones Cris y Jere van a contar lo suyo así que estén atentos.&lt;/p&gt;
+&lt;p&gt;Hasta la próxima 👋🏽&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 data-hextra-search-id="fuentes-y-lecturas-recomendadas"&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
+&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/logical-replication.html" target="_blank" rel="noopener"&gt;PostgreSQL: Logical Replication&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/logicaldecoding.html" target="_blank" rel="noopener"&gt;PostgreSQL: Logical Decoding&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/replication-origins.html" target="_blank" rel="noopener"&gt;PostgreSQL: Replication Progress Tracking (replication origins)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/functions-admin.html#FUNCTIONS-REPLICATION" target="_blank" rel="noopener"&gt;PostgreSQL: funciones de gestión de replicación&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.postgresql.org/docs/current/sql-altertable.html" target="_blank" rel="noopener"&gt;PostgreSQL: ALTER TABLE … REPLICA IDENTITY&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Dos clicks</title><link>https://luispe.github.io/blog/es/posts/two-clicks/</link><pubDate>Sat, 24 Jan 2026 14:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/two-clicks/</guid><description>
 &lt;p&gt;Hoy voy a parafrasear bastante, en el caso del título a un gran
 amigo con quien supimos laburar juntos y sin dudas creo que
 volveremos a encontrarnos laboralmente,
-&lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;el chavito&lt;/a&gt;;
+&lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;el chavito&lt;/a&gt;;
 de él escuche la frase por primera vez y creo que en la publicación
 hablaré un poco de ella y de cuando la motivación se esfuma;
 ¿puede recuperarse?, ¿vale la pena el desafío? ¿qué aprendí en el camino?.&lt;/p&gt;
@@ -38,7 +231,7 @@ de eso duele más que el cachetazo per se.&lt;/p&gt;
 otro momento porque quiero abordar otras cosas a continuación.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;El otro día hablando con mi hermano hormiga el loco
-&lt;a href="https://www.linkedin.com/in/victor-de-grandis-0a1202ab/"target="_blank" rel="noopener"&gt;Vitor&lt;/a&gt;,
+&lt;a href="https://www.linkedin.com/in/victor-de-grandis-0a1202ab/" target="_blank" rel="noopener"&gt;Vitor&lt;/a&gt;,
 me escribe un poco preocupado, que le provocaba tremenda tristeza
 todo el hype de tener que usar IA sí o sí; porque los empleadores
 por el solo hecho de que la utilices asumen que vas a ir más rápido,
@@ -77,7 +270,7 @@ se seguirán diseminando hasta que en algún momento todo explote;
 es que seguiré aprendiendo, profundizando en los conocimientos que
 voy adquiriendo y el día que algo explote, tendré las herramientas para al menos
 sentarme a ver qué pasa sin necesidad de una IA, solo con el valor de experiencias previas
-y &lt;a href="https://youtu.be/ARXdEMbPTGs?si=xj8I1pR_d0JcyerZ"target="_blank" rel="noopener"&gt;el desafío hermoso; el placer de tener un problema no resuelto en la cabeza&lt;/a&gt;.&lt;/p&gt;
+y &lt;a href="https://youtu.be/ARXdEMbPTGs?si=xj8I1pR_d0JcyerZ" target="_blank" rel="noopener"&gt;el desafío hermoso; el placer de tener un problema no resuelto en la cabeza&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;En definitiva van a querer comerse tu cerebro a mordiscos,
 pero que no se beban el jugo de tu corazón.&lt;/p&gt;
 &lt;hr&gt;
@@ -113,7 +306,7 @@ y que un corazón no se endurece porque sí, y si eso sucede.&lt;/p&gt;
 &lt;p&gt;En esta publicación voy intentar contar nuestra experiencia
 construyendo el IDP en Akua, que retos sorteamos, estado actual
 y lo que queda para el futuro del IDP.&lt;/p&gt;
-&lt;p&gt;Con &lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; a esta altura me
+&lt;p&gt;Con &lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; a esta altura me
 animo a decir que un amigo, nos unimos desde los inicios de Akua
 con el objetivo de construir la plataforma de desarrollo interna,
 ambos de experiencias e industrias diferentes pero con una
@@ -121,15 +314,15 @@ misma visión profunda sobre lo que necesitaba Akua.&lt;/p&gt;
 &lt;p&gt;Deje enlace de su linkedin, pero a muy breve &amp;ndash;e irrespetuoso resumen&amp;ndash;
 Ger viene con una experiencia desde el más bajo nivel en infraestructura
 hasta llegar a construir el equipo y la plataforma en Sate (para los amigos),
-&lt;a href="https://www.linkedin.com/company/satellogic/"target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; si nos ponemos
+&lt;a href="https://www.linkedin.com/company/satellogic/" target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; si nos ponemos
 más serios.&lt;/p&gt;
 &lt;p&gt;En mi caso arranque mi carrera como desarrollador de producto y ya desde
 mi paso por Viacom (Telefé) comencé a sentir una curiosidad muy fuerte
 por la infraestructura, en Pomelo pude trabajar a tiempo completo ayudando
 a construir el IDP y en Akua ya junto a &amp;ldquo;mi compa&amp;rdquo; lo diseñamos y ejecutamos
 desde cero con todo el orgullo que eso me provoca.&lt;/p&gt;
-&lt;h2&gt;Primeros dias y primeros pasos&lt;span class="hx:absolute hx:-mt-20" id="primeros-dias-y-primeros-pasos"&gt;&lt;/span&gt;
-&lt;a href="#primeros-dias-y-primeros-pasos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Comenzamos con una hoja en blanco, literal, no había absolutamente nada
+&lt;h2 data-hextra-search-id="primeros-dias-y-primeros-pasos"&gt;Primeros dias y primeros pasos&lt;span class="hx:absolute hx:-mt-20" id="primeros-dias-y-primeros-pasos"&gt;&lt;/span&gt;
+&lt;a href="#primeros-dias-y-primeros-pasos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Comenzamos con una hoja en blanco, literal, no había absolutamente nada
 en Akua, una cuenta de AWS pelada pero eso era lo que menos nos preocupaba;
 dejo un punteo de &amp;ldquo;nuestros mantras&amp;rdquo; que hasta el día de hoy seguimos
 manteniendo y velando porque eso siga sucediendo:&lt;/p&gt;
@@ -143,8 +336,8 @@ ciclo de vida por el que pase el software.&lt;/li&gt;
 &lt;li&gt;La simpleza ante todo.&lt;/li&gt;
 &lt;li&gt;Rompamos con la inercia de experiencias previas.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;Armando las bases&lt;span class="hx:absolute hx:-mt-20" id="armando-las-bases"&gt;&lt;/span&gt;
-&lt;a href="#armando-las-bases" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Nos aliamos con Binbash para que ejecute nuestro diseño de redes
+&lt;h3 data-hextra-search-id="armando-las-bases"&gt;Armando las bases&lt;span class="hx:absolute hx:-mt-20" id="armando-las-bases"&gt;&lt;/span&gt;
+&lt;a href="#armando-las-bases" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Nos aliamos con Binbash para que ejecute nuestro diseño de redes
 compliance con PCI, mientras Ger y yo hacíamos una validación
 de que herramienta se iba a adaptar mejor para la gestión de la
 infraestructura de nuestro IDP, para ser absolutamente transparentes
@@ -211,8 +404,8 @@ la UI es exquisita, brinda acceso por SSO, tiene sistema de RBAC (aun bastante m
 y sumado a Scorecards, Self Service actions, Automations y generación de dashboard
 con un par de clicks se convirtió en nuestra herramienta perfecta para la capa
 de presentación de nuestra Plataforma que estábamos buscando.&lt;/p&gt;
-&lt;h3&gt;Stack tecnológico&lt;span class="hx:absolute hx:-mt-20" id="stack-tecnológico"&gt;&lt;/span&gt;
-&lt;a href="#stack-tecnol%c3%b3gico" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Desarrollamos un Helm chart a medida para nuestras aplicaciones, con el tiempo
+&lt;h3 data-hextra-search-id="stack-tecnológico"&gt;Stack tecnológico&lt;span class="hx:absolute hx:-mt-20" id="stack-tecnológico"&gt;&lt;/span&gt;
+&lt;a href="#stack-tecnol%c3%b3gico" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Desarrollamos un Helm chart a medida para nuestras aplicaciones, con el tiempo
 evolucionó y hoy soporta poder desplegar tanto un microservicio o un monorepo con esto
 último nos queremos referir a que con un mismo proyecto se puedan desplegar múltiples
 servicios en kubernetes sin necesidad de tener &amp;ldquo;n&amp;rdquo; proyectos en Gitlab.&lt;/p&gt;
@@ -251,13 +444,13 @@ nuestro cluster de EKS tiene muy muy pocas herramientas o componentes instalados
 &lt;/ul&gt;
 &lt;p&gt;Y si, tienen que haber una justificación y ganancia muy alta para instalar
 más herramientas en nuestros clusters.&lt;/p&gt;
-&lt;h4&gt;Un momento y los secretos?&lt;span class="hx:absolute hx:-mt-20" id="un-momento-y-los-secretos"&gt;&lt;/span&gt;
-&lt;a href="#un-momento-y-los-secretos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desarrollamos un flujo de trabajo con parameter store que nos permite desplegar
+&lt;h4 data-hextra-search-id="un-momento-y-los-secretos"&gt;Un momento y los secretos?&lt;span class="hx:absolute hx:-mt-20" id="un-momento-y-los-secretos"&gt;&lt;/span&gt;
+&lt;a href="#un-momento-y-los-secretos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desarrollamos un flujo de trabajo con parameter store que nos permite desplegar
 y disponibilizar los secretos a las aplicaciones en kubernetes con la flexibilidad
 de que si algún secreto no es manejado por nuestra infra-lib el equipo de seguridad
 lo pueda agregar a parameter store y nuestra infra-lib lo deja disponible en la app.&lt;/p&gt;
-&lt;h4&gt;Seguridad auth y authz?&lt;span class="hx:absolute hx:-mt-20" id="seguridad-auth-y-authz"&gt;&lt;/span&gt;
-&lt;a href="#seguridad-auth-y-authz" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desde el minuto cero para las aplicaciones usamos IRSA (Iam Role for Service Account)
+&lt;h4 data-hextra-search-id="seguridad-auth-y-authz"&gt;Seguridad auth y authz?&lt;span class="hx:absolute hx:-mt-20" id="seguridad-auth-y-authz"&gt;&lt;/span&gt;
+&lt;a href="#seguridad-auth-y-authz" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Desde el minuto cero para las aplicaciones usamos IRSA (Iam Role for Service Account)
 y desplegamos permisos por tag (en breve comento nuestra estrategia de tagging),
 y en caso de que el recurso de AWS no lo soporte (s3), nuestra infra-lib tiene
 la habilidad de autodescubrir el recurso y asignar los permisos necesarios.&lt;/p&gt;
@@ -275,8 +468,8 @@ es mediante reglas en los security groups entre la app y la DB, así mismo el ac
 entre aplicaciones está bloqueado a nivel del red aunque estén el mismo namespace,
 esto nos permite establecer reglas de acceso entre servicios que son manejadas por
 Kong y se configuran de forma fácil desde nuestro portal Port.io.&lt;/p&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Resta aún comentar un monton de cosas más: como implementamos scorecards,
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Resta aún comentar un monton de cosas más: como implementamos scorecards,
 acciones del día 2, despliegue de single tenants, publicación de rutas públicas;
 entre otros, pero lo guardo para otra publicación :).&lt;/p&gt;
 &lt;p&gt;Pero para ir finalizando quiero reflexionar sobre algunos asuntos.&lt;/p&gt;
@@ -305,8 +498,8 @@ shutdown&lt;/strong&gt;.&lt;/p&gt;
 workers, consumidores de colas o cualquier proceso concurrente con
 &lt;em&gt;goroutines&lt;/em&gt;, manejar correctamente el apagado puede evitar pérdidas de
 datos, conexiones colgadas o comportamientos erráticos.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El concepto de graceful shutdown no es nuevo. Se trata, simplemente, de
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El concepto de graceful shutdown no es nuevo. Se trata, simplemente, de
 &lt;strong&gt;darle tiempo a nuestra aplicación para que termine lo que está
 haciendo&lt;/strong&gt; antes de morir.&lt;/p&gt;
 &lt;p&gt;El problema es que en Go solemos subestimar su complejidad. Por ejemplo,
@@ -314,8 +507,8 @@ lanzamos un servidor HTTP y varias &lt;em&gt;goroutines&lt;/em&gt; de background
 asumimos que con &lt;code&gt;ctrl + c&lt;/code&gt; o un &lt;code&gt;SIGTERM&lt;/code&gt; todo se apaga como por arte
 de magia.&lt;/p&gt;
 &lt;p&gt;Spoiler: no. 😅&lt;/p&gt;
-&lt;h2&gt;Anti patrón&lt;span class="hx:absolute hx:-mt-20" id="anti-patrón"&gt;&lt;/span&gt;
-&lt;a href="#anti-patr%c3%b3n" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos el siguiente código:&lt;/p&gt;
+&lt;h2 data-hextra-search-id="anti-patrón"&gt;Anti patrón&lt;span class="hx:absolute hx:-mt-20" id="anti-patrón"&gt;&lt;/span&gt;
+&lt;a href="#anti-patr%c3%b3n" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos el siguiente código:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
@@ -335,6 +528,8 @@ de magia.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -346,8 +541,8 @@ con &lt;code&gt;ctrl + c&lt;/code&gt;, el proceso muere abruptamente.
 Cualquier request en curso se corta, los recursos abiertos
 (conexexiones, archivos, etc.) no se liberan y no hay oportunidad de
 realizar tareas de limpieza.&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
 &lt;code&gt;context&lt;/code&gt; y &lt;code&gt;os/signal&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
@@ -392,6 +587,8 @@ realizar tareas de limpieza.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -401,8 +598,8 @@ title="Copiar código"
 &lt;p&gt;Ahora, cuando el proceso recibe una señal (&lt;code&gt;SIGTERM&lt;/code&gt; o &lt;code&gt;SIGINT&lt;/code&gt;), se le
 da un tiempo (en este caso 5 segundos) para terminar las requests
 activas antes de cerrar.&lt;/p&gt;
-&lt;h3&gt;El cuidado con las goroutines&lt;span class="hx:absolute hx:-mt-20" id="el-cuidado-con-las-goroutines"&gt;&lt;/span&gt;
-&lt;a href="#el-cuidado-con-las-goroutines" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá viene el punto delicado.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="el-cuidado-con-las-goroutines"&gt;El cuidado con las goroutines&lt;span class="hx:absolute hx:-mt-20" id="el-cuidado-con-las-goroutines"&gt;&lt;/span&gt;
+&lt;a href="#el-cuidado-con-las-goroutines" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá viene el punto delicado.&lt;/p&gt;
 &lt;p&gt;Si además del servidor tenés &lt;em&gt;goroutines&lt;/em&gt; de background &amp;mdash;por ejemplo
 workers que consumen de una cola o procesan tareas&amp;mdash;, &lt;strong&gt;debés
 asegurarte de que también respeten el contexto de cancelación&lt;/strong&gt;.&lt;/p&gt;
@@ -416,6 +613,8 @@ asegurarte de que también respeten el contexto de cancelación&lt;/strong&gt;.&
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -443,6 +642,8 @@ muere abruptamente, dejando el trabajo a medias.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -451,8 +652,8 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;p&gt;Cuando el proceso recibe una señal, &lt;code&gt;cancel()&lt;/code&gt; se ejecuta y todas las
 &lt;em&gt;goroutines&lt;/em&gt; escuchando ese contexto terminan ordenadamente.&lt;/p&gt;
-&lt;h3&gt;Casos borde&lt;span class="hx:absolute hx:-mt-20" id="casos-borde"&gt;&lt;/span&gt;
-&lt;a href="#casos-borde" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;h3 data-hextra-search-id="casos-borde"&gt;Casos borde&lt;span class="hx:absolute hx:-mt-20" id="casos-borde"&gt;&lt;/span&gt;
+&lt;a href="#casos-borde" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Bloqueos en goroutines&lt;/strong&gt;: si una &lt;em&gt;goroutine&lt;/em&gt; espera en un canal
 que nadie cierra, el shutdown no completa.&lt;br&gt;
 Solución: asegurarse de que todos los canales se cierren en la
@@ -464,8 +665,8 @@ del sistema.&lt;/li&gt;
 ejecutan cuando la &lt;em&gt;goroutine&lt;/em&gt; retorna. Si no retornan, nunca se
 ejecutan.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El graceful shutdown no es opcional; es parte esencial de la salud de un
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El graceful shutdown no es opcional; es parte esencial de la salud de un
 servicio en producción.&lt;/p&gt;
 &lt;p&gt;Usar contextos correctamente y respetar los tiempos de cierre es una
 forma simple de evitar &lt;em&gt;bugs&lt;/em&gt; difíciles de reproducir y mejorar la
@@ -473,25 +674,25 @@ estabilidad de nuestras apps.&lt;/p&gt;
 &lt;p&gt;Para no aburrirte y por el momento hagamos una pausa.&lt;/p&gt;
 &lt;p&gt;¡Hasta pronto! 👋🏽&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
-&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://go.dev/blog/context"target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
+&lt;h2 data-hextra-search-id="fuentes-y-lecturas-recomendadas"&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
+&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://go.dev/blog/context" target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
 Context&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/context"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/context" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;context&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;os/signal&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;net/http&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling"target="_blank" rel="noopener"&gt;Wiki oficial de Go: Signal
+&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling" target="_blank" rel="noopener"&gt;Wiki oficial de Go: Signal
 Handling&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Todos deberíamos gestionar equipos</title><link>https://luispe.github.io/blog/es/posts/we-should-allmanageteams/</link><pubDate>Sat, 22 Jun 2024 11:10:25 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/we-should-allmanageteams/</guid><description>
 &lt;p&gt;Para tener un contexto por si llegaste de casualidad a esta publicación,
 voy a hablar desde la industria de tecnología, industria profundamente técnica,
 y cómo liderar equipos, al menos por un lapso de tiempo,
 puede ayudar al equipo y a vos mismo, tanto de forma profesional como personal.&lt;/p&gt;
-&lt;h2&gt;Cómo impacta en tu ansiedad y la del equipo gestionarlo&lt;span class="hx:absolute hx:-mt-20" id="cómo-impacta-en-tu-ansiedad-y-la-del-equipo-gestionarlo"&gt;&lt;/span&gt;
-&lt;a href="#c%c3%b3mo-impacta-en-tu-ansiedad-y-la-del-equipo-gestionarlo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Que tema la ansiedad, soy de Argentina, país con la mayor cantidad de
+&lt;h2 data-hextra-search-id="cómo-impacta-en-tu-ansiedad-y-la-del-equipo-gestionarlo"&gt;Cómo impacta en tu ansiedad y la del equipo gestionarlo&lt;span class="hx:absolute hx:-mt-20" id="cómo-impacta-en-tu-ansiedad-y-la-del-equipo-gestionarlo"&gt;&lt;/span&gt;
+&lt;a href="#c%c3%b3mo-impacta-en-tu-ansiedad-y-la-del-equipo-gestionarlo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Que tema la ansiedad, soy de Argentina, país con la mayor cantidad de
 psicólogos por habitante, no es un dato ni bueno ni malo, de hecho hace más
 de diez años hago terapia para repensarme y repensar a la sociedad.&lt;/p&gt;
 &lt;p&gt;Traigo este dato por el tema de la ansiedad y merece un capítulo aparte,
@@ -502,7 +703,7 @@ que fomentan compartir videos de segundos porque no soportamos ver
 un video de más de 30 segundos, donde compartir información se tiene que comprimir en
 140 caracteres y si es un thread mas largo uf ni ganas de leerlo. Con este contexto de ansiedad
 gestionar y desarrollar equipos es un desafío enorme casi titánico diría.&lt;/p&gt;
-&lt;p&gt;Robado de una charla de Paenza &lt;a href="https://youtu.be/ARXdEMbPTGs?si=8mNgRBn3z2x4b84V"target="_blank" rel="noopener"&gt;charla completa&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Robado de una charla de Paenza &lt;a href="https://youtu.be/ARXdEMbPTGs?si=8mNgRBn3z2x4b84V" target="_blank" rel="noopener"&gt;charla completa&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;No debe haber ningún otro año en la vida de una persona en donde uno
 incorpore tanta información, aprenda tanto, cambie tanto de calidad de vida,
@@ -531,8 +732,8 @@ no todo en la vida tiene una solución ni hay respuestas para todo.&lt;/p&gt;
 incorpore tanta información, aprenda tanto, cambie tanto de calidad de vida,
 como de 0 a 1 año&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;La búsqueda de feedback rápido para sentirse valioso&lt;span class="hx:absolute hx:-mt-20" id="la-búsqueda-de-feedback-rápido-para-sentirse-valioso"&gt;&lt;/span&gt;
-&lt;a href="#la-b%c3%basqueda-de-feedback-r%c3%a1pido-para-sentirse-valioso" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Una de las cosas que me hubiese encantado que me aconsejen cuando
+&lt;h2 data-hextra-search-id="la-búsqueda-de-feedback-rápido-para-sentirse-valioso"&gt;La búsqueda de feedback rápido para sentirse valioso&lt;span class="hx:absolute hx:-mt-20" id="la-búsqueda-de-feedback-rápido-para-sentirse-valioso"&gt;&lt;/span&gt;
+&lt;a href="#la-b%c3%basqueda-de-feedback-r%c3%a1pido-para-sentirse-valioso" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Una de las cosas que me hubiese encantado que me aconsejen cuando
 comencé a gestionar y liderar equipos es buscar cosas que me den un retorno
 rápido de dopamina.&lt;/p&gt;
 &lt;p&gt;Cuando uno está liderando y gestionando equipos los procesos de cambio son muy lentos
@@ -543,8 +744,8 @@ o refactorizar, documentar, cualquier cosa, pero algo que te haga sentir que
 estás aportando valor al equipo, de nuevo, ya liderar y tomar decisiones aportan
 un valor brutal, la macana es que es imperceptible y uno es humano y necesita
 sentirse útil y valioso.&lt;/p&gt;
-&lt;h2&gt;¿Tengo un crecimiento personal?&lt;span class="hx:absolute hx:-mt-20" id="tengo-un-crecimiento-personal"&gt;&lt;/span&gt;
-&lt;a href="#tengo-un-crecimiento-personal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Qué pasaría si lideramos un equipo al menos por un año?&lt;/p&gt;
+&lt;h2 data-hextra-search-id="tengo-un-crecimiento-personal"&gt;¿Tengo un crecimiento personal?&lt;span class="hx:absolute hx:-mt-20" id="tengo-un-crecimiento-personal"&gt;&lt;/span&gt;
+&lt;a href="#tengo-un-crecimiento-personal" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Qué pasaría si lideramos un equipo al menos por un año?&lt;/p&gt;
 &lt;p&gt;Aunque no sea el path de carrera que elegiste, liderar y gestionar un equipo
 va a brindarte herramientas importantísimas, más importantes que cualquier patrón
 de diseño y arquitectura de software.&lt;/p&gt;
@@ -553,8 +754,8 @@ vas a aprender a negociar, confiar, aconsejar, direccionar, pedir perdón y most
 podría seguir por un rato largo, pero creo que me explico el nivel de información
 y herramientas que puede brindarte.&lt;/p&gt;
 &lt;p&gt;La respuesta es sí, vas a tener un crecimiento personal y claramente profesional.&lt;/p&gt;
-&lt;h2&gt;Lo obvio, no todo tiene que pasar por vos, ni tenés que estar al tanto de todo&lt;span class="hx:absolute hx:-mt-20" id="lo-obvio-no-todo-tiene-que-pasar-por-vos-ni-tenés-que-estar-al-tanto-de-todo"&gt;&lt;/span&gt;
-&lt;a href="#lo-obvio-no-todo-tiene-que-pasar-por-vos-ni-ten%c3%a9s-que-estar-al-tanto-de-todo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Cuántas veces te cruzaste con &amp;ldquo;líderes tóxicos&amp;rdquo;?, ¿Qué es tóxico para mí?&lt;/p&gt;
+&lt;h2 data-hextra-search-id="lo-obvio-no-todo-tiene-que-pasar-por-vos-ni-tenés-que-estar-al-tanto-de-todo"&gt;Lo obvio, no todo tiene que pasar por vos, ni tenés que estar al tanto de todo&lt;span class="hx:absolute hx:-mt-20" id="lo-obvio-no-todo-tiene-que-pasar-por-vos-ni-tenés-que-estar-al-tanto-de-todo"&gt;&lt;/span&gt;
+&lt;a href="#lo-obvio-no-todo-tiene-que-pasar-por-vos-ni-ten%c3%a9s-que-estar-al-tanto-de-todo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Cuántas veces te cruzaste con &amp;ldquo;líderes tóxicos&amp;rdquo;?, ¿Qué es tóxico para mí?&lt;/p&gt;
 &lt;p&gt;Esas personas que son embudo, todo tiene que pasar por ellas, todo el tiempo
 necesitan que las diferentes decisiones pasen por ellas y casi el 100% de las veces
 predominan sus decisiones.&lt;/p&gt;
@@ -563,35 +764,35 @@ predominan sus decisiones.&lt;/p&gt;
 compartamos conocimiento y estemos abiertos a nuevas y ideas y propuestas.&lt;/p&gt;
 &lt;p&gt;Personalmente hablando el día que me fuí de vacaciones y todo siguió su rumbo,
 es más sacamos funcionalidades, las comunicamos y al volver no se tiene esa
-sensación de &lt;a href="https://es.wikipedia.org/wiki/S%C3%ADndrome_FOMO"target="_blank" rel="noopener"&gt;FOMO&lt;/a&gt; es la gloria.&lt;/p&gt;
+sensación de &lt;a href="https://es.wikipedia.org/wiki/S%C3%ADndrome_FOMO" target="_blank" rel="noopener"&gt;FOMO&lt;/a&gt; es la gloria.&lt;/p&gt;
 &lt;p&gt;Te dejo la pregunta en el contexto de cuando volvés o alguien vuelve de vacaciones
 y en la daily se escucha.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Uff estuve revisando todos los emails y mensajes de slack para ponerme al día&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;¿No debería seguir su curso natural los proyectos sin que estés vos presente?&lt;/p&gt;
-&lt;h2&gt;Explota las virtudes y reflexiona las mejoras, ambas son igual de importantes&lt;span class="hx:absolute hx:-mt-20" id="explota-las-virtudes-y-reflexiona-las-mejoras-ambas-son-igual-de-importantes"&gt;&lt;/span&gt;
-&lt;a href="#explota-las-virtudes-y-reflexiona-las-mejoras-ambas-son-igual-de-importantes" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Voy a decir una obviedad, todos tenemos cosas buenas y malas.&lt;/p&gt;
+&lt;h2 data-hextra-search-id="explota-las-virtudes-y-reflexiona-las-mejoras-ambas-son-igual-de-importantes"&gt;Explota las virtudes y reflexiona las mejoras, ambas son igual de importantes&lt;span class="hx:absolute hx:-mt-20" id="explota-las-virtudes-y-reflexiona-las-mejoras-ambas-son-igual-de-importantes"&gt;&lt;/span&gt;
+&lt;a href="#explota-las-virtudes-y-reflexiona-las-mejoras-ambas-son-igual-de-importantes" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Voy a decir una obviedad, todos tenemos cosas buenas y malas.&lt;/p&gt;
 &lt;p&gt;Por favor cuando tengas 1.1 habla de ambas cosas, explota y recalcá las virtudes y reflexiona sobre
 las mejoras, si solo resaltas las mejoras &amp;ldquo;o lo que hace mal&amp;rdquo; es angustiante
 para la persona que está del otro lado, va a sentir que nada alcanza y nada hace bien.&lt;br&gt;
 Por el contrario, si solo resaltas las virtudes y no te tomas el tiempo para charlar sobre las mejoras
 no vas a impulsar el cambio y mejora en la vida y carrera de la persona.&lt;/p&gt;
 &lt;p&gt;De nuevo &lt;strong&gt;explota las virtudes y reflexiona las mejoras, ambas son igual de importantes&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2&gt;Se vos mismo, no gestiones desde lo libros&lt;span class="hx:absolute hx:-mt-20" id="se-vos-mismo-no-gestiones-desde-lo-libros"&gt;&lt;/span&gt;
-&lt;a href="#se-vos-mismo-no-gestiones-desde-lo-libros" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Por último y también puede ser una obviedad, pero se vos mismo, se siente a kilómetros
+&lt;h2 data-hextra-search-id="se-vos-mismo-no-gestiones-desde-lo-libros"&gt;Se vos mismo, no gestiones desde lo libros&lt;span class="hx:absolute hx:-mt-20" id="se-vos-mismo-no-gestiones-desde-lo-libros"&gt;&lt;/span&gt;
+&lt;a href="#se-vos-mismo-no-gestiones-desde-lo-libros" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Por último y también puede ser una obviedad, pero se vos mismo, se siente a kilómetros
 de distancia cuando alguien te está hablando desde un discurso preparado o desde
 tips de un libro de liderazgo.&lt;/p&gt;
 &lt;p&gt;Todos estamos y continuamos aprendiendo, vos también.&lt;/p&gt;</description></item><item><title>El infierno de los tickets</title><link>https://luispe.github.io/blog/es/posts/ticket-hell/</link><pubDate>Wed, 19 Jun 2024 19:10:20 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/ticket-hell/</guid><description>
-&lt;h2&gt;Problema&lt;span class="hx:absolute hx:-mt-20" id="problema"&gt;&lt;/span&gt;
-&lt;a href="#problema" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;Si solo tenés un martillo todos los problemas se parecen a un clavo&lt;/em&gt;&lt;/p&gt;
+&lt;h2 data-hextra-search-id="problema"&gt;Problema&lt;span class="hx:absolute hx:-mt-20" id="problema"&gt;&lt;/span&gt;
+&lt;a href="#problema" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;Si solo tenés un martillo todos los problemas se parecen a un clavo&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;¿Por qué comienzo con esta conocida frase?, primero quiero dar un poco de historia y luego
 voy a explicar por qué la menciono.&lt;/p&gt;
 &lt;p&gt;En los equipos de infraestructura en el cual llevo trabajando hace
 algunos años tuve la gran fortuna de cruzarme con personas importantes que siempre me dijeron.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;- Nunca caigamos en un equipo de infraestructura que trabaje mediante pedidos por tickets&lt;/em&gt;&lt;/p&gt;
-&lt;h2&gt;Posicionamiento&lt;span class="hx:absolute hx:-mt-20" id="posicionamiento"&gt;&lt;/span&gt;
-&lt;a href="#posicionamiento" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Cuál es el racional detrás de esta posición firme?&lt;/p&gt;
+&lt;h2 data-hextra-search-id="posicionamiento"&gt;Posicionamiento&lt;span class="hx:absolute hx:-mt-20" id="posicionamiento"&gt;&lt;/span&gt;
+&lt;a href="#posicionamiento" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;¿Cuál es el racional detrás de esta posición firme?&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Se tiene que tener una cultura extremadamente fuerte de punta a punta
 para poder determinar que ticket es mas importante que otro.&lt;/li&gt;
@@ -602,8 +803,8 @@ y producto se expande a nuevas funcionalidades.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;Existen varios motivos más, pero en este momento me parecen los mas destacables y avanzo
 en explicar cada uno de ellos.&lt;/p&gt;
-&lt;h3&gt;1. Cultura extremadamente fuerte&lt;span class="hx:absolute hx:-mt-20" id="1-cultura-extremadamente-fuerte"&gt;&lt;/span&gt;
-&lt;a href="#1-cultura-extremadamente-fuerte" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Tanto a los equipos de infraestructura como a los de QA no se los suele involucrar en el armado
+&lt;h3 data-hextra-search-id="1-cultura-extremadamente-fuerte"&gt;1. Cultura extremadamente fuerte&lt;span class="hx:absolute hx:-mt-20" id="1-cultura-extremadamente-fuerte"&gt;&lt;/span&gt;
+&lt;a href="#1-cultura-extremadamente-fuerte" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Tanto a los equipos de infraestructura como a los de QA no se los suele involucrar en el armado
 de roadmap y sprint de tecnología y producto.
 En caso de que pase, se lo hace al final de la milla &amp;ldquo;cuando ya todo está cocinado&amp;rdquo;.&lt;/p&gt;
 &lt;p&gt;¿A dónde apunto con esto?, que si al responsable de infraestructura le llegan dos tickets
@@ -611,8 +812,8 @@ y tiene que priorizar por cuestiones de capacidad de ejecución, la pregunta obv
 &lt;p&gt;¿que ticket priorizo?&lt;/p&gt;
 &lt;p&gt;Buena suerte cuando estés ahí, porque para los clientes (en este caso equipo interno de tecnología)
 lo de ellos es lo más importante del mundo mundial por sobre cualquier cosa.&lt;/p&gt;
-&lt;h3&gt;2. Crecimiento sin sentido&lt;span class="hx:absolute hx:-mt-20" id="2-crecimiento-sin-sentido"&gt;&lt;/span&gt;
-&lt;a href="#2-crecimiento-sin-sentido" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Supongamos que el punto anterior esta resuelto, de este punto que voy
+&lt;h3 data-hextra-search-id="2-crecimiento-sin-sentido"&gt;2. Crecimiento sin sentido&lt;span class="hx:absolute hx:-mt-20" id="2-crecimiento-sin-sentido"&gt;&lt;/span&gt;
+&lt;a href="#2-crecimiento-sin-sentido" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Supongamos que el punto anterior esta resuelto, de este punto que voy
 a explicar a continuación no se zafa.&lt;/p&gt;
 &lt;p&gt;¿Por qué decimos que el equipo de infraestructura inherentemente tiene que crecer?&lt;/p&gt;
 &lt;p&gt;Si caemos en tickets que solo resuelve el equipo de infraestructura a más productos y
@@ -620,8 +821,8 @@ funcionalidades que tenga la empresa más personas se necesitan del equipo de
 infraestructura para atacar la demanda de tickets.&lt;/p&gt;
 &lt;p&gt;Felicitaciones, creaste un embudo de ejecución.&lt;/p&gt;
 &lt;p&gt;¿Solución?, contratar más talento para el equipo de infraestructura.&lt;/p&gt;
-&lt;h3&gt;3. Motivación&lt;span class="hx:absolute hx:-mt-20" id="3-motivación"&gt;&lt;/span&gt;
-&lt;a href="#3-motivaci%c3%b3n" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Supongamos que el punto 1 y el 2 están resueltos.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="3-motivación"&gt;3. Motivación&lt;span class="hx:absolute hx:-mt-20" id="3-motivación"&gt;&lt;/span&gt;
+&lt;a href="#3-motivaci%c3%b3n" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Supongamos que el punto 1 y el 2 están resueltos.&lt;/p&gt;
 &lt;p&gt;¿Los integrantes del equipo de infraestructura son humanos verdad?&lt;/p&gt;
 &lt;p&gt;Digo esto porque es difícil mantener la motivación si &amp;mdash;en un trabajo
 que es altamente impulsado por la creatividad&amp;mdash; acotamos a los integrantes del
@@ -630,13 +831,13 @@ equipo a &amp;ldquo;cerrar tickets&amp;rdquo; sin ningún lugar para la discusi�
 que, si son tóxicos, pueden acusar de bloqueantes o mala experiencia en la gestión
 de infraestructura al equipo de infra.&lt;/p&gt;
 &lt;p&gt;De esto último ¿qué puede decirte?, Keep Calm y te dejo un gran abrazo.&lt;/p&gt;
-&lt;h3&gt;4. Innovación&lt;span class="hx:absolute hx:-mt-20" id="4-innovación"&gt;&lt;/span&gt;
-&lt;a href="#4-innovaci%c3%b3n" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Por último si tenemos resueltos los anteriores 3 puntos es imposible innovar,
+&lt;h3 data-hextra-search-id="4-innovación"&gt;4. Innovación&lt;span class="hx:absolute hx:-mt-20" id="4-innovación"&gt;&lt;/span&gt;
+&lt;a href="#4-innovaci%c3%b3n" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Por último si tenemos resueltos los anteriores 3 puntos es imposible innovar,
 lisa y llanamente.&lt;/p&gt;
 &lt;p&gt;¿Por qué?, un equipo que trabaja simplemente cerrando tickets, abocado solo a participar en
 un proyecto creando infraestructura, es imposible que pueda innovar.&lt;/p&gt;
-&lt;h2&gt;Volvamos al inicio&lt;span class="hx:absolute hx:-mt-20" id="volvamos-al-inicio"&gt;&lt;/span&gt;
-&lt;a href="#volvamos-al-inicio" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;Si solo tenés un martillo todos los problemas se parecen a un clavo&lt;/em&gt;&lt;/p&gt;
+&lt;h2 data-hextra-search-id="volvamos-al-inicio"&gt;Volvamos al inicio&lt;span class="hx:absolute hx:-mt-20" id="volvamos-al-inicio"&gt;&lt;/span&gt;
+&lt;a href="#volvamos-al-inicio" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;Si solo tenés un martillo todos los problemas se parecen a un clavo&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;A lo largo de post expliqué el racional y los puntos mas importantes en los que va a impactar
 una metodología de tickets para gestión de infraestructura.&lt;/p&gt;
 &lt;p&gt;Y quiero dejar en claro que no está mal trabajar por tickets en un equipo de infraestructura,
@@ -655,25 +856,25 @@ o necesitas discutir algo de lo que escribí estoy encantado de conocerte :)&lt;
 &lt;p&gt;¡Hasta pronto! 👋🏽&lt;/p&gt;</description></item><item><title>Aniversarios</title><link>https://luispe.github.io/blog/es/posts/career/</link><pubDate>Fri, 02 Sep 2022 19:11:03 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/career/</guid><description>
 &lt;p&gt;Los aniversarios, puede ser un cumpleaños, fin año o cualquiera sea, en general lo llevan a uno llevan a reflexionar.&lt;/p&gt;
 &lt;p&gt;Este caso no sería la excepción, ¿cuál es el aniversario?, hace menos de un mes cumplí un año en mi actual empresa
-(&lt;a href="https://www.linkedin.com/company/pomelo-latam/mycompany/"target="_blank" rel="noopener"&gt;Pomelo&lt;/a&gt;), el 29 de agosto del 2022 hicieron públicas las
+(&lt;a href="https://www.linkedin.com/company/pomelo-latam/mycompany/" target="_blank" rel="noopener"&gt;Pomelo&lt;/a&gt;), el 29 de agosto del 2022 hicieron públicas las
 promociones en la empresa, formo parte de las personas a las que ascendieron, quería escribir algunas conclusiones
 que me llevo de estos más 365 días, dos equipos y un ascenso.&lt;/p&gt;
-&lt;h2&gt;Pilares&lt;span class="hx:absolute hx:-mt-20" id="pilares"&gt;&lt;/span&gt;
-&lt;a href="#pilares" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Los que me conocen, sea en lo laboral o la vida personal, me escuchan hablar sobre tres principios, con los que trato
+&lt;h2 data-hextra-search-id="pilares"&gt;Pilares&lt;span class="hx:absolute hx:-mt-20" id="pilares"&gt;&lt;/span&gt;
+&lt;a href="#pilares" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Los que me conocen, sea en lo laboral o la vida personal, me escuchan hablar sobre tres principios, con los que trato
 de movilizarme y busco a mi alrededor:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Confianza&lt;/li&gt;
 &lt;li&gt;Humildad&lt;/li&gt;
 &lt;li&gt;Respeto&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3&gt;Confianza&lt;span class="hx:absolute hx:-mt-20" id="confianza"&gt;&lt;/span&gt;
-&lt;a href="#confianza" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Voy a intentar explicar que significa para mí este pilar.&lt;/p&gt;
-&lt;p&gt;En una de &lt;a href="https://luispe.github.io/blog/es/posts//mistakes-and-learnings/"target="_blank" rel="noopener"&gt;mis primeras publicaciones&lt;/a&gt; donde hablo sobre
+&lt;h3 data-hextra-search-id="confianza"&gt;Confianza&lt;span class="hx:absolute hx:-mt-20" id="confianza"&gt;&lt;/span&gt;
+&lt;a href="#confianza" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Voy a intentar explicar que significa para mí este pilar.&lt;/p&gt;
+&lt;p&gt;En una de &lt;a href="https://luispe.github.io/blog/es/posts//mistakes-and-learnings/" target="_blank" rel="noopener"&gt;mis primeras publicaciones&lt;/a&gt; donde hablo sobre
 errores y aprendizajes, hablo sobre que ascender no debería ser la única o principal meta hay cosas muchísimo,
 pero muchísimo más importantes y la confianza es una de ellas.&lt;/p&gt;
 &lt;p&gt;Ok luispi, ¿pero qué tiene que ver con la confianza?, alla vamos.&lt;/p&gt;
-&lt;h4&gt;Inicios&lt;span class="hx:absolute hx:-mt-20" id="inicios"&gt;&lt;/span&gt;
-&lt;a href="#inicios" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Mi primer acercamiento a Pomelo fué por medio de &lt;a href="https://www.linkedin.com/in/marumoran/"target="_blank" rel="noopener"&gt;Maru&lt;/a&gt;, ya nos conocíamos,
+&lt;h4 data-hextra-search-id="inicios"&gt;Inicios&lt;span class="hx:absolute hx:-mt-20" id="inicios"&gt;&lt;/span&gt;
+&lt;a href="#inicios" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Mi primer acercamiento a Pomelo fué por medio de &lt;a href="https://www.linkedin.com/in/marumoran/" target="_blank" rel="noopener"&gt;Maru&lt;/a&gt;, ya nos conocíamos,
 Maru fué quien hizo el proceso de hiring cuando entré en MercadoLibre, luego estuvimos cerca de reencontrarnos en
 Naranja X, pero bien sirvió el impasse para reencontrarnos profesionalmente en Pomelo, esto lo cuento justamente por
 el término de &lt;strong&gt;confianza&lt;/strong&gt;.&lt;/p&gt;
@@ -683,20 +884,20 @@ absolutamente admirable en construir equipos de tecnología, y esa confianza que
 &lt;li&gt;Maru vuelva a confiar en mí una y otra vez y vuelva a convocarme.&lt;/li&gt;
 &lt;li&gt;De mi lado tomar esa confianza depositada y construir (o intentar hacerlo) el mejor contexto de trabajo posible.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4&gt;Reencuentro y desencuentro&lt;span class="hx:absolute hx:-mt-20" id="reencuentro-y-desencuentro"&gt;&lt;/span&gt;
-&lt;a href="#reencuentro-y-desencuentro" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;En los más 365 días que llevo en Pomelo trabaje casi la mitad de tiempo en el equipo del Procesador, me reencontré
+&lt;h4 data-hextra-search-id="reencuentro-y-desencuentro"&gt;Reencuentro y desencuentro&lt;span class="hx:absolute hx:-mt-20" id="reencuentro-y-desencuentro"&gt;&lt;/span&gt;
+&lt;a href="#reencuentro-y-desencuentro" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;En los más 365 días que llevo en Pomelo trabaje casi la mitad de tiempo en el equipo del Procesador, me reencontré
 con caras conocidas y conocí algunas nuevas, ya voy a nombrarlas, primero la anécdota.&lt;/p&gt;
 &lt;p&gt;En el Procesador estuve poco más de 5 meses, cumplimos el hito (locura) de tener en marcha el procesador y
 luego mediando enero de 2022 me mude al equipo de infra.
 Acá se jugaron dos pilares, confianza y respeto, ¿por qué digo esto?, los chicos supieron para donde quería dirigir
 mi carrera y me apoyaron al 100%.&lt;/p&gt;
 &lt;p&gt;No obstante 7 meses después me demostraron que son personas en las cuales voy a confiar infinitamente más allá
-de Pomelo, estas personas son: &lt;a href="https://www.linkedin.com/in/victoria-rodr%C3%ADguez-brizi-61639a55/"target="_blank" rel="noopener"&gt;Brizi&lt;/a&gt;,
-&lt;a href="https://www.linkedin.com/in/damian-tundis/"target="_blank" rel="noopener"&gt;Dami&lt;/a&gt; y &lt;a href="https://www.linkedin.com/in/nsarfati/"target="_blank" rel="noopener"&gt;Nico&lt;/a&gt;, no voy a contar
+de Pomelo, estas personas son: &lt;a href="https://www.linkedin.com/in/victoria-rodr%C3%ADguez-brizi-61639a55/" target="_blank" rel="noopener"&gt;Brizi&lt;/a&gt;,
+&lt;a href="https://www.linkedin.com/in/damian-tundis/" target="_blank" rel="noopener"&gt;Dami&lt;/a&gt; y &lt;a href="https://www.linkedin.com/in/nsarfati/" target="_blank" rel="noopener"&gt;Nico&lt;/a&gt;, no voy a contar
 los pormenores ellos saben a qué me refiero, pero quería agradecerles públicamente ❤️.&lt;/p&gt;
-&lt;h4&gt;Con ustedes, a la guerra con un escarbadientes&lt;span class="hx:absolute hx:-mt-20" id="con-ustedes-a-la-guerra-con-un-escarbadientes"&gt;&lt;/span&gt;
-&lt;a href="#con-ustedes-a-la-guerra-con-un-escarbadientes" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Hablé de mi primera etapa en Pomelo, pasemos a la segunda, &amp;ldquo;Migración al equipo de Infraestructura&amp;rdquo;.&lt;/p&gt;
-&lt;p&gt;De enero a esta parte y desde el minuto cero &lt;a href="https://www.linkedin.com/in/juanjosebehrend/"target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt; y &lt;a href="https://www.linkedin.com/in/gustavo-adrian-gimenez-4894589b/"target="_blank" rel="noopener"&gt;Gus&lt;/a&gt;
+&lt;h4 data-hextra-search-id="con-ustedes-a-la-guerra-con-un-escarbadientes"&gt;Con ustedes, a la guerra con un escarbadientes&lt;span class="hx:absolute hx:-mt-20" id="con-ustedes-a-la-guerra-con-un-escarbadientes"&gt;&lt;/span&gt;
+&lt;a href="#con-ustedes-a-la-guerra-con-un-escarbadientes" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;Hablé de mi primera etapa en Pomelo, pasemos a la segunda, &amp;ldquo;Migración al equipo de Infraestructura&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;De enero a esta parte y desde el minuto cero &lt;a href="https://www.linkedin.com/in/juanjosebehrend/" target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt; y &lt;a href="https://www.linkedin.com/in/gustavo-adrian-gimenez-4894589b/" target="_blank" rel="noopener"&gt;Gus&lt;/a&gt;
 y conociéndome, diría que nada, me dieron el espacio para crear un espacio de debate y repreguntas. Escucharon
 mis propuestas, las hicieron suyas, y entre todos las llevamos adelante, me hicieron partes de las suyas las tome como
 propias y así rodeado de una pila de personas con una calidad humana de otro planeta hicimos y estamos haciendo cosas
@@ -708,8 +909,8 @@ cualquier puesto que ocupemos u obtengamos.&lt;/p&gt;
 para transitar la vida, humildad y respeto.&lt;/p&gt;</description></item><item><title>Deuda técnica</title><link>https://luispe.github.io/blog/es/posts/technical-debt/</link><pubDate>Sat, 02 Jul 2022 16:36:17 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/technical-debt/</guid><description>
 &lt;p&gt;En la siguiente publicación vamos a repensar un concepto comúnmente encontrado y avalado en la industria de la
 tecnología, la deuda técnica.&lt;/p&gt;
-&lt;h2&gt;Distinta vara&lt;span class="hx:absolute hx:-mt-20" id="distinta-vara"&gt;&lt;/span&gt;
-&lt;a href="#distinta-vara" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos que necesitamos pintar el exterior de nuestra casa y decidimos contratar a un profesional para que realice el
+&lt;h2 data-hextra-search-id="distinta-vara"&gt;Distinta vara&lt;span class="hx:absolute hx:-mt-20" id="distinta-vara"&gt;&lt;/span&gt;
+&lt;a href="#distinta-vara" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos que necesitamos pintar el exterior de nuestra casa y decidimos contratar a un profesional para que realice el
 trabajo.&lt;/p&gt;
 &lt;p&gt;Después de consultar por varios presupuestos decidimos contratar los servicios de &amp;ldquo;x&amp;rdquo; para que se encargue del trabajo.&lt;/p&gt;
 &lt;p&gt;Al cabo de unos dias &amp;ldquo;x&amp;rdquo; nos comenta:&lt;/p&gt;
@@ -719,9 +920,9 @@ trabajo.&lt;/p&gt;
 &lt;p&gt;- &lt;em&gt;Disculpá, deuda técnica que la podemos atacar a futuro.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;¿Qué sentirías si te encontrás con una situación asi?&lt;/p&gt;
 &lt;p&gt;¿Por qué en el contexto de la tecnología avalamos tener deuda técnica?&lt;/p&gt;
-&lt;h2&gt;Repensemos&lt;span class="hx:absolute hx:-mt-20" id="repensemos"&gt;&lt;/span&gt;
-&lt;a href="#repensemos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;En tecnología es muy común encontrarnos con este escenario y lamentablemente lo naturalizamos y como comente en otra
-&lt;a href="https://luispe.github.io/blog/es/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;publicación&lt;/a&gt; donde hablo entre otras cosas sobre
+&lt;h2 data-hextra-search-id="repensemos"&gt;Repensemos&lt;span class="hx:absolute hx:-mt-20" id="repensemos"&gt;&lt;/span&gt;
+&lt;a href="#repensemos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;En tecnología es muy común encontrarnos con este escenario y lamentablemente lo naturalizamos y como comente en otra
+&lt;a href="https://luispe.github.io/blog/es/posts/mistakes-and-learnings/" target="_blank" rel="noopener"&gt;publicación&lt;/a&gt; donde hablo entre otras cosas sobre
 la importancia de documentar y hacer test, es algo común que siempre veo como &amp;ldquo;deuda técnica&amp;rdquo;, repensando en el ejemplo
 de pintar la casa creo que nos expone como podemos tener &amp;ldquo;distinta vara&amp;rdquo; para medir la misma situación en diferentes
 contextos.&lt;/p&gt;
@@ -733,8 +934,8 @@ perdamos una cantidad enorme de tiempo tratando de entender como están construi
 &lt;li&gt;En contexto de equipo: tener deuda técnica hace que el conocimiento quede en las personas y deberíamos siempre, siempre,
 impulsar que el conocimiento esté distribuido.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La deuda técnica es &lt;strong&gt;muy agotadora&lt;/strong&gt; para los equipos y donde hoy pensamos que estamos ganando tiempo te aseguro que pronto,
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La deuda técnica es &lt;strong&gt;muy agotadora&lt;/strong&gt; para los equipos y donde hoy pensamos que estamos ganando tiempo te aseguro que pronto,
 muy pronto, se pierde agilidad y velocidad en el desarrollo.&lt;/p&gt;
 &lt;p&gt;Se puede evitar en la mayoría de los casos y no la aceptemos como algo natural.&lt;/p&gt;
 &lt;p&gt;Para finalizar espero que repensemos juntos la &amp;ldquo;deuda técnica&amp;rdquo; y que nos incomode tenerla.&lt;/p&gt;
@@ -742,11 +943,11 @@ muy pronto, se pierde agilidad y velocidad en el desarrollo.&lt;/p&gt;
 &lt;p&gt;En la siguiente publicación quiero compartir un error común que solía cometer en mis proyectos en Golang. Y como bien
 dice el título y descripción hoy vamos a hablar de las interfaces.&lt;/p&gt;
 &lt;p&gt;Seguramente se encuentren con algunas referencias a otra publicación que hice sobre
-&lt;a href="https://luispe.github.io/blog/es/posts/hexagonal-architecture/"target="_blank" rel="noopener"&gt;arquitectura hexagonal&lt;/a&gt;, creo que parte del mal uso de las
+&lt;a href="https://luispe.github.io/blog/es/posts/hexagonal-architecture/" target="_blank" rel="noopener"&gt;arquitectura hexagonal&lt;/a&gt;, creo que parte del mal uso de las
 interfaces es la consecuencia de seguir a rajatabla publicaciones de &amp;ldquo;medium&amp;rdquo; y no tomarse el tiempo para entender el
 concepto subyacente.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Si hay algo que tenemos que admitir en el ecosistema de Golang es el enrosque que a veces nos damos con algunas/varias
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Si hay algo que tenemos que admitir en el ecosistema de Golang es el enrosque que a veces nos damos con algunas/varias
 cuestiones. Por dar un ejemplo en como nombrar las variables (que es un tema del que quiero hablar pronto) y en el
 caso de hoy con las interfaces.&lt;/p&gt;
 &lt;p&gt;Golang tiene sus particularidades, pero se basa en muchos patrones ya conocidos en la industria. En el ecosistema de Go
@@ -780,6 +981,8 @@ falso y refactorizarlo para hacer un buen uso de las interfaces.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -817,6 +1020,8 @@ title="Copiar código"
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -830,8 +1035,8 @@ cometer el mismo error.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Las interfaces en Go generalmente pertenecen al paquete que usa valores del tipo de interfaz, no al paquete que implementa
 esos valores.&lt;/em&gt; 🫠&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;El paquete de implementación debe devolver tipos concretos (generalmente puntero o estructura): de esa manera, se pueden
 agregar nuevos métodos a las implementaciones sin requerir una refactorización extensa.&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -860,6 +1065,8 @@ no la interfaz.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -905,6 +1112,8 @@ de nuevo, retornan tipos concretos (generalmente un puntero o una estructura).&l
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -916,9 +1125,9 @@ title="Copiar código"
 la interfaz para que pueda consumirse en los métodos del servicio.&lt;/p&gt;
 &lt;p&gt;Al igual que con la capa de repositorio nuestro &lt;code&gt;NewService()&lt;/code&gt; ahora retorna una estructura y no una interfaz.&lt;/p&gt;
 &lt;p&gt;Por ultimo agregamos el método &lt;code&gt;Create&lt;/code&gt; a nuestro &lt;code&gt;Service&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Con estos cambios sutiles pero poderosos nuestros &lt;code&gt;producer&lt;/code&gt; ahora tienen una enorme flexibilidad.&lt;/p&gt;
-&lt;p&gt;Por último quiero agradecer a mi amigo y mentor &lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; que me compartió este
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Con estos cambios sutiles pero poderosos nuestros &lt;code&gt;producer&lt;/code&gt; ahora tienen una enorme flexibilidad.&lt;/p&gt;
+&lt;p&gt;Por último quiero agradecer a mi amigo y mentor &lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; que me compartió este
 anti patrón y me hizo repensar y mejorar, una vez más, en esto del desarrollo de software.&lt;/p&gt;
 &lt;p&gt;Para no aburrirte y por el momento hagamos una pausa.&lt;/p&gt;
 &lt;p&gt;Próximamente vamos a seguir con pequeñas publicaciones donde vamos a intentar repensar otros anti patrones.&lt;/p&gt;
@@ -926,15 +1135,15 @@ anti patrón y me hizo repensar y mejorar, una vez más, en esto del desarrollo 
 &lt;hr&gt;
 &lt;p&gt;Fuentes:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces"target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/"target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces" target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/" target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Cuando el contexto importa</title><link>https://luispe.github.io/blog/es/posts/when-the-context-matter/</link><pubDate>Tue, 14 Jun 2022 18:45:35 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/when-the-context-matter/</guid><description>
 &lt;p&gt;La siguiente publicación se podría decir que es una continuación de otra donde hablamos de como tener imágenes livianas
 nos ayuda en muchos aspectos, si aún no pudiste leerla acá te dejo
-&lt;a href="https://luispe.github.io/blog/es/posts/lightweight-container-image/"target="_blank" rel="noopener"&gt;el acceso&lt;/a&gt;.&lt;/p&gt;
+&lt;a href="https://luispe.github.io/blog/es/posts/lightweight-container-image/" target="_blank" rel="noopener"&gt;el acceso&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Hoy vamos a realizar una pequeña, pero importante mejora, y vamos a descubrir porque la estamos realizando.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Como última propuesta en la publicación que compartí anteriormente nos quedamos en este punto:&lt;/p&gt;
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Como última propuesta en la publicación que compartí anteriormente nos quedamos en este punto:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -975,6 +1184,8 @@ nos ayuda en muchos aspectos, si aún no pudiste leerla acá te dejo
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -986,8 +1197,8 @@ por los beneficios de poder construir en diferentes lugares y no encontrarnos co
 que está contenida en el container, te invito a que pensemos durante unos segundos/minutos o el tiempo que necesitemos.&lt;/p&gt;
 &lt;p&gt;¿Se puede realizar una mejora en la imagen para la aplicación de Golang?&lt;/p&gt;
 &lt;p&gt;La respuesta es si, ¡manos a la obra!&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Golang posee una característica que es realmente poderosa, y no estoy hablando de las goroutines, y es la gran virtud de
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Golang posee una característica que es realmente poderosa, y no estoy hablando de las goroutines, y es la gran virtud de
 poder realizar compilación cruzada.&lt;/p&gt;
 &lt;p&gt;¿Qué es compilación cruzada?, es la característica de poder compilar desde un host con una determinada arquitectura y
 sistema operativo (SO) el binario para otra arquitectura o SO.&lt;/p&gt;
@@ -1046,6 +1257,8 @@ arquitectura amd64.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1061,6 +1274,8 @@ GOARCH=amd64&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1080,8 +1295,8 @@ quedamos tranquilos de que estamos acortando el margen de contratiempos.&lt;/p&g
 &lt;p&gt;En la siguiente publicación voy a compartirles algunos consejos y buenas prácticas para desarrollar nuestras imágenes
 de container, como ejemplo vamos a crear una imagen para una app en Golang, pero los siguientes consejos aplican
 para cualquier lenguaje, ¡vamos!&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Perseguir que nuestras imágenes de container sean lo más reducida posible en cuanto a su peso (megabytes, gigabytes, etc.)
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Perseguir que nuestras imágenes de container sean lo más reducida posible en cuanto a su peso (megabytes, gigabytes, etc.)
 no es una cuestión de gustos, nos ayuda en muchos aspectos, a continuación les comparto algunos:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Reduce gastos de storage en el registry que utilizamos para gestionar nuestras imágenes.&lt;/li&gt;
@@ -1096,8 +1311,8 @@ inicializarse con mayor velocidad.&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Por dar algunos ejemplos.&lt;/p&gt;
-&lt;h2&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
-&lt;a href="#comencemos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos que tenemos el siguiente Dockerfile para crear nuestra imagen de container e.g:&lt;/p&gt;
+&lt;h2 data-hextra-search-id="comencemos"&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
+&lt;a href="#comencemos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos que tenemos el siguiente Dockerfile para crear nuestra imagen de container e.g:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1128,6 +1343,8 @@ inicializarse con mayor velocidad.&lt;/li&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1143,9 +1360,9 @@ title="Copiar código"
 Por dar un ejemplo &lt;code&gt;RUN go build -o ./myapp ./path/to/main&lt;/code&gt; donde &lt;code&gt;./path/to/main&lt;/code&gt; debería estar el main de tu app de
 Golang&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Vamos con la primera propuesta.&lt;span class="hx:absolute hx:-mt-20" id="vamos-con-la-primera-propuesta"&gt;&lt;/span&gt;
-&lt;a href="#vamos-con-la-primera-propuesta" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Siempre es una buena práctica usar imágenes &lt;code&gt;-alpine&lt;/code&gt;, por convención en el universo de container cuando disponibilizamos
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3 data-hextra-search-id="vamos-con-la-primera-propuesta"&gt;Vamos con la primera propuesta.&lt;span class="hx:absolute hx:-mt-20" id="vamos-con-la-primera-propuesta"&gt;&lt;/span&gt;
+&lt;a href="#vamos-con-la-primera-propuesta" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Siempre es una buena práctica usar imágenes &lt;code&gt;-alpine&lt;/code&gt;, por convención en el universo de container cuando disponibilizamos
 una imagen &lt;code&gt;-alpine&lt;/code&gt; estamos indicando al cliente que es una imagen reducida en tamaño y la que deberíamos utilizar en
 nuestro Dockerfile, entre otras cosas.&lt;/p&gt;
 &lt;p&gt;Bien, realicemos un pequeño cambio en nuestro Dockerfile y volvamos a construir nuestra imagen&lt;/p&gt;
@@ -1177,6 +1394,8 @@ nuestro Dockerfile, entre otras cosas.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1190,10 +1409,10 @@ title="Copiar código"
 &lt;p&gt;Es una excelente &amp;ldquo;approach&amp;rdquo; pero repensemos. ¿Hace falta tener una imagen con todo Golang dentro del container pesando
 cerca de 331 MB para disponibilizar un binario que pesa unos cuantos megabytes?.&lt;/p&gt;
 &lt;p&gt;La respuesta es claramente, no.&lt;/p&gt;
-&lt;h3&gt;Segunda propuesta&lt;span class="hx:absolute hx:-mt-20" id="segunda-propuesta"&gt;&lt;/span&gt;
-&lt;a href="#segunda-propuesta" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;La tecnología de container tiene una característica excelente, que para nuestro caso, nos va a ayudar a construir una
+&lt;h3 data-hextra-search-id="segunda-propuesta"&gt;Segunda propuesta&lt;span class="hx:absolute hx:-mt-20" id="segunda-propuesta"&gt;&lt;/span&gt;
+&lt;a href="#segunda-propuesta" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;La tecnología de container tiene una característica excelente, que para nuestro caso, nos va a ayudar a construir una
 imagen de container muy liviana, por si no lo sabías, estoy hablando de Multistage, te comparto la
-&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/"target="_blank" rel="noopener"&gt;documentación oficial&lt;/a&gt; para que profundices sobre esta
+&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/" target="_blank" rel="noopener"&gt;documentación oficial&lt;/a&gt; para que profundices sobre esta
 característica.&lt;/p&gt;
 &lt;p&gt;¿En qué consiste Multistage?, se trata de construir imágenes por etapas pudiendo así compartir datos entre cada una de
 ellas y vamos a obtener una imagen final de un tamaño muy pequeño.&lt;/p&gt;
@@ -1240,6 +1459,8 @@ etapa donde vamos a dejarlo disponible para utilizarlo.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1257,8 +1478,8 @@ desde la etapa que tagueamos como &lt;code&gt;builder&lt;/code&gt; y lo disponib
 &lt;p&gt;Esta es la primera de una serie donde vamos a revisar diferentes patrones de desarrollo que errores cometí y cuál es
 en la actualidad y lo que entiendo hasta el momento, la mejor forma de aplicarlo.&lt;/p&gt;
 &lt;p&gt;Como bien dice el título de la publicación hoy quiero hablar sobre arquitectura hexagonal.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Hace tiempo noto mucho &amp;ldquo;hype&amp;rdquo; en torno a la arquitectura hexagonal y me gustaría ser claro al respecto, no estoy en contra,
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Hace tiempo noto mucho &amp;ldquo;hype&amp;rdquo; en torno a la arquitectura hexagonal y me gustaría ser claro al respecto, no estoy en contra,
 mas bien todo lo contrario, me parece un excelente patrón.&lt;/p&gt;
 &lt;p&gt;Pero creo que caemos en el error de aplicar la recetas de publicaciones de &amp;ldquo;medium&amp;rdquo; y no solo terminamos con todas las
 capas de nuestro sistema acopladas sino que con nombres de packages al estilo &amp;ldquo;adapters&amp;rdquo; o &amp;ldquo;ports&amp;rdquo; y si hay algo hermoso
@@ -1269,10 +1490,10 @@ en el lenguaje de Go(lang) es la intencionalidad en el nombre de un package.&lt;
 &lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;Un buen nombre en el package hace que no sea necesario nada más para expresar la intencionalidad del mismo.&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;Te comparto y recomiendo leer la siguiente &lt;a href="https://go.dev/blog/package-names"target="_blank" rel="noopener"&gt;publicación oficial&lt;/a&gt;, opinión personal,
+&lt;p&gt;Te comparto y recomiendo leer la siguiente &lt;a href="https://go.dev/blog/package-names" target="_blank" rel="noopener"&gt;publicación oficial&lt;/a&gt;, opinión personal,
 aplica para cualquier lenguaje.&lt;/p&gt;
-&lt;h2&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
-&lt;a href="#comencemos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="comencemos"&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
+&lt;a href="#comencemos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Anti patrón&lt;/p&gt;
 &lt;p&gt;Anotación en nuestro modelo de dominio e.g &lt;code&gt;json&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1286,6 +1507,8 @@ aplica para cualquier lenguaje.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1293,8 +1516,8 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Antes de continuar leyendo te invito a que por unos segundos/minutos hagamos una reflexión de porque es un anti patrón.&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Nuestro modelo debería ser agnóstico a la capa de presentación y a la de datos, por lo tanto, no debería contener ninguna
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Nuestro modelo debería ser agnóstico a la capa de presentación y a la de datos, por lo tanto, no debería contener ninguna
 anotación. Deberíamos mapear los datos hacia nuestro modelo y viceversa, a continuación un ejemplo de como quedaría
 un controlador rest HTTP e.g.:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;user/rest_controller.go&lt;/code&gt;&lt;/p&gt;
@@ -1320,6 +1543,8 @@ un controlador rest HTTP e.g.:&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1337,6 +1562,8 @@ hacia el modelo de dominio cuando llamemos al servicio y viceversa.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1355,8 +1582,8 @@ es agnóstico a las capas de presentación o datos ganando flexibilidad, testabi
 errores (opinión de quien redacta, mal llamado &lt;strong&gt;fracaso&lt;/strong&gt;).&lt;/p&gt;
 &lt;p&gt;Como estarás sospechando a continuación voy a compartir algunos errores, que aprendí de ellos y más aún cuanto crecí y
 entendí de la industria al compartirlos.&lt;/p&gt;
-&lt;h2&gt;Enseñanza 1:&lt;span class="hx:absolute hx:-mt-20" id="enseñanza-1"&gt;&lt;/span&gt;
-&lt;a href="#ense%c3%b1anza-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="enseñanza-1"&gt;Enseñanza 1:&lt;span class="hx:absolute hx:-mt-20" id="enseñanza-1"&gt;&lt;/span&gt;
+&lt;a href="#ense%c3%b1anza-1" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Escribir un paso a paso, compartirlo, validarlo y re-validarlo antes de ejecutar nada&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Mi primer desarrollo productivo fue en 2012 (?) aproximadamente, se trató de una web para una empresa que necesitaba
@@ -1378,8 +1605,8 @@ orgulloso le digo:&lt;/p&gt;
 &lt;p&gt;Como la gente de digitalocean está preparada para personas como quien redacta, tiene una funcionalidad que si se accede
 desde la web (no tengo mucha idea como se resuelve por detrás) podes ejecutar una terminal en el navegador y acceder al droplet.&lt;/p&gt;
 &lt;p&gt;Configure de nuevo los puertos, y el resto medio que es historia.&lt;/p&gt;
-&lt;h2&gt;Enseñanza 2:&lt;span class="hx:absolute hx:-mt-20" id="enseñanza-2"&gt;&lt;/span&gt;
-&lt;a href="#ense%c3%b1anza-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="enseñanza-2"&gt;Enseñanza 2:&lt;span class="hx:absolute hx:-mt-20" id="enseñanza-2"&gt;&lt;/span&gt;
+&lt;a href="#ense%c3%b1anza-2" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Documentar el conocimiento por más trivial que lo consideremos e invitemos a que el resto lo haga. Además de evitar
 varias reuniones de “transferencia de conocimiento” nos vamos a ahorrar varios arrobas, ¿te recuerda algo?&lt;/p&gt;
 &lt;p&gt;@fulanito puede darte una mano&lt;/p&gt;
@@ -1394,8 +1621,8 @@ a entender cómo dejar esa línea de código local y exponerla a internet.&lt;/p
 &lt;p&gt;O acaso, y te invito a pensar durante unos segundos. ¿te encontraste una o más veces haciendo reuniones de
 “knowledge transfer” porque alguna persona estaba dejando el equipo?&lt;/p&gt;
 &lt;p&gt;¿O acaso eras vos quien lo estaba dejando?&lt;/p&gt;
-&lt;h2&gt;Enseñanza 3:&lt;span class="hx:absolute hx:-mt-20" id="enseñanza-3"&gt;&lt;/span&gt;
-&lt;a href="#ense%c3%b1anza-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="enseñanza-3"&gt;Enseñanza 3:&lt;span class="hx:absolute hx:-mt-20" id="enseñanza-3"&gt;&lt;/span&gt;
+&lt;a href="#ense%c3%b1anza-3" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Ascender no debería ser la única o principal meta, compartir y adquirir conocimiento debería ser la guía.&lt;/p&gt;
 &lt;p&gt;Enseñanza 3 bis:&lt;/p&gt;
 &lt;p&gt;Pensar y realizar pruebas antes de implementar cualquier cosa es una guía fundamental para entender el comportamiento de
@@ -1403,7 +1630,7 @@ nuestros sistemas o del conocimiento del dominio que tenemos hasta el momento. S
 es una ganancia en el tiempo.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Por último y en otro lugar que trabajé, conocí a una de las personas que mejor resuelve problemas,
-&lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;Juan Moreno&lt;/a&gt;, ¿qué es mejor para mí?, soluciones simples a problemas complejos.&lt;/p&gt;
+&lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;Juan Moreno&lt;/a&gt;, ¿qué es mejor para mí?, soluciones simples a problemas complejos.&lt;/p&gt;
 &lt;p&gt;Después de este pequeño paréntesis y dedicatoria a quien hoy es una de mis fuentes de consulta, referente y mentor,
 voy a intentar explicar la enseñanza número 3 y 3 bis.&lt;/p&gt;
 &lt;p&gt;En los tiempos prepandemia, solía –costumbre que aún conservo desde lo remoto– arrancar temprano, tener un par de horas

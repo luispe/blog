@@ -2,11 +2,11 @@
 &lt;p&gt;En la siguiente publicación quiero compartir un error común que solía cometer en mis proyectos en Golang. Y como bien
 dice el título y descripción hoy vamos a hablar de las interfaces.&lt;/p&gt;
 &lt;p&gt;Seguramente se encuentren con algunas referencias a otra publicación que hice sobre
-&lt;a href="https://luispe.github.io/blog/es/posts/hexagonal-architecture/"target="_blank" rel="noopener"&gt;arquitectura hexagonal&lt;/a&gt;, creo que parte del mal uso de las
+&lt;a href="https://luispe.github.io/blog/es/posts/hexagonal-architecture/" target="_blank" rel="noopener"&gt;arquitectura hexagonal&lt;/a&gt;, creo que parte del mal uso de las
 interfaces es la consecuencia de seguir a rajatabla publicaciones de &amp;ldquo;medium&amp;rdquo; y no tomarse el tiempo para entender el
 concepto subyacente.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Si hay algo que tenemos que admitir en el ecosistema de Golang es el enrosque que a veces nos damos con algunas/varias
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Si hay algo que tenemos que admitir en el ecosistema de Golang es el enrosque que a veces nos damos con algunas/varias
 cuestiones. Por dar un ejemplo en como nombrar las variables (que es un tema del que quiero hablar pronto) y en el
 caso de hoy con las interfaces.&lt;/p&gt;
 &lt;p&gt;Golang tiene sus particularidades, pero se basa en muchos patrones ya conocidos en la industria. En el ecosistema de Go
@@ -40,6 +40,8 @@ falso y refactorizarlo para hacer un buen uso de las interfaces.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -77,6 +79,8 @@ title="Copiar código"
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -90,8 +94,8 @@ cometer el mismo error.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Las interfaces en Go generalmente pertenecen al paquete que usa valores del tipo de interfaz, no al paquete que implementa
 esos valores.&lt;/em&gt; 🫠&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;El paquete de implementación debe devolver tipos concretos (generalmente puntero o estructura): de esa manera, se pueden
 agregar nuevos métodos a las implementaciones sin requerir una refactorización extensa.&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -120,6 +124,8 @@ no la interfaz.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -165,6 +171,8 @@ de nuevo, retornan tipos concretos (generalmente un puntero o una estructura).&l
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -176,9 +184,9 @@ title="Copiar código"
 la interfaz para que pueda consumirse en los métodos del servicio.&lt;/p&gt;
 &lt;p&gt;Al igual que con la capa de repositorio nuestro &lt;code&gt;NewService()&lt;/code&gt; ahora retorna una estructura y no una interfaz.&lt;/p&gt;
 &lt;p&gt;Por ultimo agregamos el método &lt;code&gt;Create&lt;/code&gt; a nuestro &lt;code&gt;Service&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Con estos cambios sutiles pero poderosos nuestros &lt;code&gt;producer&lt;/code&gt; ahora tienen una enorme flexibilidad.&lt;/p&gt;
-&lt;p&gt;Por último quiero agradecer a mi amigo y mentor &lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; que me compartió este
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Con estos cambios sutiles pero poderosos nuestros &lt;code&gt;producer&lt;/code&gt; ahora tienen una enorme flexibilidad.&lt;/p&gt;
+&lt;p&gt;Por último quiero agradecer a mi amigo y mentor &lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; que me compartió este
 anti patrón y me hizo repensar y mejorar, una vez más, en esto del desarrollo de software.&lt;/p&gt;
 &lt;p&gt;Para no aburrirte y por el momento hagamos una pausa.&lt;/p&gt;
 &lt;p&gt;Próximamente vamos a seguir con pequeñas publicaciones donde vamos a intentar repensar otros anti patrones.&lt;/p&gt;
@@ -186,14 +194,14 @@ anti patrón y me hizo repensar y mejorar, una vez más, en esto del desarrollo 
 &lt;hr&gt;
 &lt;p&gt;Fuentes:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces"target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/"target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces" target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/" target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Hexagonal Architecture</title><link>https://luispe.github.io/blog/es/posts/hexagonal-architecture/</link><pubDate>Thu, 09 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/hexagonal-architecture/</guid><description>
 &lt;p&gt;Esta es la primera de una serie donde vamos a revisar diferentes patrones de desarrollo que errores cometí y cuál es
 en la actualidad y lo que entiendo hasta el momento, la mejor forma de aplicarlo.&lt;/p&gt;
 &lt;p&gt;Como bien dice el título de la publicación hoy quiero hablar sobre arquitectura hexagonal.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Hace tiempo noto mucho &amp;ldquo;hype&amp;rdquo; en torno a la arquitectura hexagonal y me gustaría ser claro al respecto, no estoy en contra,
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Hace tiempo noto mucho &amp;ldquo;hype&amp;rdquo; en torno a la arquitectura hexagonal y me gustaría ser claro al respecto, no estoy en contra,
 mas bien todo lo contrario, me parece un excelente patrón.&lt;/p&gt;
 &lt;p&gt;Pero creo que caemos en el error de aplicar la recetas de publicaciones de &amp;ldquo;medium&amp;rdquo; y no solo terminamos con todas las
 capas de nuestro sistema acopladas sino que con nombres de packages al estilo &amp;ldquo;adapters&amp;rdquo; o &amp;ldquo;ports&amp;rdquo; y si hay algo hermoso
@@ -204,10 +212,10 @@ en el lenguaje de Go(lang) es la intencionalidad en el nombre de un package.&lt;
 &lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;Un buen nombre en el package hace que no sea necesario nada más para expresar la intencionalidad del mismo.&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;Te comparto y recomiendo leer la siguiente &lt;a href="https://go.dev/blog/package-names"target="_blank" rel="noopener"&gt;publicación oficial&lt;/a&gt;, opinión personal,
+&lt;p&gt;Te comparto y recomiendo leer la siguiente &lt;a href="https://go.dev/blog/package-names" target="_blank" rel="noopener"&gt;publicación oficial&lt;/a&gt;, opinión personal,
 aplica para cualquier lenguaje.&lt;/p&gt;
-&lt;h2&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
-&lt;a href="#comencemos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="comencemos"&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
+&lt;a href="#comencemos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Anti patrón&lt;/p&gt;
 &lt;p&gt;Anotación en nuestro modelo de dominio e.g &lt;code&gt;json&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -221,6 +229,8 @@ aplica para cualquier lenguaje.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -228,8 +238,8 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Antes de continuar leyendo te invito a que por unos segundos/minutos hagamos una reflexión de porque es un anti patrón.&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Nuestro modelo debería ser agnóstico a la capa de presentación y a la de datos, por lo tanto, no debería contener ninguna
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Nuestro modelo debería ser agnóstico a la capa de presentación y a la de datos, por lo tanto, no debería contener ninguna
 anotación. Deberíamos mapear los datos hacia nuestro modelo y viceversa, a continuación un ejemplo de como quedaría
 un controlador rest HTTP e.g.:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;user/rest_controller.go&lt;/code&gt;&lt;/p&gt;
@@ -255,6 +265,8 @@ un controlador rest HTTP e.g.:&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -272,6 +284,8 @@ hacia el modelo de dominio cuando llamemos al servicio y viceversa.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;

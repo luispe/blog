@@ -1,7 +1,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Home</title><link>https://luispe.github.io/blog/</link><description>Recent content in Home on luispe</description><generator>Hugo -- gohugo.io</generator><language>en</language><atom:link href="https://luispe.github.io/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Two Clicks</title><link>https://luispe.github.io/blog/posts/two-clicks/</link><pubDate>Sat, 24 Jan 2026 14:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/posts/two-clicks/</guid><description>
 &lt;p&gt;Today I&amp;rsquo;m going to paraphrase quite a bit, starting with the title from a great
 friend with whom we worked together and I&amp;rsquo;m sure we&amp;rsquo;ll meet again professionally,
-&lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;el chavito&lt;/a&gt;;
+&lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;el chavito&lt;/a&gt;;
 I first heard the phrase from him and I think in this post
 I&amp;rsquo;ll talk a bit about it and about when motivation vanishes;
 can it be recovered?, is the challenge worth it? what did I learn along the way?&lt;/p&gt;
@@ -37,7 +37,7 @@ that hurts more than the slap itself.&lt;/p&gt;
 another time because I want to address other things next.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;The other day talking with my ant brother, the crazy
-&lt;a href="https://www.linkedin.com/in/victor-de-grandis-0a1202ab/"target="_blank" rel="noopener"&gt;Vitor&lt;/a&gt;,
+&lt;a href="https://www.linkedin.com/in/victor-de-grandis-0a1202ab/" target="_blank" rel="noopener"&gt;Vitor&lt;/a&gt;,
 he writes to me a bit worried, that all the hype of having to use AI no matter what
 caused him tremendous sadness; because employers
 assume that just because you use it you&amp;rsquo;re going to go faster,
@@ -76,7 +76,7 @@ does it reassure me that everything explodes?, no, I don&amp;rsquo;t want everyt
 is that I&amp;rsquo;ll continue learning, deepening the knowledge
 I&amp;rsquo;m acquiring and the day something explodes, I&amp;rsquo;ll have the tools to at least
 sit down and see what&amp;rsquo;s happening without needing an AI, just with the value of previous experiences
-and &lt;a href="https://youtu.be/ARXdEMbPTGs?si=xj8I1pR_d0JcyerZ"target="_blank" rel="noopener"&gt;the beautiful challenge; the pleasure of having an unsolved problem in your head&lt;/a&gt;.&lt;/p&gt;
+and &lt;a href="https://youtu.be/ARXdEMbPTGs?si=xj8I1pR_d0JcyerZ" target="_blank" rel="noopener"&gt;the beautiful challenge; the pleasure of having an unsolved problem in your head&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In short, they&amp;rsquo;re going to want to eat away at your brain in bites,
 but don&amp;rsquo;t let them drink the juice of your heart.&lt;/p&gt;
 &lt;hr&gt;
@@ -110,10 +110,10 @@ and a heart doesn&amp;rsquo;t harden just because, and if that happens.&lt;/p&gt
 &lt;p&gt;&lt;em&gt;all the noble valor of life&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>Building from Differences</title><link>https://luispe.github.io/blog/posts/build-on-difference/</link><pubDate>Sat, 01 Nov 2025 00:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/posts/build-on-difference/</guid><description>
 &lt;p&gt;In this post, I’ll try to share our experience building Akua’s IDP — the challenges we faced, the current state, and what lies ahead.&lt;/p&gt;
-&lt;p&gt;With &lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; — at this point I can proudly call him a friend — we joined Akua from the very beginning with the goal of building the internal developer platform. We both came from different industries and backgrounds, but shared a deep common vision of what Akua needed.&lt;/p&gt;
-&lt;p&gt;I left the link to his LinkedIn, but to give a &lt;strong&gt;very short (and disrespectfully brief)&lt;/strong&gt; summary: Ger comes with experience from the lowest layers of infrastructure all the way up to building the team and platform at &lt;em&gt;Sate&lt;/em&gt; (for friends), or &lt;a href="https://www.linkedin.com/company/satellogic/"target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; if we’re being formal.&lt;/p&gt;
+&lt;p&gt;With &lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; — at this point I can proudly call him a friend — we joined Akua from the very beginning with the goal of building the internal developer platform. We both came from different industries and backgrounds, but shared a deep common vision of what Akua needed.&lt;/p&gt;
+&lt;p&gt;I left the link to his LinkedIn, but to give a &lt;strong&gt;very short (and disrespectfully brief)&lt;/strong&gt; summary: Ger comes with experience from the lowest layers of infrastructure all the way up to building the team and platform at &lt;em&gt;Sate&lt;/em&gt; (for friends), or &lt;a href="https://www.linkedin.com/company/satellogic/" target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; if we’re being formal.&lt;/p&gt;
 &lt;p&gt;In my case, I started my career as a product developer and, during my time at Viacom (Telefé), I began to feel a strong curiosity for infrastructure. At Pomelo, I had the chance to work full-time helping to build the IDP, and at Akua, together with my “compa,” we designed and executed it from scratch — something I’m incredibly proud of.&lt;/p&gt;
-&lt;h2&gt;Early Days and First Steps&lt;span class="hx:absolute hx:-mt-20" id="early-days-and-first-steps"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="early-days-and-first-steps"&gt;Early Days and First Steps&lt;span class="hx:absolute hx:-mt-20" id="early-days-and-first-steps"&gt;&lt;/span&gt;
 &lt;a href="#early-days-and-first-steps" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;We started literally with a blank page. There was absolutely nothing in Akua — just an empty AWS account — but that was the least of our concerns.
 Here’s a list of our “mantras,” which we still uphold to this day:&lt;/p&gt;
 &lt;ul&gt;
@@ -124,7 +124,7 @@ Here’s a list of our “mantras,” which we still uphold to this day:&lt;/p&g
 &lt;li&gt;Simplicity above all.&lt;/li&gt;
 &lt;li&gt;Break the inertia of past experiences.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;Laying the Foundations&lt;span class="hx:absolute hx:-mt-20" id="laying-the-foundations"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="laying-the-foundations"&gt;Laying the Foundations&lt;span class="hx:absolute hx:-mt-20" id="laying-the-foundations"&gt;&lt;/span&gt;
 &lt;a href="#laying-the-foundations" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We partnered with Binbash to execute our PCI-compliant network design, while Ger and I evaluated which tool would best fit our infrastructure management needs for the IDP.
 To be fully transparent, we evaluated three tools — discarded one immediately, and ran quick POCs with the other two before deciding.&lt;/p&gt;
 &lt;p&gt;The three tools we analyzed:&lt;/p&gt;
@@ -151,7 +151,7 @@ There are more, of course, but as always, we focused on those with strong adopti
 Port.io, on the other hand, wasn’t a fallback choice — it’s like the &lt;em&gt;Notion for platforms&lt;/em&gt;. Its Blueprint system lets you design your platform around your needs, not the other way around.
 The UI is elegant, it supports SSO, has RBAC (still room for improvement), and includes Scorecards, Self-Service Actions, Automations, and click-and-build dashboards.
 All in all, it became the perfect tool for our platform’s presentation layer.&lt;/p&gt;
-&lt;h3&gt;Technology Stack&lt;span class="hx:absolute hx:-mt-20" id="technology-stack"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="technology-stack"&gt;Technology Stack&lt;span class="hx:absolute hx:-mt-20" id="technology-stack"&gt;&lt;/span&gt;
 &lt;a href="#technology-stack" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We built a custom Helm chart for our applications. Over time, it evolved and now supports both microservices and monorepos — meaning multiple services can be deployed from a single GitLab project without having to manage “n” repositories.&lt;/p&gt;
 &lt;p&gt;Our Helm chart is centralized, versioned (using semver), and evolves like any other piece of software. Product developers can choose whichever version they need.
 The idea was to &lt;strong&gt;centralize evolution&lt;/strong&gt; while minimizing cognitive load for developers.
@@ -176,10 +176,10 @@ That was Ger’s proposal, and thankfully we convinced everyone to go that route
 &lt;li&gt;External DNS&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;And yes, installing anything else needs a &lt;strong&gt;very strong justification&lt;/strong&gt;.&lt;/p&gt;
-&lt;h4&gt;Wait, what about secrets?&lt;span class="hx:absolute hx:-mt-20" id="wait-what-about-secrets"&gt;&lt;/span&gt;
+&lt;h4 data-hextra-search-id="wait-what-about-secrets"&gt;Wait, what about secrets?&lt;span class="hx:absolute hx:-mt-20" id="wait-what-about-secrets"&gt;&lt;/span&gt;
 &lt;a href="#wait-what-about-secrets" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;We built a workflow with &lt;strong&gt;Parameter Store&lt;/strong&gt; that lets us deploy and inject secrets into Kubernetes applications.
 If a secret isn’t managed by our infra-lib, the security team can still add it to Parameter Store, and our infra-lib takes care of the rest.&lt;/p&gt;
-&lt;h4&gt;Security — Auth &amp;amp; Authz&lt;span class="hx:absolute hx:-mt-20" id="security--auth--authz"&gt;&lt;/span&gt;
+&lt;h4 data-hextra-search-id="security--auth--authz"&gt;Security — Auth &amp;amp; Authz&lt;span class="hx:absolute hx:-mt-20" id="security--auth--authz"&gt;&lt;/span&gt;
 &lt;a href="#security--auth--authz" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;From day one, we’ve used &lt;strong&gt;IRSA (IAM Roles for Service Accounts)&lt;/strong&gt; and &lt;strong&gt;tag-based permissions&lt;/strong&gt; (more on that later).
 If an AWS resource doesn’t support tagging (like S3), our infra-lib auto-discovers it and applies the right permissions.&lt;/p&gt;
 &lt;p&gt;Someone once commented on a previous post that “a platform without FinOps can’t be called a platform.”
@@ -188,7 +188,7 @@ That’s what will make it easy to implement cost tracking and billing later.
 And a quick side note — our infra costs turned out to be &lt;em&gt;significantly lower&lt;/em&gt; than we had projected, thanks to proper environment configurations handled by our infra-lib.&lt;/p&gt;
 &lt;p&gt;Continuing with security — database access is controlled via &lt;strong&gt;Security Group rules&lt;/strong&gt;, and communication between applications is blocked at the network level (even within the same namespace).
 This allows us to define and enforce access rules between services through &lt;strong&gt;Kong&lt;/strong&gt;, easily configurable from our Port.io portal.&lt;/p&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;There’s still so much to share — how we implemented Scorecards, Day-2 actions, single-tenant deployments, public route publishing…
 But I’ll save that for another post :)&lt;/p&gt;
 &lt;p&gt;For now, I’d like to close with a reflection.&lt;/p&gt;
@@ -206,7 +206,7 @@ developing Go applications: &lt;strong&gt;the graceful shutdown&lt;/strong&gt;.&
 servers, workers, queue consumers, or any concurrent process using
 &lt;em&gt;goroutines&lt;/em&gt;, handling shutdown properly can prevent data loss, hanging
 connections, or erratic behavior.&lt;/p&gt;
-&lt;h2&gt;Preamble&lt;span class="hx:absolute hx:-mt-20" id="preamble"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preamble"&gt;Preamble&lt;span class="hx:absolute hx:-mt-20" id="preamble"&gt;&lt;/span&gt;
 &lt;a href="#preamble" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The concept of graceful shutdown is simple: &lt;strong&gt;give your application time
 to finish what it&amp;rsquo;s doing&lt;/strong&gt; before dying.&lt;/p&gt;
 &lt;p&gt;The problem is that in Go, we often underestimate its complexity. For
@@ -214,7 +214,7 @@ example, we start an HTTP server and a few background &lt;em&gt;goroutines&lt;/e
 assuming that &lt;code&gt;ctrl + c&lt;/code&gt; or a &lt;code&gt;SIGTERM&lt;/code&gt; will magically stop everything
 cleanly.&lt;/p&gt;
 &lt;p&gt;Spoiler: it won&amp;rsquo;t. 😅&lt;/p&gt;
-&lt;h2&gt;Anti-pattern&lt;span class="hx:absolute hx:-mt-20" id="anti-pattern"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="anti-pattern"&gt;Anti-pattern&lt;span class="hx:absolute hx:-mt-20" id="anti-pattern"&gt;&lt;/span&gt;
 &lt;a href="#anti-pattern" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s look at this code:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
@@ -235,6 +235,8 @@ cleanly.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -245,7 +247,7 @@ title="Copy code"
 &lt;code&gt;ctrl + c&lt;/code&gt;, the process dies abruptly.&lt;/p&gt;
 &lt;p&gt;Any ongoing requests are cut off, open resources (connections, files,
 etc.) aren&amp;rsquo;t released, and there&amp;rsquo;s no opportunity to perform cleanup.&lt;/p&gt;
-&lt;h2&gt;Proposal / Learning&lt;span class="hx:absolute hx:-mt-20" id="proposal--learning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposal--learning"&gt;Proposal / Learning&lt;span class="hx:absolute hx:-mt-20" id="proposal--learning"&gt;&lt;/span&gt;
 &lt;a href="#proposal--learning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The solution is to implement a &lt;strong&gt;graceful shutdown&lt;/strong&gt; using Go&amp;rsquo;s
 &lt;code&gt;context&lt;/code&gt; and &lt;code&gt;os/signal&lt;/code&gt; packages.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
@@ -291,6 +293,8 @@ etc.) aren&amp;rsquo;t released, and there&amp;rsquo;s no opportunity to perform
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -299,7 +303,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;p&gt;Now, when the process receives a signal (&lt;code&gt;SIGTERM&lt;/code&gt; or &lt;code&gt;SIGINT&lt;/code&gt;), it has
 time (5 seconds in this case) to finish ongoing requests before closing.&lt;/p&gt;
-&lt;h3&gt;Mind your goroutines&lt;span class="hx:absolute hx:-mt-20" id="mind-your-goroutines"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="mind-your-goroutines"&gt;Mind your goroutines&lt;span class="hx:absolute hx:-mt-20" id="mind-your-goroutines"&gt;&lt;/span&gt;
 &lt;a href="#mind-your-goroutines" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Here&amp;rsquo;s where things get tricky.&lt;/p&gt;
 &lt;p&gt;If you have background &lt;em&gt;goroutines&lt;/em&gt; &amp;mdash;like workers consuming from a
 queue or processing tasks&amp;mdash;, &lt;strong&gt;you need to ensure they also respect the
@@ -314,6 +318,8 @@ cancellation context&lt;/strong&gt;.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -341,6 +347,8 @@ running&amp;hellip; or dies abruptly, leaving half-done work.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -349,7 +357,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;p&gt;When the process receives a signal, &lt;code&gt;cancel()&lt;/code&gt; is called, and all
 &lt;em&gt;goroutines&lt;/em&gt; listening to that context exit gracefully.&lt;/p&gt;
-&lt;h3&gt;Edge cases&lt;span class="hx:absolute hx:-mt-20" id="edge-cases"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="edge-cases"&gt;Edge cases&lt;span class="hx:absolute hx:-mt-20" id="edge-cases"&gt;&lt;/span&gt;
 &lt;a href="#edge-cases" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Blocked goroutines&lt;/strong&gt;: if a &lt;em&gt;goroutine&lt;/em&gt; is waiting on a channel
 that no one closes, shutdown won&amp;rsquo;t complete.&lt;br&gt;
@@ -360,7 +368,7 @@ abort valid tasks. Tune it based on your real workload.&lt;/li&gt;
 statements execute when the &lt;em&gt;goroutine&lt;/em&gt; returns. If it never
 returns, they never run.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Graceful shutdown isn&amp;rsquo;t optional; it&amp;rsquo;s a fundamental part of building
 reliable production services.&lt;/p&gt;
 &lt;p&gt;Using contexts properly and respecting shutdown timeouts is a simple way
@@ -369,22 +377,22 @@ apps.&lt;/p&gt;
 &lt;p&gt;To avoid boring you for now, let&amp;rsquo;s pause here.&lt;/p&gt;
 &lt;p&gt;See you soon! 👋🏽&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Sources and recommended readings&lt;span class="hx:absolute hx:-mt-20" id="sources-and-recommended-readings"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="sources-and-recommended-readings"&gt;Sources and recommended readings&lt;span class="hx:absolute hx:-mt-20" id="sources-and-recommended-readings"&gt;&lt;/span&gt;
 &lt;a href="#sources-and-recommended-readings" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://go.dev/blog/context"target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
+&lt;li&gt;&lt;a href="https://go.dev/blog/context" target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
 Context&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/context"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;context&lt;/code&gt; package docs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;os/signal&lt;/code&gt; package
+&lt;li&gt;&lt;a href="https://pkg.go.dev/context" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;context&lt;/code&gt; package docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;os/signal&lt;/code&gt; package
 docs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown"target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;net/http&lt;/code&gt; package docs &amp;mdash;
+&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown" target="_blank" rel="noopener"&gt;Official Go &lt;code&gt;net/http&lt;/code&gt; package docs &amp;mdash;
 Server.Shutdown&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling"target="_blank" rel="noopener"&gt;Go Wiki: Signal
+&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling" target="_blank" rel="noopener"&gt;Go Wiki: Signal
 Handling&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>We should all manage teams</title><link>https://luispe.github.io/blog/posts/we-should-allmanageteams/</link><pubDate>Sat, 22 Jun 2024 11:10:25 -0300</pubDate><guid>https://luispe.github.io/blog/posts/we-should-allmanageteams/</guid><description>
 &lt;p&gt;For context in case you happened to come across this post, I&amp;rsquo;m going to speak from
 the technology industry, a deeply technical industry, and how leading teams,
 at least for a period of time, can help the team and yourself, both professionally and personally.&lt;/p&gt;
-&lt;h2&gt;How it impacts your anxiety and that of the team to manage it&lt;span class="hx:absolute hx:-mt-20" id="how-it-impacts-your-anxiety-and-that-of-the-team-to-manage-it"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="how-it-impacts-your-anxiety-and-that-of-the-team-to-manage-it"&gt;How it impacts your anxiety and that of the team to manage it&lt;span class="hx:absolute hx:-mt-20" id="how-it-impacts-your-anxiety-and-that-of-the-team-to-manage-it"&gt;&lt;/span&gt;
 &lt;a href="#how-it-impacts-your-anxiety-and-that-of-the-team-to-manage-it" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I am from Argentina, a country with the highest number of psychologists per inhabitant,
 it is neither a good nor a bad thing, in fact I have been doing therapy for more
 than ten years to rethink myself and to rethink society.&lt;/p&gt;
@@ -396,7 +404,7 @@ sharing videos of seconds because we can not stand to see a video longer than 30
 where sharing information has to be compressed into 140 characters and if it is a longer thread
 uf not even want to read it. In this context of anxiety,
 managing and developing teams is a huge challenge, almost titanic I would say.&lt;/p&gt;
-&lt;p&gt;Stolen from a lecture by Paenza &lt;a href="https://youtu.be/ARXdEMbPTGs?si=8mNgRBn3z2x4b84V"target="_blank" rel="noopener"&gt;full lecture&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Stolen from a lecture by Paenza &lt;a href="https://youtu.be/ARXdEMbPTGs?si=8mNgRBn3z2x4b84V" target="_blank" rel="noopener"&gt;full lecture&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;There should be no other year in a person&amp;rsquo;s life where one incorporates so much information,
 learns so much, changes so much in quality of life, as from 0 to 1 year of age.&lt;/p&gt;
@@ -422,7 +430,7 @@ twice a year and I would like to leave a question in the air.&lt;/p&gt;
 &lt;p&gt;There should be no other year in a person&amp;rsquo;s life where one incorporates so much information,
 learns so much, changes so much in quality of life, as from 0 to 1 year of age.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;The quest for quick feedback to feel valuable&lt;span class="hx:absolute hx:-mt-20" id="the-quest-for-quick-feedback-to-feel-valuable"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="the-quest-for-quick-feedback-to-feel-valuable"&gt;The quest for quick feedback to feel valuable&lt;span class="hx:absolute hx:-mt-20" id="the-quest-for-quick-feedback-to-feel-valuable"&gt;&lt;/span&gt;
 &lt;a href="#the-quest-for-quick-feedback-to-feel-valuable" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;One of the things I would have loved to have been advised on when I started managing
 and leading teams is to look for things that give me a quick return of dopamine.&lt;/p&gt;
 &lt;p&gt;When you are leading and managing teams, change processes are very slow and you tend
@@ -432,7 +440,7 @@ to be advised is to look for what makes you happy, write a piece of code or refa
 document, anything, but something that makes you feel that you are contributing value to the team,
 again, already leading and making decisions bring a brutal value, the problem is that it is imperceptible
 and one is human and needs to feel useful and valuable.&lt;/p&gt;
-&lt;h2&gt;Do I have personal growth?&lt;span class="hx:absolute hx:-mt-20" id="do-i-have-personal-growth"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="do-i-have-personal-growth"&gt;Do I have personal growth?&lt;span class="hx:absolute hx:-mt-20" id="do-i-have-personal-growth"&gt;&lt;/span&gt;
 &lt;a href="#do-i-have-personal-growth" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;What would happen if we lead a team for at least one year?&lt;/p&gt;
 &lt;p&gt;Even if it is not your chosen career path, leading and managing a team will provide you with very
 important tools, more important than any software design and architecture pattern.&lt;/p&gt;
@@ -440,7 +448,7 @@ important tools, more important than any software design and architecture patter
 trust, advise, direct, ask for forgiveness and show your vulnerability, I could go on for a long time,
 but I think I can explain the level of information and tools it can give you.&lt;/p&gt;
 &lt;p&gt;The answer is yes, you are going to have personal and clearly professional growth.&lt;/p&gt;
-&lt;h2&gt;The obvious, not everything has to go through you, nor do you have to be aware of everything&lt;span class="hx:absolute hx:-mt-20" id="the-obvious-not-everything-has-to-go-through-you-nor-do-you-have-to-be-aware-of-everything"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="the-obvious-not-everything-has-to-go-through-you-nor-do-you-have-to-be-aware-of-everything"&gt;The obvious, not everything has to go through you, nor do you have to be aware of everything&lt;span class="hx:absolute hx:-mt-20" id="the-obvious-not-everything-has-to-go-through-you-nor-do-you-have-to-be-aware-of-everything"&gt;&lt;/span&gt;
 &lt;a href="#the-obvious-not-everything-has-to-go-through-you-nor-do-you-have-to-be-aware-of-everything" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;How many times have you crossed paths with &amp;ldquo;toxic leaders&amp;rdquo;, What is toxic for me?&lt;/p&gt;
 &lt;p&gt;Those people who are funnel, everything has to go through them, all the time they
 need different decisions to go through them and almost 100% of the time their decisions predominate.&lt;/p&gt;
@@ -449,13 +457,13 @@ need different decisions to go through them and almost 100% of the time their de
 let&amp;rsquo;s share knowledge and be open to new ideas and proposals.&lt;/p&gt;
 &lt;p&gt;Personally speaking the day I went on vacation and everything followed its course,
 we even took out functionalities, we communicated them and when you come back you don&amp;rsquo;t have that feeling of
-&lt;a href="https://es.wikipedia.org/wiki/S%C3%ADndrome_FOMO"target="_blank" rel="noopener"&gt;FOMO&lt;/a&gt; it&amp;rsquo;s the glory.&lt;/p&gt;
+&lt;a href="https://es.wikipedia.org/wiki/S%C3%ADndrome_FOMO" target="_blank" rel="noopener"&gt;FOMO&lt;/a&gt; it&amp;rsquo;s the glory.&lt;/p&gt;
 &lt;p&gt;I leave the question in the context of when you come back or someone comes back from vacation and you hear it daily.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Uff I&amp;rsquo;ve been going through all the emails and slack messages to catch up&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Shouldn&amp;rsquo;t projects take their natural course without you being present?&lt;/p&gt;
-&lt;h2&gt;Exploit the virtues and reflect on the improvements, both are equally important&lt;span class="hx:absolute hx:-mt-20" id="exploit-the-virtues-and-reflect-on-the-improvements-both-are-equally-important"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="exploit-the-virtues-and-reflect-on-the-improvements-both-are-equally-important"&gt;Exploit the virtues and reflect on the improvements, both are equally important&lt;span class="hx:absolute hx:-mt-20" id="exploit-the-virtues-and-reflect-on-the-improvements-both-are-equally-important"&gt;&lt;/span&gt;
 &lt;a href="#exploit-the-virtues-and-reflect-on-the-improvements-both-are-equally-important" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I am going to state the obvious, we all have good and bad things.&lt;/p&gt;
 &lt;p&gt;Please when you have 1.1 talk about both things, exploit and emphasize the virtues and reflect on the improvements,
 if you only highlight the improvements &amp;ldquo;or what is wrong&amp;rdquo; it is distressing for the person on the other side,
@@ -463,17 +471,17 @@ he/she will feel that nothing is enough and nothing is right. On the contrary, i
 and do not take the time to talk about the improvements, you will not drive change and
 improvement in the person&amp;rsquo;s life and career.&lt;/p&gt;
 &lt;p&gt;Again &lt;strong&gt;exploit the virtues and reflect on the improvements, both are equally important&lt;/strong&gt;.&lt;/p&gt;
-&lt;h2&gt;Be yourself, don&amp;rsquo;t manage from books&lt;span class="hx:absolute hx:-mt-20" id="be-yourself-dont-manage-from-books"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="be-yourself-dont-manage-from-books"&gt;Be yourself, don&amp;rsquo;t manage from books&lt;span class="hx:absolute hx:-mt-20" id="be-yourself-dont-manage-from-books"&gt;&lt;/span&gt;
 &lt;a href="#be-yourself-dont-manage-from-books" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Lastly, and this may also be a truism, but be yourself, you feel miles away when
 someone is talking to you from a prepared speech or tips from a leadership book.&lt;/p&gt;
 &lt;p&gt;We all are and continue to learn, you too.&lt;/p&gt;</description></item><item><title>The Ticket Hell</title><link>https://luispe.github.io/blog/posts/ticket-hell/</link><pubDate>Wed, 19 Jun 2024 19:10:20 -0300</pubDate><guid>https://luispe.github.io/blog/posts/ticket-hell/</guid><description>
-&lt;h2&gt;Problem&lt;span class="hx:absolute hx:-mt-20" id="problem"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="problem"&gt;Problem&lt;span class="hx:absolute hx:-mt-20" id="problem"&gt;&lt;/span&gt;
 &lt;a href="#problem" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If all you have is a hammer, everything looks like a nail.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Why do I start with this well-known phrase?
 First, I want to give a bit of background, and then I’ll explain why I mention it.&lt;/p&gt;
 &lt;p&gt;Over the years working with infrastructure teams, I’ve had the great fortune of meeting some very insightful people who have always told me:&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;“Never let the infrastructure team operate solely through ticket requests.”&lt;/em&gt;&lt;/p&gt;
-&lt;h2&gt;Position&lt;span class="hx:absolute hx:-mt-20" id="position"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="position"&gt;Position&lt;span class="hx:absolute hx:-mt-20" id="position"&gt;&lt;/span&gt;
 &lt;a href="#position" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;What’s the rationale behind such a strong stance?&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;You need an &lt;strong&gt;extremely strong culture&lt;/strong&gt; from end to end to decide which ticket is more important than another.&lt;/li&gt;
@@ -483,14 +491,14 @@ First, I want to give a bit of background, and then I’ll explain why I mention
 &lt;/ol&gt;
 &lt;p&gt;There are many other reasons, but these are the most relevant ones — let’s go through each.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;1. Extremely Strong Culture&lt;span class="hx:absolute hx:-mt-20" id="1-extremely-strong-culture"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="1-extremely-strong-culture"&gt;1. Extremely Strong Culture&lt;span class="hx:absolute hx:-mt-20" id="1-extremely-strong-culture"&gt;&lt;/span&gt;
 &lt;a href="#1-extremely-strong-culture" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Infrastructure and QA teams are rarely included in roadmap and sprint planning.
 If they are, it usually happens at the very end — “when everything’s already cooked.”&lt;/p&gt;
 &lt;p&gt;So, when the infrastructure lead receives two tickets and needs to prioritize based on execution capacity, the obvious question arises:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Which ticket should I prioritize?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Good luck with that — because for every internal team (your “clients”), their request will always be &lt;strong&gt;the most important thing in the world.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;2. Meaningless Growth&lt;span class="hx:absolute hx:-mt-20" id="2-meaningless-growth"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="2-meaningless-growth"&gt;2. Meaningless Growth&lt;span class="hx:absolute hx:-mt-20" id="2-meaningless-growth"&gt;&lt;/span&gt;
 &lt;a href="#2-meaningless-growth" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let’s assume the previous issue is somehow solved.
 You still can’t escape this one.&lt;/p&gt;
 &lt;p&gt;Why do we say the infrastructure team &lt;em&gt;must inherently grow&lt;/em&gt;?&lt;/p&gt;
@@ -498,7 +506,7 @@ You still can’t escape this one.&lt;/p&gt;
 &lt;p&gt;Congratulations — you’ve created an &lt;strong&gt;execution bottleneck.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;The “solution”?&lt;/strong&gt; Hire more infrastructure people.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;3. Motivation&lt;span class="hx:absolute hx:-mt-20" id="3-motivation"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="3-motivation"&gt;3. Motivation&lt;span class="hx:absolute hx:-mt-20" id="3-motivation"&gt;&lt;/span&gt;
 &lt;a href="#3-motivation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let’s assume points 1 and 2 are solved.&lt;/p&gt;
 &lt;p&gt;But&amp;hellip; are infrastructure engineers human?
 (They are, last I checked.)&lt;/p&gt;
@@ -509,12 +517,12 @@ And if those teams happen to be toxic, they might even start labeling infrastruc
 &lt;p&gt;And what can I say about that?
 &lt;strong&gt;Keep calm — and here’s a big hug.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;4. Innovation&lt;span class="hx:absolute hx:-mt-20" id="4-innovation"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="4-innovation"&gt;4. Innovation&lt;span class="hx:absolute hx:-mt-20" id="4-innovation"&gt;&lt;/span&gt;
 &lt;a href="#4-innovation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Finally, even if the previous three points were somehow resolved, &lt;strong&gt;innovation is still impossible.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Why?
 Because a team that only closes tickets — that only participates reactively in projects to “build infrastructure” — &lt;strong&gt;will never have the space to innovate.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Back to the Beginning&lt;span class="hx:absolute hx:-mt-20" id="back-to-the-beginning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="back-to-the-beginning"&gt;Back to the Beginning&lt;span class="hx:absolute hx:-mt-20" id="back-to-the-beginning"&gt;&lt;/span&gt;
 &lt;a href="#back-to-the-beginning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If all you have is a hammer, everything looks like a nail.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Throughout this post, I’ve explained the reasoning and main consequences of running infrastructure management through tickets.&lt;/p&gt;
 &lt;p&gt;And I want to be clear:
@@ -530,10 +538,10 @@ It’s time to &lt;strong&gt;pause and reflect&lt;/strong&gt; on why things aren
 &lt;p&gt;See you soon! 👋🏽&lt;/p&gt;</description></item><item><title>Anniversaries</title><link>https://luispe.github.io/blog/posts/career/</link><pubDate>Fri, 02 Sep 2022 19:11:03 -0300</pubDate><guid>https://luispe.github.io/blog/posts/career/</guid><description>
 &lt;p&gt;Anniversaries, be it a birthday, the end of the year or whatever, generally lead one to reflect.&lt;/p&gt;
 &lt;p&gt;This case would not be the exception, what is the anniversary, less than a month ago i completed
-one year in my current company (&lt;a href="https://www.linkedin.com/company/pomelo-latam/mycompany/"target="_blank" rel="noopener"&gt;Pomelo&lt;/a&gt;),
+one year in my current company (&lt;a href="https://www.linkedin.com/company/pomelo-latam/mycompany/" target="_blank" rel="noopener"&gt;Pomelo&lt;/a&gt;),
 August 29, 2022 the promotions in the company were made public, I am part of the people who were promoted,
 I wanted to write some conclusions that I have drawn from these 365 days, two teams and a promotion.&lt;/p&gt;
-&lt;h2&gt;Pillars&lt;span class="hx:absolute hx:-mt-20" id="pillars"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="pillars"&gt;Pillars&lt;span class="hx:absolute hx:-mt-20" id="pillars"&gt;&lt;/span&gt;
 &lt;a href="#pillars" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Those who know me whether in my work or in my personal life, hear me talk about three principles
 with which I try to mobilize myself and i search around me:&lt;/p&gt;
 &lt;ol&gt;
@@ -541,14 +549,14 @@ with which I try to mobilize myself and i search around me:&lt;/p&gt;
 &lt;li&gt;Humility&lt;/li&gt;
 &lt;li&gt;Respect&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3&gt;Trust&lt;span class="hx:absolute hx:-mt-20" id="trust"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="trust"&gt;Trust&lt;span class="hx:absolute hx:-mt-20" id="trust"&gt;&lt;/span&gt;
 &lt;a href="#trust" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;I will try to explain what this pillar means to me.&lt;/p&gt;
-&lt;p&gt;In one of &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;my first publications&lt;/a&gt; where I talk about
+&lt;p&gt;In one of &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/" target="_blank" rel="noopener"&gt;my first publications&lt;/a&gt; where I talk about
 mistakes and learnings, I talk about the fact that moving up should not be the only or main goal, there are much,
 much more important things and confidence is one of them.&lt;/p&gt;
 &lt;p&gt;Ok luispi, but what does that have to do with trust?, here we go.&lt;/p&gt;
-&lt;h4&gt;Beginnings&lt;span class="hx:absolute hx:-mt-20" id="beginnings"&gt;&lt;/span&gt;
-&lt;a href="#beginnings" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;My first approach to Pomelo was through &lt;a href="https://www.linkedin.com/in/marumoran/"target="_blank" rel="noopener"&gt;Maru&lt;/a&gt;, we already knew each other,
+&lt;h4 data-hextra-search-id="beginnings"&gt;Beginnings&lt;span class="hx:absolute hx:-mt-20" id="beginnings"&gt;&lt;/span&gt;
+&lt;a href="#beginnings" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;My first approach to Pomelo was through &lt;a href="https://www.linkedin.com/in/marumoran/" target="_blank" rel="noopener"&gt;Maru&lt;/a&gt;, we already knew each other,
 Maru was the one who did the hiring process when I joined MercadoLibre, then we were close to meet again
 in Naranja X, but the impasse served well to meet again professionally in Pomelo,
 I tell this precisely because of the term of &lt;strong&gt;trust&lt;/strong&gt;.&lt;/p&gt;
@@ -559,7 +567,7 @@ and call me back:&lt;/p&gt;
 &lt;li&gt;Maru trusts me again and again and calls me back.&lt;/li&gt;
 &lt;li&gt;On my side, I take that trust and build (or try to build) the best possible work context.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4&gt;Meeting and mismatching&lt;span class="hx:absolute hx:-mt-20" id="meeting-and-mismatching"&gt;&lt;/span&gt;
+&lt;h4 data-hextra-search-id="meeting-and-mismatching"&gt;Meeting and mismatching&lt;span class="hx:absolute hx:-mt-20" id="meeting-and-mismatching"&gt;&lt;/span&gt;
 &lt;a href="#meeting-and-mismatching" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;In the more than 365 days that I have been in Pomelo I worked almost half of the time in the Processor team,
 I met again with familiar faces and met some new ones, I will name them, first the anecdote.&lt;/p&gt;
 &lt;p&gt;I was at the Processor for a little more than 5 months, we reached the milestone (madness) of having
@@ -567,12 +575,12 @@ the processor up and running and then in mid-January 2022 I moved to the infra t
 Here two pillars were played, trust and respect, why I say this, the guys knew where I wanted to direct
 my career and supported me 100%.&lt;/p&gt;
 &lt;p&gt;However, 7 months later they showed me that they are people in which I will trust infinitely beyond Pomelo,
-these people are: &lt;a href="https://www.linkedin.com/in/victoria-rodr%C3%ADguez-brizi-61639a55/"target="_blank" rel="noopener"&gt;Brizi&lt;/a&gt;,
-&lt;a href="https://www.linkedin.com/in/damian-tundis/"target="_blank" rel="noopener"&gt;Dami&lt;/a&gt; and &lt;a href="https://www.linkedin.com/in/nsarfati/"target="_blank" rel="noopener"&gt;Nico&lt;/a&gt;,
+these people are: &lt;a href="https://www.linkedin.com/in/victoria-rodr%C3%ADguez-brizi-61639a55/" target="_blank" rel="noopener"&gt;Brizi&lt;/a&gt;,
+&lt;a href="https://www.linkedin.com/in/damian-tundis/" target="_blank" rel="noopener"&gt;Dami&lt;/a&gt; and &lt;a href="https://www.linkedin.com/in/nsarfati/" target="_blank" rel="noopener"&gt;Nico&lt;/a&gt;,
 I will not tell the details they know what I mean, but I wanted to thank them publicly ❤️.&lt;/p&gt;
-&lt;h4&gt;With you, to the war with a toothpick&lt;span class="hx:absolute hx:-mt-20" id="with-you-to-the-war-with-a-toothpick"&gt;&lt;/span&gt;
+&lt;h4 data-hextra-search-id="with-you-to-the-war-with-a-toothpick"&gt;With you, to the war with a toothpick&lt;span class="hx:absolute hx:-mt-20" id="with-you-to-the-war-with-a-toothpick"&gt;&lt;/span&gt;
 &lt;a href="#with-you-to-the-war-with-a-toothpick" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;I talked about my first stage in Pomelo, let&amp;rsquo;s move on to the second, &amp;ldquo;Migration to the Infrastructure team&amp;rdquo;.&lt;/p&gt;
-&lt;p&gt;From January to this part and from minute zero &lt;a href="https://www.linkedin.com/in/juanjosebehrend/"target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt; and &lt;a href="https://www.linkedin.com/in/gustavo-adrian-gimenez-4894589b/"target="_blank" rel="noopener"&gt;Gus&lt;/a&gt;
+&lt;p&gt;From January to this part and from minute zero &lt;a href="https://www.linkedin.com/in/juanjosebehrend/" target="_blank" rel="noopener"&gt;Juanjo&lt;/a&gt; and &lt;a href="https://www.linkedin.com/in/gustavo-adrian-gimenez-4894589b/" target="_blank" rel="noopener"&gt;Gus&lt;/a&gt;
 and knowing me, I would say nothing, gave me the space to create a space for debates and cross-examination.
 They listened to my proposals, made them their own, and together we carried them forward,
 they made parts of theirs I took them as my own and so surrounded by a pile of people with a
@@ -584,7 +592,7 @@ to any position we hold or obtain. any position we hold or obtain.&lt;/p&gt;
 indispensable to walk through life, humility and respect.&lt;/p&gt;</description></item><item><title>Technical debt</title><link>https://luispe.github.io/blog/posts/technical-debt/</link><pubDate>Sat, 02 Jul 2022 16:36:17 -0300</pubDate><guid>https://luispe.github.io/blog/posts/technical-debt/</guid><description>
 &lt;p&gt;In the following post we will rethink a concept commonly encountered and endorsed
 in the technology industry, technical debt.&lt;/p&gt;
-&lt;h2&gt;Different yardstick&lt;span class="hx:absolute hx:-mt-20" id="different-yardstick"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="different-yardstick"&gt;Different yardstick&lt;span class="hx:absolute hx:-mt-20" id="different-yardstick"&gt;&lt;/span&gt;
 &lt;a href="#different-yardstick" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s imagine that we need to paint the exterior of our house, and we decide to hire a professional to do the job.&lt;/p&gt;
 &lt;p&gt;After consulting several quotes we decided to hire the services of &amp;ldquo;x&amp;rdquo; to take care of the job.&lt;/p&gt;
 &lt;p&gt;After a few days &amp;ldquo;x&amp;rdquo; tells us:&lt;/p&gt;
@@ -594,9 +602,9 @@ in the technology industry, technical debt.&lt;/p&gt;
 &lt;p&gt;- Sorry, it is a technical debt that I can attack in the future.&lt;/p&gt;
 &lt;p&gt;How would you feel if you encountered such a situation?&lt;/p&gt;
 &lt;p&gt;Why in the context of technology do we endorse having technical debt?&lt;/p&gt;
-&lt;h2&gt;Rethink&lt;span class="hx:absolute hx:-mt-20" id="rethink"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="rethink"&gt;Rethink&lt;span class="hx:absolute hx:-mt-20" id="rethink"&gt;&lt;/span&gt;
 &lt;a href="#rethink" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In technology, it is very common to encounter this scenario, and unfortunately we naturalize it and as
-I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;previous publication&lt;/a&gt;
+I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/" target="_blank" rel="noopener"&gt;previous publication&lt;/a&gt;
 where I talk among other things about the importance of documenting and testing, it is something common that
 I always see as &amp;ldquo;technical debt&amp;rdquo;, rethinking the example of painting the house I think it exposes
 how we can have &amp;ldquo;different yardsticks&amp;rdquo; to measure the same situation in different contexts.&lt;/p&gt;
@@ -608,7 +616,7 @@ documentation causes us to waste an enormous amount of time trying to understand
 &lt;li&gt;In a team context: having technical debt means that the knowledge stays with the people and we should always,
 always encourage knowledge to be distributed.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The technical debt is very exhausting for the teams and where today we think we are gaining time,
 I assure you that soon, very soon, we will lose agility and speed in the development.&lt;/p&gt;
 &lt;p&gt;It can be avoided in most cases, and we do not accept it as a matter of course.&lt;/p&gt;
@@ -617,10 +625,10 @@ I assure you that soon, very soon, we will lose agility and speed in the develop
 &lt;p&gt;In the following post I want to share a common mistake I used to make in my Golang projects.
 And as the title and description says, today we are going to talk about interfaces.&lt;/p&gt;
 &lt;p&gt;You will probably come across some references to another post I did on
-&lt;a href="https://luispe.github.io/blog/posts/hexagonal-architecture/"target="_blank" rel="noopener"&gt;hexagonal architecture&lt;/a&gt;, I think part of the misuse
+&lt;a href="https://luispe.github.io/blog/posts/hexagonal-architecture/" target="_blank" rel="noopener"&gt;hexagonal architecture&lt;/a&gt;, I think part of the misuse
 of interfaces is the consequence of following &amp;ldquo;medium&amp;rdquo; publications to the letter and not taking the time
 to understand the underlying concept.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;If there is something that we have to admit in the Golang ecosystem, it is the kink that we sometimes give ourselves
 with some/several issues. To give an example on how to name variables (which is a topic I want to talk about soon)
 and in today&amp;rsquo;s case with interfaces.&lt;/p&gt;
@@ -655,6 +663,8 @@ in the next post we will review a fake project and refactor it to make good use 
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -692,6 +702,8 @@ title="Copy code"
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -705,7 +717,7 @@ I also made the same mistake.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Go interfaces generally belong to the package that uses values of the interface type,
 not to the package that implements those values.&lt;/em&gt; 🫠&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;The implementation package must return concrete types (usually pointer or struct): that way,
 new methods can be added to implementations without requiring extensive refactoring.&lt;/em&gt;&lt;/p&gt;
@@ -735,6 +747,8 @@ structure and not the interface.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -780,6 +794,8 @@ return concrete types (usually a pointer or a structure).&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -791,9 +807,9 @@ title="Copy code"
 we inject the interface so that it can be consumed in the service methods.&lt;/p&gt;
 &lt;p&gt;As with the repository layer our &lt;code&gt;NewService()&lt;/code&gt; now returns a structure and not an interface.&lt;/p&gt;
 &lt;p&gt;Finally, we add the &lt;code&gt;Create&lt;/code&gt; method to our &lt;code&gt;Service&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;With these subtle but powerful changes our &lt;code&gt;producer&lt;/code&gt; now has enormous flexibility.&lt;/p&gt;
-&lt;p&gt;Finally, I want to thank my friend and mentor &lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; who shared with me
+&lt;p&gt;Finally, I want to thank my friend and mentor &lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; who shared with me
 this anti pattern and made me rethink and improve, once again, in this software development.&lt;/p&gt;
 &lt;p&gt;So as not to bore you and for the moment let&amp;rsquo;s take a break.&lt;/p&gt;
 &lt;p&gt;Soon we will continue with small publications where we will try to rethink other anti-patterns.&lt;/p&gt;
@@ -801,15 +817,15 @@ this anti pattern and made me rethink and improve, once again, in this software 
 &lt;hr&gt;
 &lt;p&gt;Sources:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces"target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/"target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces" target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/" target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>When context matters</title><link>https://luispe.github.io/blog/posts/when-the-context-matter/</link><pubDate>Tue, 14 Jun 2022 18:45:35 -0300</pubDate><guid>https://luispe.github.io/blog/posts/when-the-context-matter/</guid><description>
 &lt;p&gt;The following publication could be said to be a continuation of another one where we talk
 about how having lightweight images helps us in many aspects,
 if you still could not read it here I leave you
-&lt;a href="https://luispe.github.io/blog/posts/lightweight-container-image/"target="_blank" rel="noopener"&gt;the access&lt;/a&gt;.&lt;/p&gt;
+&lt;a href="https://luispe.github.io/blog/posts/lightweight-container-image/" target="_blank" rel="noopener"&gt;the access&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Today we are going to make a small, but important improvement, and we are going to find out why we are doing it.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;As the last proposal in the post I shared earlier we stayed at this point:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -851,6 +867,8 @@ if you still could not read it here I leave you
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -863,7 +881,7 @@ places and not find surprises when we start the application that is contained in
 I invite you to think for a few seconds / minutes or as long as we need.&lt;/p&gt;
 &lt;p&gt;Can an image enhancement be made for the Golang application?&lt;/p&gt;
 &lt;p&gt;The answer is yes, let&amp;rsquo;s get to work!&lt;/p&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Golang has one feature that is really powerful, and I&amp;rsquo;m not talking about goroutines,
 and that is the great virtue of being able to cross-compile.&lt;/p&gt;
 &lt;p&gt;What is cross-compilation?, it is the feature of being able to compile
@@ -924,6 +942,8 @@ the computation is linux as OS and with amd64 architecture.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -939,6 +959,8 @@ GOARCH=amd64&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class="hextra-code-copy
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -958,7 +980,7 @@ we can rest assured that we are shortening the margin of mishaps.&lt;/p&gt;
 &lt;p&gt;¡Have a good time! 👋🏽&lt;/p&gt;</description></item><item><title>Size matters</title><link>https://luispe.github.io/blog/posts/lightweight-container-image/</link><pubDate>Sat, 11 Jun 2022 17:49:18 -0300</pubDate><guid>https://luispe.github.io/blog/posts/lightweight-container-image/</guid><description>
 &lt;p&gt;In the following post I am going to share with you some tips and best practices to develop our container images,
 as an example we are going to create an image for an app in Golang, but the following tips apply to any language, let&amp;rsquo;s go!&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;To make our container images as small as possible in terms of weight (megabytes, gigabytes, etc.)
 is not a matter of taste, it helps us in many ways, here are some of them:&lt;/p&gt;
 &lt;ul&gt;
@@ -973,7 +995,7 @@ is going to initialize with a higher speed.&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;To give a few examples.&lt;/p&gt;
-&lt;h2&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lets-start"&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
 &lt;a href="#lets-start" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let us imagine that we have the following Dockerfile to create our container image e.g:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div class="hextra-code-filename not-prose" dir="auto"&gt;Dockerfile&lt;/div&gt;&lt;div&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -1005,6 +1027,8 @@ is going to initialize with a higher speed.&lt;/li&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1020,8 +1044,8 @@ title="Copy code"
 &lt;p&gt;To give an example &lt;code&gt;RUN go build -o ./myapp ./path/to/main&lt;/code&gt; where &lt;code&gt;./path/to/main&lt;/code&gt; should be the main of
 your Golang app&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
-&lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3&gt;Let&amp;rsquo;s go with the first proposal.&lt;span class="hx:absolute hx:-mt-20" id="lets-go-with-the-first-proposal"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h3 data-hextra-search-id="lets-go-with-the-first-proposal"&gt;Let&amp;rsquo;s go with the first proposal.&lt;span class="hx:absolute hx:-mt-20" id="lets-go-with-the-first-proposal"&gt;&lt;/span&gt;
 &lt;a href="#lets-go-with-the-first-proposal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;It is always a good practice to use &lt;code&gt;-alpine&lt;/code&gt; images, by convention in the container universe when we make available
 an &lt;code&gt;-alpine&lt;/code&gt; image we are indicating to the client that it is an image reduced in size and the one we should use in
 our Dockerfile, among other things.&lt;/p&gt;
@@ -1054,6 +1078,8 @@ our Dockerfile, among other things.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1068,10 +1094,10 @@ title="Copy code"
 &lt;p&gt;It&amp;rsquo;s an excellent approach, but let&amp;rsquo;s rethink: do you have to have an image with all of Golang inside
 the container weighing about 331 MB to make available a binary that weighs a few megabytes?&lt;/p&gt;
 &lt;p&gt;The answer is clearly, no.&lt;/p&gt;
-&lt;h3&gt;Second proposal&lt;span class="hx:absolute hx:-mt-20" id="second-proposal"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="second-proposal"&gt;Second proposal&lt;span class="hx:absolute hx:-mt-20" id="second-proposal"&gt;&lt;/span&gt;
 &lt;a href="#second-proposal" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The container technology has an excellent feature, that for our case, will help us to build a very light
 container image, in case you didn&amp;rsquo;t know, I&amp;rsquo;m talking about Multistage, I share with you the
-&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/"target="_blank" rel="noopener"&gt;official documentation&lt;/a&gt;
+&lt;a href="https://docs.docker.com/develop/develop-images/multistage-build/" target="_blank" rel="noopener"&gt;official documentation&lt;/a&gt;
 to deepen about this feature.&lt;/p&gt;
 &lt;p&gt;What does Multistage consist of? It is about building images in stages so that we can share data between each
 one of them, and we will obtain a final image of a very small size.&lt;/p&gt;
@@ -1118,6 +1144,8 @@ and a second stage where we are going to make it available for use.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1135,7 +1163,7 @@ I wrote correctly 9 megabytes 😎.&lt;/p&gt;
 &lt;p&gt;This is the first of a series where we will review different development patterns that I made
 mistakes and what is currently and what I understand so far, the best way to apply it.&lt;/p&gt;
 &lt;p&gt;As the title of the publication says, today I want to talk about hexagonal architecture.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I have been noticing a lot of &amp;ldquo;hype&amp;rdquo; around the hexagonal architecture and I would like to be clear about it,
 I am not against it, on the contrary, I think it is an excellent pattern.&lt;/p&gt;
 &lt;p&gt;But I think we fall into the mistake of applying the publishing recipes of &amp;ldquo;medium&amp;rdquo; and not only end up
@@ -1147,9 +1175,9 @@ something beautiful in the language of Go(lang) is the intentionality in the nam
 &lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;A good package name means that nothing else is needed to express the intentionality of the package.&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;I share and recommend you to read the following &lt;a href="https://go.dev/blog/package-names"target="_blank" rel="noopener"&gt;official publication&lt;/a&gt;,
+&lt;p&gt;I share and recommend you to read the following &lt;a href="https://go.dev/blog/package-names" target="_blank" rel="noopener"&gt;official publication&lt;/a&gt;,
 personal opinion, applies to any language.&lt;/p&gt;
-&lt;h2&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lets-start"&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
 &lt;a href="#lets-start" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Anti pattern&lt;/p&gt;
 &lt;p&gt;Annotation in our domain model e.g &lt;code&gt;json&lt;/code&gt;.&lt;/p&gt;
@@ -1164,6 +1192,8 @@ personal opinion, applies to any language.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1171,7 +1201,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Before reading on, I invite you to take a few seconds/minutes to reflect on why this is an anti-pattern.&lt;/p&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Our model should be presentation and data layer agnostic, therefore, it should not contain any annotations.
 We should map the data to our model and vice versa, here is an example of what a rest HTTP controller
 would look like e.g.:&lt;/p&gt;
@@ -1198,6 +1228,8 @@ would look like e.g.:&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1215,6 +1247,8 @@ to the domain model when we call the service and vice versa.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -1233,7 +1267,7 @@ stories (opinion of the writer, wrongly called &lt;strong&gt;successful case&lt;
 mistakes are shared (opinion of the writer, wrongly called &lt;strong&gt;failure&lt;/strong&gt;).&lt;/p&gt;
 &lt;p&gt;As you might be suspecting below I am going to share some mistakes, which I learned from them and even more how much
 I grew and understood about the industry by sharing them.&lt;/p&gt;
-&lt;h2&gt;Lesson 1:&lt;span class="hx:absolute hx:-mt-20" id="lesson-1"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lesson-1"&gt;Lesson 1:&lt;span class="hx:absolute hx:-mt-20" id="lesson-1"&gt;&lt;/span&gt;
 &lt;a href="#lesson-1" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Write a step-by-step, share it, validate and re-validate it before executing anything&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1255,7 +1289,7 @@ its product catalog, I list technologies to have some context:&lt;/p&gt;
 &lt;p&gt;As the digitalocean people are prepared for people like this writer, they have a feature that if accessed
 from the web (I have no idea how to solve it from behind) you can run a terminal in the browser and access the droplet.&lt;/p&gt;
 &lt;p&gt;I reconfigured the ports, and the rest is history.&lt;/p&gt;
-&lt;h2&gt;Lesson 2:&lt;span class="hx:absolute hx:-mt-20" id="lesson-2"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lesson-2"&gt;Lesson 2:&lt;span class="hx:absolute hx:-mt-20" id="lesson-2"&gt;&lt;/span&gt;
 &lt;a href="#lesson-2" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Document knowledge, no matter how trivial we consider it, and invite others to do the same.
 In addition to avoiding several &amp;ldquo;knowledge transfer&amp;rdquo; meetings, we will save several arrobas, remind you anything?&lt;/p&gt;
@@ -1271,7 +1305,7 @@ we had to sit down and figure out how to leave that local line of code and expos
 &lt;p&gt;Or perhaps, and I invite you to think for a few seconds, did you find yourself one or more times holding
 &amp;ldquo;knowledge transfer&amp;rdquo; meetings because someone was leaving the team?&lt;/p&gt;
 &lt;p&gt;Or was it you who was leaving him?&lt;/p&gt;
-&lt;h2&gt;Lesson 3:&lt;span class="hx:absolute hx:-mt-20" id="lesson-3"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lesson-3"&gt;Lesson 3:&lt;span class="hx:absolute hx:-mt-20" id="lesson-3"&gt;&lt;/span&gt;
 &lt;a href="#lesson-3" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Job promotions should not be the only or the main objective, but the guide should be to share and acquire knowledge.&lt;/p&gt;
 &lt;p&gt;Lesson 3 bis:&lt;/p&gt;
@@ -1279,7 +1313,7 @@ we had to sit down and figure out how to leave that local line of code and expos
 of our systems or the domain knowledge we have so far. Always, and let&amp;rsquo;s repeat, &lt;strong&gt;always&lt;/strong&gt;, it is a gain in time.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Finally, and in another place I worked, I met one of the best problem solvers,
-&lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;Juan Moreno&lt;/a&gt;, what is better for me, simple solutions to complex problems.&lt;/p&gt;
+&lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;Juan Moreno&lt;/a&gt;, what is better for me, simple solutions to complex problems.&lt;/p&gt;
 &lt;p&gt;After this small parenthesis and dedication to the one who today is one of my sources
 of consultation, reference and mentor, I am going to try to explain teaching number 3 and 3 bis.&lt;/p&gt;
 &lt;p&gt;In pre-pandemic times, I used to - a habit I still have from afar - start early, having a couple of hours &amp;ldquo;alone&amp;rdquo;

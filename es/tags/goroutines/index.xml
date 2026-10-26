@@ -6,8 +6,8 @@ shutdown&lt;/strong&gt;.&lt;/p&gt;
 workers, consumidores de colas o cualquier proceso concurrente con
 &lt;em&gt;goroutines&lt;/em&gt;, manejar correctamente el apagado puede evitar pérdidas de
 datos, conexiones colgadas o comportamientos erráticos.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El concepto de graceful shutdown no es nuevo. Se trata, simplemente, de
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El concepto de graceful shutdown no es nuevo. Se trata, simplemente, de
 &lt;strong&gt;darle tiempo a nuestra aplicación para que termine lo que está
 haciendo&lt;/strong&gt; antes de morir.&lt;/p&gt;
 &lt;p&gt;El problema es que en Go solemos subestimar su complejidad. Por ejemplo,
@@ -15,8 +15,8 @@ lanzamos un servidor HTTP y varias &lt;em&gt;goroutines&lt;/em&gt; de background
 asumimos que con &lt;code&gt;ctrl + c&lt;/code&gt; o un &lt;code&gt;SIGTERM&lt;/code&gt; todo se apaga como por arte
 de magia.&lt;/p&gt;
 &lt;p&gt;Spoiler: no. 😅&lt;/p&gt;
-&lt;h2&gt;Anti patrón&lt;span class="hx:absolute hx:-mt-20" id="anti-patrón"&gt;&lt;/span&gt;
-&lt;a href="#anti-patr%c3%b3n" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos el siguiente código:&lt;/p&gt;
+&lt;h2 data-hextra-search-id="anti-patrón"&gt;Anti patrón&lt;span class="hx:absolute hx:-mt-20" id="anti-patrón"&gt;&lt;/span&gt;
+&lt;a href="#anti-patr%c3%b3n" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos el siguiente código:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
@@ -36,6 +36,8 @@ de magia.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -47,8 +49,8 @@ con &lt;code&gt;ctrl + c&lt;/code&gt;, el proceso muere abruptamente.
 Cualquier request en curso se corta, los recursos abiertos
 (conexexiones, archivos, etc.) no se liberan y no hay oportunidad de
 realizar tareas de limpieza.&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
 &lt;code&gt;context&lt;/code&gt; y &lt;code&gt;os/signal&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
@@ -93,6 +95,8 @@ realizar tareas de limpieza.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -102,8 +106,8 @@ title="Copiar código"
 &lt;p&gt;Ahora, cuando el proceso recibe una señal (&lt;code&gt;SIGTERM&lt;/code&gt; o &lt;code&gt;SIGINT&lt;/code&gt;), se le
 da un tiempo (en este caso 5 segundos) para terminar las requests
 activas antes de cerrar.&lt;/p&gt;
-&lt;h3&gt;El cuidado con las goroutines&lt;span class="hx:absolute hx:-mt-20" id="el-cuidado-con-las-goroutines"&gt;&lt;/span&gt;
-&lt;a href="#el-cuidado-con-las-goroutines" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá viene el punto delicado.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="el-cuidado-con-las-goroutines"&gt;El cuidado con las goroutines&lt;span class="hx:absolute hx:-mt-20" id="el-cuidado-con-las-goroutines"&gt;&lt;/span&gt;
+&lt;a href="#el-cuidado-con-las-goroutines" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá viene el punto delicado.&lt;/p&gt;
 &lt;p&gt;Si además del servidor tenés &lt;em&gt;goroutines&lt;/em&gt; de background &amp;mdash;por ejemplo
 workers que consumen de una cola o procesan tareas&amp;mdash;, &lt;strong&gt;debés
 asegurarte de que también respeten el contexto de cancelación&lt;/strong&gt;.&lt;/p&gt;
@@ -117,6 +121,8 @@ asegurarte de que también respeten el contexto de cancelación&lt;/strong&gt;.&
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -144,6 +150,8 @@ muere abruptamente, dejando el trabajo a medias.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -152,8 +160,8 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;p&gt;Cuando el proceso recibe una señal, &lt;code&gt;cancel()&lt;/code&gt; se ejecuta y todas las
 &lt;em&gt;goroutines&lt;/em&gt; escuchando ese contexto terminan ordenadamente.&lt;/p&gt;
-&lt;h3&gt;Casos borde&lt;span class="hx:absolute hx:-mt-20" id="casos-borde"&gt;&lt;/span&gt;
-&lt;a href="#casos-borde" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;h3 data-hextra-search-id="casos-borde"&gt;Casos borde&lt;span class="hx:absolute hx:-mt-20" id="casos-borde"&gt;&lt;/span&gt;
+&lt;a href="#casos-borde" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Bloqueos en goroutines&lt;/strong&gt;: si una &lt;em&gt;goroutine&lt;/em&gt; espera en un canal
 que nadie cierra, el shutdown no completa.&lt;br&gt;
 Solución: asegurarse de que todos los canales se cierren en la
@@ -165,8 +173,8 @@ del sistema.&lt;/li&gt;
 ejecutan cuando la &lt;em&gt;goroutine&lt;/em&gt; retorna. Si no retornan, nunca se
 ejecutan.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El graceful shutdown no es opcional; es parte esencial de la salud de un
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El graceful shutdown no es opcional; es parte esencial de la salud de un
 servicio en producción.&lt;/p&gt;
 &lt;p&gt;Usar contextos correctamente y respetar los tiempos de cierre es una
 forma simple de evitar &lt;em&gt;bugs&lt;/em&gt; difíciles de reproducir y mejorar la
@@ -174,16 +182,16 @@ estabilidad de nuestras apps.&lt;/p&gt;
 &lt;p&gt;Para no aburrirte y por el momento hagamos una pausa.&lt;/p&gt;
 &lt;p&gt;¡Hasta pronto! 👋🏽&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
-&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://go.dev/blog/context"target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
+&lt;h2 data-hextra-search-id="fuentes-y-lecturas-recomendadas"&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
+&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://go.dev/blog/context" target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
 Context&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/context"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/context" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;context&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;os/signal&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;net/http&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling"target="_blank" rel="noopener"&gt;Wiki oficial de Go: Signal
+&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling" target="_blank" rel="noopener"&gt;Wiki oficial de Go: Signal
 Handling&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>

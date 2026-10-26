@@ -2,10 +2,10 @@
 &lt;p&gt;In the following post I want to share a common mistake I used to make in my Golang projects.
 And as the title and description says, today we are going to talk about interfaces.&lt;/p&gt;
 &lt;p&gt;You will probably come across some references to another post I did on
-&lt;a href="https://luispe.github.io/blog/posts/hexagonal-architecture/"target="_blank" rel="noopener"&gt;hexagonal architecture&lt;/a&gt;, I think part of the misuse
+&lt;a href="https://luispe.github.io/blog/posts/hexagonal-architecture/" target="_blank" rel="noopener"&gt;hexagonal architecture&lt;/a&gt;, I think part of the misuse
 of interfaces is the consequence of following &amp;ldquo;medium&amp;rdquo; publications to the letter and not taking the time
 to understand the underlying concept.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;If there is something that we have to admit in the Golang ecosystem, it is the kink that we sometimes give ourselves
 with some/several issues. To give an example on how to name variables (which is a topic I want to talk about soon)
 and in today&amp;rsquo;s case with interfaces.&lt;/p&gt;
@@ -40,6 +40,8 @@ in the next post we will review a fake project and refactor it to make good use 
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -77,6 +79,8 @@ title="Copy code"
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -90,7 +94,7 @@ I also made the same mistake.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Go interfaces generally belong to the package that uses values of the interface type,
 not to the package that implements those values.&lt;/em&gt; 🫠&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;The implementation package must return concrete types (usually pointer or struct): that way,
 new methods can be added to implementations without requiring extensive refactoring.&lt;/em&gt;&lt;/p&gt;
@@ -120,6 +124,8 @@ structure and not the interface.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -165,6 +171,8 @@ return concrete types (usually a pointer or a structure).&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -176,9 +184,9 @@ title="Copy code"
 we inject the interface so that it can be consumed in the service methods.&lt;/p&gt;
 &lt;p&gt;As with the repository layer our &lt;code&gt;NewService()&lt;/code&gt; now returns a structure and not an interface.&lt;/p&gt;
 &lt;p&gt;Finally, we add the &lt;code&gt;Create&lt;/code&gt; method to our &lt;code&gt;Service&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;With these subtle but powerful changes our &lt;code&gt;producer&lt;/code&gt; now has enormous flexibility.&lt;/p&gt;
-&lt;p&gt;Finally, I want to thank my friend and mentor &lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; who shared with me
+&lt;p&gt;Finally, I want to thank my friend and mentor &lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; who shared with me
 this anti pattern and made me rethink and improve, once again, in this software development.&lt;/p&gt;
 &lt;p&gt;So as not to bore you and for the moment let&amp;rsquo;s take a break.&lt;/p&gt;
 &lt;p&gt;Soon we will continue with small publications where we will try to rethink other anti-patterns.&lt;/p&gt;
@@ -186,13 +194,13 @@ this anti pattern and made me rethink and improve, once again, in this software 
 &lt;hr&gt;
 &lt;p&gt;Sources:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces"target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/"target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces" target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/" target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Hexagonal Architecture</title><link>https://luispe.github.io/blog/posts/hexagonal-architecture/</link><pubDate>Thu, 09 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/posts/hexagonal-architecture/</guid><description>
 &lt;p&gt;This is the first of a series where we will review different development patterns that I made
 mistakes and what is currently and what I understand so far, the best way to apply it.&lt;/p&gt;
 &lt;p&gt;As the title of the publication says, today I want to talk about hexagonal architecture.&lt;/p&gt;
-&lt;h2&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="preface"&gt;Preface&lt;span class="hx:absolute hx:-mt-20" id="preface"&gt;&lt;/span&gt;
 &lt;a href="#preface" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;I have been noticing a lot of &amp;ldquo;hype&amp;rdquo; around the hexagonal architecture and I would like to be clear about it,
 I am not against it, on the contrary, I think it is an excellent pattern.&lt;/p&gt;
 &lt;p&gt;But I think we fall into the mistake of applying the publishing recipes of &amp;ldquo;medium&amp;rdquo; and not only end up
@@ -204,9 +212,9 @@ something beautiful in the language of Go(lang) is the intentionality in the nam
 &lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;A good package name means that nothing else is needed to express the intentionality of the package.&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;I share and recommend you to read the following &lt;a href="https://go.dev/blog/package-names"target="_blank" rel="noopener"&gt;official publication&lt;/a&gt;,
+&lt;p&gt;I share and recommend you to read the following &lt;a href="https://go.dev/blog/package-names" target="_blank" rel="noopener"&gt;official publication&lt;/a&gt;,
 personal opinion, applies to any language.&lt;/p&gt;
-&lt;h2&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="lets-start"&gt;Let&amp;rsquo;s start&lt;span class="hx:absolute hx:-mt-20" id="lets-start"&gt;&lt;/span&gt;
 &lt;a href="#lets-start" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Anti pattern&lt;/p&gt;
 &lt;p&gt;Annotation in our domain model e.g &lt;code&gt;json&lt;/code&gt;.&lt;/p&gt;
@@ -221,6 +229,8 @@ personal opinion, applies to any language.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -228,7 +238,7 @@ title="Copy code"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Before reading on, I invite you to take a few seconds/minutes to reflect on why this is an anti-pattern.&lt;/p&gt;
-&lt;h2&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="proposallearning"&gt;Proposal/learning&lt;span class="hx:absolute hx:-mt-20" id="proposallearning"&gt;&lt;/span&gt;
 &lt;a href="#proposallearning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Our model should be presentation and data layer agnostic, therefore, it should not contain any annotations.
 We should map the data to our model and vice versa, here is an example of what a rest HTTP controller
 would look like e.g.:&lt;/p&gt;
@@ -255,6 +265,8 @@ would look like e.g.:&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -272,6 +284,8 @@ to the domain model when we call the service and vice versa.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copy code"
+aria-label="Copy code"
+data-copied-label="Copied!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;

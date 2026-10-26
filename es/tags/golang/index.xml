@@ -6,8 +6,8 @@ shutdown&lt;/strong&gt;.&lt;/p&gt;
 workers, consumidores de colas o cualquier proceso concurrente con
 &lt;em&gt;goroutines&lt;/em&gt;, manejar correctamente el apagado puede evitar pérdidas de
 datos, conexiones colgadas o comportamientos erráticos.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El concepto de graceful shutdown no es nuevo. Se trata, simplemente, de
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El concepto de graceful shutdown no es nuevo. Se trata, simplemente, de
 &lt;strong&gt;darle tiempo a nuestra aplicación para que termine lo que está
 haciendo&lt;/strong&gt; antes de morir.&lt;/p&gt;
 &lt;p&gt;El problema es que en Go solemos subestimar su complejidad. Por ejemplo,
@@ -15,8 +15,8 @@ lanzamos un servidor HTTP y varias &lt;em&gt;goroutines&lt;/em&gt; de background
 asumimos que con &lt;code&gt;ctrl + c&lt;/code&gt; o un &lt;code&gt;SIGTERM&lt;/code&gt; todo se apaga como por arte
 de magia.&lt;/p&gt;
 &lt;p&gt;Spoiler: no. 😅&lt;/p&gt;
-&lt;h2&gt;Anti patrón&lt;span class="hx:absolute hx:-mt-20" id="anti-patrón"&gt;&lt;/span&gt;
-&lt;a href="#anti-patr%c3%b3n" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos el siguiente código:&lt;/p&gt;
+&lt;h2 data-hextra-search-id="anti-patrón"&gt;Anti patrón&lt;span class="hx:absolute hx:-mt-20" id="anti-patrón"&gt;&lt;/span&gt;
+&lt;a href="#anti-patr%c3%b3n" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Imaginemos el siguiente código:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
@@ -36,6 +36,8 @@ de magia.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -47,8 +49,8 @@ con &lt;code&gt;ctrl + c&lt;/code&gt;, el proceso muere abruptamente.
 Cualquier request en curso se corta, los recursos abiertos
 (conexexiones, archivos, etc.) no se liberan y no hay oportunidad de
 realizar tareas de limpieza.&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;La solución es implementar &lt;strong&gt;graceful shutdown&lt;/strong&gt; usando los paquetes
 &lt;code&gt;context&lt;/code&gt; y &lt;code&gt;os/signal&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-go" data-lang="go"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="kn"&gt;package&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nx"&gt;main&lt;/span&gt;&lt;span class="w"&gt;
@@ -93,6 +95,8 @@ realizar tareas de limpieza.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -102,8 +106,8 @@ title="Copiar código"
 &lt;p&gt;Ahora, cuando el proceso recibe una señal (&lt;code&gt;SIGTERM&lt;/code&gt; o &lt;code&gt;SIGINT&lt;/code&gt;), se le
 da un tiempo (en este caso 5 segundos) para terminar las requests
 activas antes de cerrar.&lt;/p&gt;
-&lt;h3&gt;El cuidado con las goroutines&lt;span class="hx:absolute hx:-mt-20" id="el-cuidado-con-las-goroutines"&gt;&lt;/span&gt;
-&lt;a href="#el-cuidado-con-las-goroutines" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá viene el punto delicado.&lt;/p&gt;
+&lt;h3 data-hextra-search-id="el-cuidado-con-las-goroutines"&gt;El cuidado con las goroutines&lt;span class="hx:absolute hx:-mt-20" id="el-cuidado-con-las-goroutines"&gt;&lt;/span&gt;
+&lt;a href="#el-cuidado-con-las-goroutines" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá viene el punto delicado.&lt;/p&gt;
 &lt;p&gt;Si además del servidor tenés &lt;em&gt;goroutines&lt;/em&gt; de background &amp;mdash;por ejemplo
 workers que consumen de una cola o procesan tareas&amp;mdash;, &lt;strong&gt;debés
 asegurarte de que también respeten el contexto de cancelación&lt;/strong&gt;.&lt;/p&gt;
@@ -117,6 +121,8 @@ asegurarte de que también respeten el contexto de cancelación&lt;/strong&gt;.&
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -144,6 +150,8 @@ muere abruptamente, dejando el trabajo a medias.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -152,8 +160,8 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;p&gt;Cuando el proceso recibe una señal, &lt;code&gt;cancel()&lt;/code&gt; se ejecuta y todas las
 &lt;em&gt;goroutines&lt;/em&gt; escuchando ese contexto terminan ordenadamente.&lt;/p&gt;
-&lt;h3&gt;Casos borde&lt;span class="hx:absolute hx:-mt-20" id="casos-borde"&gt;&lt;/span&gt;
-&lt;a href="#casos-borde" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;h3 data-hextra-search-id="casos-borde"&gt;Casos borde&lt;span class="hx:absolute hx:-mt-20" id="casos-borde"&gt;&lt;/span&gt;
+&lt;a href="#casos-borde" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Bloqueos en goroutines&lt;/strong&gt;: si una &lt;em&gt;goroutine&lt;/em&gt; espera en un canal
 que nadie cierra, el shutdown no completa.&lt;br&gt;
 Solución: asegurarse de que todos los canales se cierren en la
@@ -165,8 +173,8 @@ del sistema.&lt;/li&gt;
 ejecutan cuando la &lt;em&gt;goroutine&lt;/em&gt; retorna. Si no retornan, nunca se
 ejecutan.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El graceful shutdown no es opcional; es parte esencial de la salud de un
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;El graceful shutdown no es opcional; es parte esencial de la salud de un
 servicio en producción.&lt;/p&gt;
 &lt;p&gt;Usar contextos correctamente y respetar los tiempos de cierre es una
 forma simple de evitar &lt;em&gt;bugs&lt;/em&gt; difíciles de reproducir y mejorar la
@@ -174,27 +182,27 @@ estabilidad de nuestras apps.&lt;/p&gt;
 &lt;p&gt;Para no aburrirte y por el momento hagamos una pausa.&lt;/p&gt;
 &lt;p&gt;¡Hasta pronto! 👋🏽&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
-&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href="https://go.dev/blog/context"target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
+&lt;h2 data-hextra-search-id="fuentes-y-lecturas-recomendadas"&gt;Fuentes y lecturas recomendadas&lt;span class="hx:absolute hx:-mt-20" id="fuentes-y-lecturas-recomendadas"&gt;&lt;/span&gt;
+&lt;a href="#fuentes-y-lecturas-recomendadas" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://go.dev/blog/context" target="_blank" rel="noopener"&gt;Go Blog: Go Concurrency Patterns &amp;mdash;
 Context&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/context"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/context" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;context&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/os/signal" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;os/signal&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown"target="_blank" rel="noopener"&gt;Documentación oficial del paquete
+&lt;li&gt;&lt;a href="https://pkg.go.dev/net/http#Server.Shutdown" target="_blank" rel="noopener"&gt;Documentación oficial del paquete
 &lt;code&gt;net/http&lt;/code&gt;&lt;/a&gt;\&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling"target="_blank" rel="noopener"&gt;Wiki oficial de Go: Signal
+&lt;li&gt;&lt;a href="https://go.dev/wiki/SignalHandling" target="_blank" rel="noopener"&gt;Wiki oficial de Go: Signal
 Handling&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Interfaces y "copy paste"</title><link>https://luispe.github.io/blog/es/posts/interfaces-correct-use/</link><pubDate>Mon, 20 Jun 2022 10:47:02 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/interfaces-correct-use/</guid><description>
 &lt;p&gt;En la siguiente publicación quiero compartir un error común que solía cometer en mis proyectos en Golang. Y como bien
 dice el título y descripción hoy vamos a hablar de las interfaces.&lt;/p&gt;
 &lt;p&gt;Seguramente se encuentren con algunas referencias a otra publicación que hice sobre
-&lt;a href="https://luispe.github.io/blog/es/posts/hexagonal-architecture/"target="_blank" rel="noopener"&gt;arquitectura hexagonal&lt;/a&gt;, creo que parte del mal uso de las
+&lt;a href="https://luispe.github.io/blog/es/posts/hexagonal-architecture/" target="_blank" rel="noopener"&gt;arquitectura hexagonal&lt;/a&gt;, creo que parte del mal uso de las
 interfaces es la consecuencia de seguir a rajatabla publicaciones de &amp;ldquo;medium&amp;rdquo; y no tomarse el tiempo para entender el
 concepto subyacente.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Si hay algo que tenemos que admitir en el ecosistema de Golang es el enrosque que a veces nos damos con algunas/varias
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Si hay algo que tenemos que admitir en el ecosistema de Golang es el enrosque que a veces nos damos con algunas/varias
 cuestiones. Por dar un ejemplo en como nombrar las variables (que es un tema del que quiero hablar pronto) y en el
 caso de hoy con las interfaces.&lt;/p&gt;
 &lt;p&gt;Golang tiene sus particularidades, pero se basa en muchos patrones ya conocidos en la industria. En el ecosistema de Go
@@ -228,6 +236,8 @@ falso y refactorizarlo para hacer un buen uso de las interfaces.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -265,6 +275,8 @@ title="Copiar código"
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -278,8 +290,8 @@ cometer el mismo error.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Las interfaces en Go generalmente pertenecen al paquete que usa valores del tipo de interfaz, no al paquete que implementa
 esos valores.&lt;/em&gt; 🫠&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;em&gt;El paquete de implementación debe devolver tipos concretos (generalmente puntero o estructura): de esa manera, se pueden
 agregar nuevos métodos a las implementaciones sin requerir una refactorización extensa.&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -308,6 +320,8 @@ no la interfaz.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -353,6 +367,8 @@ de nuevo, retornan tipos concretos (generalmente un puntero o una estructura).&l
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -364,9 +380,9 @@ title="Copiar código"
 la interfaz para que pueda consumirse en los métodos del servicio.&lt;/p&gt;
 &lt;p&gt;Al igual que con la capa de repositorio nuestro &lt;code&gt;NewService()&lt;/code&gt; ahora retorna una estructura y no una interfaz.&lt;/p&gt;
 &lt;p&gt;Por ultimo agregamos el método &lt;code&gt;Create&lt;/code&gt; a nuestro &lt;code&gt;Service&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
-&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Con estos cambios sutiles pero poderosos nuestros &lt;code&gt;producer&lt;/code&gt; ahora tienen una enorme flexibilidad.&lt;/p&gt;
-&lt;p&gt;Por último quiero agradecer a mi amigo y mentor &lt;a href="https://www.linkedin.com/in/morenojp/"target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; que me compartió este
+&lt;h2 data-hextra-search-id="conclusiones"&gt;Conclusiones&lt;span class="hx:absolute hx:-mt-20" id="conclusiones"&gt;&lt;/span&gt;
+&lt;a href="#conclusiones" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Con estos cambios sutiles pero poderosos nuestros &lt;code&gt;producer&lt;/code&gt; ahora tienen una enorme flexibilidad.&lt;/p&gt;
+&lt;p&gt;Por último quiero agradecer a mi amigo y mentor &lt;a href="https://www.linkedin.com/in/morenojp/" target="_blank" rel="noopener"&gt;morenojp&lt;/a&gt; que me compartió este
 anti patrón y me hizo repensar y mejorar, una vez más, en esto del desarrollo de software.&lt;/p&gt;
 &lt;p&gt;Para no aburrirte y por el momento hagamos una pausa.&lt;/p&gt;
 &lt;p&gt;Próximamente vamos a seguir con pequeñas publicaciones donde vamos a intentar repensar otros anti patrones.&lt;/p&gt;
@@ -374,14 +390,14 @@ anti patrón y me hizo repensar y mejorar, una vez más, en esto del desarrollo 
 &lt;hr&gt;
 &lt;p&gt;Fuentes:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces"target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/"target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://github.com/golang/go/wiki/CodeReviewComments#interfaces" target="_blank" rel="noopener"&gt;wiki oficial de Golang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://8thlight.com/blog/go-interface-misuse/" target="_blank" rel="noopener"&gt;go interfaces misuse&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Hexagonal Architecture</title><link>https://luispe.github.io/blog/es/posts/hexagonal-architecture/</link><pubDate>Thu, 09 Jun 2022 21:53:34 -0300</pubDate><guid>https://luispe.github.io/blog/es/posts/hexagonal-architecture/</guid><description>
 &lt;p&gt;Esta es la primera de una serie donde vamos a revisar diferentes patrones de desarrollo que errores cometí y cuál es
 en la actualidad y lo que entiendo hasta el momento, la mejor forma de aplicarlo.&lt;/p&gt;
 &lt;p&gt;Como bien dice el título de la publicación hoy quiero hablar sobre arquitectura hexagonal.&lt;/p&gt;
-&lt;h2&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
-&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Hace tiempo noto mucho &amp;ldquo;hype&amp;rdquo; en torno a la arquitectura hexagonal y me gustaría ser claro al respecto, no estoy en contra,
+&lt;h2 data-hextra-search-id="preámbulo"&gt;Preámbulo&lt;span class="hx:absolute hx:-mt-20" id="preámbulo"&gt;&lt;/span&gt;
+&lt;a href="#pre%c3%a1mbulo" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Hace tiempo noto mucho &amp;ldquo;hype&amp;rdquo; en torno a la arquitectura hexagonal y me gustaría ser claro al respecto, no estoy en contra,
 mas bien todo lo contrario, me parece un excelente patrón.&lt;/p&gt;
 &lt;p&gt;Pero creo que caemos en el error de aplicar la recetas de publicaciones de &amp;ldquo;medium&amp;rdquo; y no solo terminamos con todas las
 capas de nuestro sistema acopladas sino que con nombres de packages al estilo &amp;ldquo;adapters&amp;rdquo; o &amp;ldquo;ports&amp;rdquo; y si hay algo hermoso
@@ -392,10 +408,10 @@ en el lenguaje de Go(lang) es la intencionalidad en el nombre de un package.&lt;
 &lt;div class="hx:mt-6 hx:leading-7 hx:first:mt-0"&gt;Un buen nombre en el package hace que no sea necesario nada más para expresar la intencionalidad del mismo.&lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;Te comparto y recomiendo leer la siguiente &lt;a href="https://go.dev/blog/package-names"target="_blank" rel="noopener"&gt;publicación oficial&lt;/a&gt;, opinión personal,
+&lt;p&gt;Te comparto y recomiendo leer la siguiente &lt;a href="https://go.dev/blog/package-names" target="_blank" rel="noopener"&gt;publicación oficial&lt;/a&gt;, opinión personal,
 aplica para cualquier lenguaje.&lt;/p&gt;
-&lt;h2&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
-&lt;a href="#comencemos" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
+&lt;h2 data-hextra-search-id="comencemos"&gt;Comencemos&lt;span class="hx:absolute hx:-mt-20" id="comencemos"&gt;&lt;/span&gt;
+&lt;a href="#comencemos" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;Anti patrón&lt;/p&gt;
 &lt;p&gt;Anotación en nuestro modelo de dominio e.g &lt;code&gt;json&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -409,6 +425,8 @@ aplica para cualquier lenguaje.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -416,8 +434,8 @@ title="Copiar código"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;Antes de continuar leyendo te invito a que por unos segundos/minutos hagamos una reflexión de porque es un anti patrón.&lt;/p&gt;
-&lt;h2&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
-&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Nuestro modelo debería ser agnóstico a la capa de presentación y a la de datos, por lo tanto, no debería contener ninguna
+&lt;h2 data-hextra-search-id="propuestaaprendizaje"&gt;Propuesta/aprendizaje&lt;span class="hx:absolute hx:-mt-20" id="propuestaaprendizaje"&gt;&lt;/span&gt;
+&lt;a href="#propuestaaprendizaje" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Nuestro modelo debería ser agnóstico a la capa de presentación y a la de datos, por lo tanto, no debería contener ninguna
 anotación. Deberíamos mapear los datos hacia nuestro modelo y viceversa, a continuación un ejemplo de como quedaría
 un controlador rest HTTP e.g.:&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;user/rest_controller.go&lt;/code&gt;&lt;/p&gt;
@@ -443,6 +461,8 @@ un controlador rest HTTP e.g.:&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
@@ -460,6 +480,8 @@ hacia el modelo de dominio cuando llamemos al servicio y viceversa.&lt;/p&gt;
 &lt;button
 class="hextra-code-copy-btn hx:group/copybtn hx:cursor-pointer hx:transition-all hx:active:opacity-50 hx:bg-primary-700/5 hx:border hx:border-black/5 hx:text-gray-600 hx:hover:text-gray-900 hx:rounded-md hx:p-1.5 hx:dark:bg-primary-300/10 hx:dark:border-white/10 hx:dark:text-gray-400 hx:dark:hover:text-gray-50"
 title="Copiar código"
+aria-label="Copiar código"
+data-copied-label="¡Copiado!"
 &gt;
 &lt;div class="hextra-copy-icon hx:group-[.copied]/copybtn:hidden hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;
 &lt;div class="hextra-success-icon hx:hidden hx:group-[.copied]/copybtn:block hx:pointer-events-none hx:h-4 hx:w-4"&gt;&lt;/div&gt;

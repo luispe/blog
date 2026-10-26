@@ -1,7 +1,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Reflection</title><link>https://luispe.github.io/blog/tags/reflection/</link><description>Recent content in Reflection on luispe</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 24 Jan 2026 14:00:00 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/tags/reflection/index.xml" rel="self" type="application/rss+xml"/><item><title>Two Clicks</title><link>https://luispe.github.io/blog/posts/two-clicks/</link><pubDate>Sat, 24 Jan 2026 14:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/posts/two-clicks/</guid><description>
 &lt;p&gt;Today I&amp;rsquo;m going to paraphrase quite a bit, starting with the title from a great
 friend with whom we worked together and I&amp;rsquo;m sure we&amp;rsquo;ll meet again professionally,
-&lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;el chavito&lt;/a&gt;;
+&lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;el chavito&lt;/a&gt;;
 I first heard the phrase from him and I think in this post
 I&amp;rsquo;ll talk a bit about it and about when motivation vanishes;
 can it be recovered?, is the challenge worth it? what did I learn along the way?&lt;/p&gt;
@@ -37,7 +37,7 @@ that hurts more than the slap itself.&lt;/p&gt;
 another time because I want to address other things next.&lt;/p&gt;
 &lt;hr&gt;
 &lt;p&gt;The other day talking with my ant brother, the crazy
-&lt;a href="https://www.linkedin.com/in/victor-de-grandis-0a1202ab/"target="_blank" rel="noopener"&gt;Vitor&lt;/a&gt;,
+&lt;a href="https://www.linkedin.com/in/victor-de-grandis-0a1202ab/" target="_blank" rel="noopener"&gt;Vitor&lt;/a&gt;,
 he writes to me a bit worried, that all the hype of having to use AI no matter what
 caused him tremendous sadness; because employers
 assume that just because you use it you&amp;rsquo;re going to go faster,
@@ -76,7 +76,7 @@ does it reassure me that everything explodes?, no, I don&amp;rsquo;t want everyt
 is that I&amp;rsquo;ll continue learning, deepening the knowledge
 I&amp;rsquo;m acquiring and the day something explodes, I&amp;rsquo;ll have the tools to at least
 sit down and see what&amp;rsquo;s happening without needing an AI, just with the value of previous experiences
-and &lt;a href="https://youtu.be/ARXdEMbPTGs?si=xj8I1pR_d0JcyerZ"target="_blank" rel="noopener"&gt;the beautiful challenge; the pleasure of having an unsolved problem in your head&lt;/a&gt;.&lt;/p&gt;
+and &lt;a href="https://youtu.be/ARXdEMbPTGs?si=xj8I1pR_d0JcyerZ" target="_blank" rel="noopener"&gt;the beautiful challenge; the pleasure of having an unsolved problem in your head&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;In short, they&amp;rsquo;re going to want to eat away at your brain in bites,
 but don&amp;rsquo;t let them drink the juice of your heart.&lt;/p&gt;
 &lt;hr&gt;
@@ -109,13 +109,13 @@ and a heart doesn&amp;rsquo;t harden just because, and if that happens.&lt;/p&gt
 &lt;p&gt;&lt;em&gt;&lt;strong&gt;that in resistance lies&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;all the noble valor of life&lt;/em&gt;&lt;/p&gt;
 &lt;/blockquote&gt;</description></item><item><title>The Ticket Hell</title><link>https://luispe.github.io/blog/posts/ticket-hell/</link><pubDate>Wed, 19 Jun 2024 19:10:20 -0300</pubDate><guid>https://luispe.github.io/blog/posts/ticket-hell/</guid><description>
-&lt;h2&gt;Problem&lt;span class="hx:absolute hx:-mt-20" id="problem"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="problem"&gt;Problem&lt;span class="hx:absolute hx:-mt-20" id="problem"&gt;&lt;/span&gt;
 &lt;a href="#problem" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If all you have is a hammer, everything looks like a nail.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Why do I start with this well-known phrase?
 First, I want to give a bit of background, and then I’ll explain why I mention it.&lt;/p&gt;
 &lt;p&gt;Over the years working with infrastructure teams, I’ve had the great fortune of meeting some very insightful people who have always told me:&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;“Never let the infrastructure team operate solely through ticket requests.”&lt;/em&gt;&lt;/p&gt;
-&lt;h2&gt;Position&lt;span class="hx:absolute hx:-mt-20" id="position"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="position"&gt;Position&lt;span class="hx:absolute hx:-mt-20" id="position"&gt;&lt;/span&gt;
 &lt;a href="#position" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;What’s the rationale behind such a strong stance?&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;You need an &lt;strong&gt;extremely strong culture&lt;/strong&gt; from end to end to decide which ticket is more important than another.&lt;/li&gt;
@@ -125,14 +125,14 @@ First, I want to give a bit of background, and then I’ll explain why I mention
 &lt;/ol&gt;
 &lt;p&gt;There are many other reasons, but these are the most relevant ones — let’s go through each.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;1. Extremely Strong Culture&lt;span class="hx:absolute hx:-mt-20" id="1-extremely-strong-culture"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="1-extremely-strong-culture"&gt;1. Extremely Strong Culture&lt;span class="hx:absolute hx:-mt-20" id="1-extremely-strong-culture"&gt;&lt;/span&gt;
 &lt;a href="#1-extremely-strong-culture" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Infrastructure and QA teams are rarely included in roadmap and sprint planning.
 If they are, it usually happens at the very end — “when everything’s already cooked.”&lt;/p&gt;
 &lt;p&gt;So, when the infrastructure lead receives two tickets and needs to prioritize based on execution capacity, the obvious question arises:&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Which ticket should I prioritize?&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Good luck with that — because for every internal team (your “clients”), their request will always be &lt;strong&gt;the most important thing in the world.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;2. Meaningless Growth&lt;span class="hx:absolute hx:-mt-20" id="2-meaningless-growth"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="2-meaningless-growth"&gt;2. Meaningless Growth&lt;span class="hx:absolute hx:-mt-20" id="2-meaningless-growth"&gt;&lt;/span&gt;
 &lt;a href="#2-meaningless-growth" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let’s assume the previous issue is somehow solved.
 You still can’t escape this one.&lt;/p&gt;
 &lt;p&gt;Why do we say the infrastructure team &lt;em&gt;must inherently grow&lt;/em&gt;?&lt;/p&gt;
@@ -140,7 +140,7 @@ You still can’t escape this one.&lt;/p&gt;
 &lt;p&gt;Congratulations — you’ve created an &lt;strong&gt;execution bottleneck.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;The “solution”?&lt;/strong&gt; Hire more infrastructure people.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;3. Motivation&lt;span class="hx:absolute hx:-mt-20" id="3-motivation"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="3-motivation"&gt;3. Motivation&lt;span class="hx:absolute hx:-mt-20" id="3-motivation"&gt;&lt;/span&gt;
 &lt;a href="#3-motivation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Let’s assume points 1 and 2 are solved.&lt;/p&gt;
 &lt;p&gt;But&amp;hellip; are infrastructure engineers human?
 (They are, last I checked.)&lt;/p&gt;
@@ -151,12 +151,12 @@ And if those teams happen to be toxic, they might even start labeling infrastruc
 &lt;p&gt;And what can I say about that?
 &lt;strong&gt;Keep calm — and here’s a big hug.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h3&gt;4. Innovation&lt;span class="hx:absolute hx:-mt-20" id="4-innovation"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="4-innovation"&gt;4. Innovation&lt;span class="hx:absolute hx:-mt-20" id="4-innovation"&gt;&lt;/span&gt;
 &lt;a href="#4-innovation" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Finally, even if the previous three points were somehow resolved, &lt;strong&gt;innovation is still impossible.&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Why?
 Because a team that only closes tickets — that only participates reactively in projects to “build infrastructure” — &lt;strong&gt;will never have the space to innovate.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2&gt;Back to the Beginning&lt;span class="hx:absolute hx:-mt-20" id="back-to-the-beginning"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="back-to-the-beginning"&gt;Back to the Beginning&lt;span class="hx:absolute hx:-mt-20" id="back-to-the-beginning"&gt;&lt;/span&gt;
 &lt;a href="#back-to-the-beginning" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;&lt;em&gt;If all you have is a hammer, everything looks like a nail.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Throughout this post, I’ve explained the reasoning and main consequences of running infrastructure management through tickets.&lt;/p&gt;
 &lt;p&gt;And I want to be clear:
@@ -172,7 +172,7 @@ It’s time to &lt;strong&gt;pause and reflect&lt;/strong&gt; on why things aren
 &lt;p&gt;See you soon! 👋🏽&lt;/p&gt;</description></item><item><title>Technical debt</title><link>https://luispe.github.io/blog/posts/technical-debt/</link><pubDate>Sat, 02 Jul 2022 16:36:17 -0300</pubDate><guid>https://luispe.github.io/blog/posts/technical-debt/</guid><description>
 &lt;p&gt;In the following post we will rethink a concept commonly encountered and endorsed
 in the technology industry, technical debt.&lt;/p&gt;
-&lt;h2&gt;Different yardstick&lt;span class="hx:absolute hx:-mt-20" id="different-yardstick"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="different-yardstick"&gt;Different yardstick&lt;span class="hx:absolute hx:-mt-20" id="different-yardstick"&gt;&lt;/span&gt;
 &lt;a href="#different-yardstick" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Let&amp;rsquo;s imagine that we need to paint the exterior of our house, and we decide to hire a professional to do the job.&lt;/p&gt;
 &lt;p&gt;After consulting several quotes we decided to hire the services of &amp;ldquo;x&amp;rdquo; to take care of the job.&lt;/p&gt;
 &lt;p&gt;After a few days &amp;ldquo;x&amp;rdquo; tells us:&lt;/p&gt;
@@ -182,9 +182,9 @@ in the technology industry, technical debt.&lt;/p&gt;
 &lt;p&gt;- Sorry, it is a technical debt that I can attack in the future.&lt;/p&gt;
 &lt;p&gt;How would you feel if you encountered such a situation?&lt;/p&gt;
 &lt;p&gt;Why in the context of technology do we endorse having technical debt?&lt;/p&gt;
-&lt;h2&gt;Rethink&lt;span class="hx:absolute hx:-mt-20" id="rethink"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="rethink"&gt;Rethink&lt;span class="hx:absolute hx:-mt-20" id="rethink"&gt;&lt;/span&gt;
 &lt;a href="#rethink" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;In technology, it is very common to encounter this scenario, and unfortunately we naturalize it and as
-I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/"target="_blank" rel="noopener"&gt;previous publication&lt;/a&gt;
+I commented in a &lt;a href="https://luispe.github.io/blog/posts/mistakes-and-learnings/" target="_blank" rel="noopener"&gt;previous publication&lt;/a&gt;
 where I talk among other things about the importance of documenting and testing, it is something common that
 I always see as &amp;ldquo;technical debt&amp;rdquo;, rethinking the example of painting the house I think it exposes
 how we can have &amp;ldquo;different yardsticks&amp;rdquo; to measure the same situation in different contexts.&lt;/p&gt;
@@ -196,7 +196,7 @@ documentation causes us to waste an enormous amount of time trying to understand
 &lt;li&gt;In a team context: having technical debt means that the knowledge stays with the people and we should always,
 always encourage knowledge to be distributed.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;The technical debt is very exhausting for the teams and where today we think we are gaining time,
 I assure you that soon, very soon, we will lose agility and speed in the development.&lt;/p&gt;
 &lt;p&gt;It can be avoided in most cases, and we do not accept it as a matter of course.&lt;/p&gt;

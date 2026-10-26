@@ -1,9 +1,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>luispe – Platform-Engineering</title><link>https://luispe.github.io/blog/tags/platform-engineering/</link><description>Recent content in Platform-Engineering on luispe</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 01 Nov 2025 00:00:00 -0300</lastBuildDate><atom:link href="https://luispe.github.io/blog/tags/platform-engineering/index.xml" rel="self" type="application/rss+xml"/><item><title>Building from Differences</title><link>https://luispe.github.io/blog/posts/build-on-difference/</link><pubDate>Sat, 01 Nov 2025 00:00:00 -0300</pubDate><guid>https://luispe.github.io/blog/posts/build-on-difference/</guid><description>
 &lt;p&gt;In this post, I’ll try to share our experience building Akua’s IDP — the challenges we faced, the current state, and what lies ahead.&lt;/p&gt;
-&lt;p&gt;With &lt;a href="https://www.linkedin.com/in/geryepes/"target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; — at this point I can proudly call him a friend — we joined Akua from the very beginning with the goal of building the internal developer platform. We both came from different industries and backgrounds, but shared a deep common vision of what Akua needed.&lt;/p&gt;
-&lt;p&gt;I left the link to his LinkedIn, but to give a &lt;strong&gt;very short (and disrespectfully brief)&lt;/strong&gt; summary: Ger comes with experience from the lowest layers of infrastructure all the way up to building the team and platform at &lt;em&gt;Sate&lt;/em&gt; (for friends), or &lt;a href="https://www.linkedin.com/company/satellogic/"target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; if we’re being formal.&lt;/p&gt;
+&lt;p&gt;With &lt;a href="https://www.linkedin.com/in/geryepes/" target="_blank" rel="noopener"&gt;Ger&lt;/a&gt; — at this point I can proudly call him a friend — we joined Akua from the very beginning with the goal of building the internal developer platform. We both came from different industries and backgrounds, but shared a deep common vision of what Akua needed.&lt;/p&gt;
+&lt;p&gt;I left the link to his LinkedIn, but to give a &lt;strong&gt;very short (and disrespectfully brief)&lt;/strong&gt; summary: Ger comes with experience from the lowest layers of infrastructure all the way up to building the team and platform at &lt;em&gt;Sate&lt;/em&gt; (for friends), or &lt;a href="https://www.linkedin.com/company/satellogic/" target="_blank" rel="noopener"&gt;Satellogic&lt;/a&gt; if we’re being formal.&lt;/p&gt;
 &lt;p&gt;In my case, I started my career as a product developer and, during my time at Viacom (Telefé), I began to feel a strong curiosity for infrastructure. At Pomelo, I had the chance to work full-time helping to build the IDP, and at Akua, together with my “compa,” we designed and executed it from scratch — something I’m incredibly proud of.&lt;/p&gt;
-&lt;h2&gt;Early Days and First Steps&lt;span class="hx:absolute hx:-mt-20" id="early-days-and-first-steps"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="early-days-and-first-steps"&gt;Early Days and First Steps&lt;span class="hx:absolute hx:-mt-20" id="early-days-and-first-steps"&gt;&lt;/span&gt;
 &lt;a href="#early-days-and-first-steps" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;We started literally with a blank page. There was absolutely nothing in Akua — just an empty AWS account — but that was the least of our concerns.
 Here’s a list of our “mantras,” which we still uphold to this day:&lt;/p&gt;
 &lt;ul&gt;
@@ -14,7 +14,7 @@ Here’s a list of our “mantras,” which we still uphold to this day:&lt;/p&g
 &lt;li&gt;Simplicity above all.&lt;/li&gt;
 &lt;li&gt;Break the inertia of past experiences.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3&gt;Laying the Foundations&lt;span class="hx:absolute hx:-mt-20" id="laying-the-foundations"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="laying-the-foundations"&gt;Laying the Foundations&lt;span class="hx:absolute hx:-mt-20" id="laying-the-foundations"&gt;&lt;/span&gt;
 &lt;a href="#laying-the-foundations" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We partnered with Binbash to execute our PCI-compliant network design, while Ger and I evaluated which tool would best fit our infrastructure management needs for the IDP.
 To be fully transparent, we evaluated three tools — discarded one immediately, and ran quick POCs with the other two before deciding.&lt;/p&gt;
 &lt;p&gt;The three tools we analyzed:&lt;/p&gt;
@@ -41,7 +41,7 @@ There are more, of course, but as always, we focused on those with strong adopti
 Port.io, on the other hand, wasn’t a fallback choice — it’s like the &lt;em&gt;Notion for platforms&lt;/em&gt;. Its Blueprint system lets you design your platform around your needs, not the other way around.
 The UI is elegant, it supports SSO, has RBAC (still room for improvement), and includes Scorecards, Self-Service Actions, Automations, and click-and-build dashboards.
 All in all, it became the perfect tool for our platform’s presentation layer.&lt;/p&gt;
-&lt;h3&gt;Technology Stack&lt;span class="hx:absolute hx:-mt-20" id="technology-stack"&gt;&lt;/span&gt;
+&lt;h3 data-hextra-search-id="technology-stack"&gt;Technology Stack&lt;span class="hx:absolute hx:-mt-20" id="technology-stack"&gt;&lt;/span&gt;
 &lt;a href="#technology-stack" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;We built a custom Helm chart for our applications. Over time, it evolved and now supports both microservices and monorepos — meaning multiple services can be deployed from a single GitLab project without having to manage “n” repositories.&lt;/p&gt;
 &lt;p&gt;Our Helm chart is centralized, versioned (using semver), and evolves like any other piece of software. Product developers can choose whichever version they need.
 The idea was to &lt;strong&gt;centralize evolution&lt;/strong&gt; while minimizing cognitive load for developers.
@@ -66,10 +66,10 @@ That was Ger’s proposal, and thankfully we convinced everyone to go that route
 &lt;li&gt;External DNS&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;And yes, installing anything else needs a &lt;strong&gt;very strong justification&lt;/strong&gt;.&lt;/p&gt;
-&lt;h4&gt;Wait, what about secrets?&lt;span class="hx:absolute hx:-mt-20" id="wait-what-about-secrets"&gt;&lt;/span&gt;
+&lt;h4 data-hextra-search-id="wait-what-about-secrets"&gt;Wait, what about secrets?&lt;span class="hx:absolute hx:-mt-20" id="wait-what-about-secrets"&gt;&lt;/span&gt;
 &lt;a href="#wait-what-about-secrets" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;We built a workflow with &lt;strong&gt;Parameter Store&lt;/strong&gt; that lets us deploy and inject secrets into Kubernetes applications.
 If a secret isn’t managed by our infra-lib, the security team can still add it to Parameter Store, and our infra-lib takes care of the rest.&lt;/p&gt;
-&lt;h4&gt;Security — Auth &amp;amp; Authz&lt;span class="hx:absolute hx:-mt-20" id="security--auth--authz"&gt;&lt;/span&gt;
+&lt;h4 data-hextra-search-id="security--auth--authz"&gt;Security — Auth &amp;amp; Authz&lt;span class="hx:absolute hx:-mt-20" id="security--auth--authz"&gt;&lt;/span&gt;
 &lt;a href="#security--auth--authz" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h4&gt;&lt;p&gt;From day one, we’ve used &lt;strong&gt;IRSA (IAM Roles for Service Accounts)&lt;/strong&gt; and &lt;strong&gt;tag-based permissions&lt;/strong&gt; (more on that later).
 If an AWS resource doesn’t support tagging (like S3), our infra-lib auto-discovers it and applies the right permissions.&lt;/p&gt;
 &lt;p&gt;Someone once commented on a previous post that “a platform without FinOps can’t be called a platform.”
@@ -78,7 +78,7 @@ That’s what will make it easy to implement cost tracking and billing later.
 And a quick side note — our infra costs turned out to be &lt;em&gt;significantly lower&lt;/em&gt; than we had projected, thanks to proper environment configurations handled by our infra-lib.&lt;/p&gt;
 &lt;p&gt;Continuing with security — database access is controlled via &lt;strong&gt;Security Group rules&lt;/strong&gt;, and communication between applications is blocked at the network level (even within the same namespace).
 This allows us to define and enforce access rules between services through &lt;strong&gt;Kong&lt;/strong&gt;, easily configurable from our Port.io portal.&lt;/p&gt;
-&lt;h2&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
+&lt;h2 data-hextra-search-id="conclusions"&gt;Conclusions&lt;span class="hx:absolute hx:-mt-20" id="conclusions"&gt;&lt;/span&gt;
 &lt;a href="#conclusions" class="subheading-anchor" aria-label="Permalink for this section"&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;There’s still so much to share — how we implemented Scorecards, Day-2 actions, single-tenant deployments, public route publishing…
 But I’ll save that for another post :)&lt;/p&gt;
 &lt;p&gt;For now, I’d like to close with a reflection.&lt;/p&gt;
