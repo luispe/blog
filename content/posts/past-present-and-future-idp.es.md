@@ -20,10 +20,10 @@ Para arrancar voy a traer una frase que escuché en la peli Kung Fu Panda
 _"El ayer es historia, el mañana es un misterio, el hoy es un regalo, por eso se llama presente"_
 
 Por qué la traigo? porque como comenté en la descripción de la publicación pasaron muchas cosas
-desde aquel junio del 2024 donde con mi entonces compañero y dupla de equipo German Yepes
+desde aquel junio del 2024 donde con mi entonces compañero, dupla de equipo y puedo decir amigo el loco [German Yepes](https://www.linkedin.com/in/geryepes/)
 comenzamos a diseñar la plataforma interna de desarrollo para Akua.
 
-En el presente mientras escribo esto comparto equipo con Cristan Ortega (Cris) y Jeremy Bacher (Jere),
+En el presente mientras escribo esto comparto equipo con [Cristan Ortega (Cris)](https://www.linkedin.com/in/cristian-gabriel-ortega-73635b36/) y [Jeremy Bacher (Jere)](https://www.linkedin.com/in/jerebacher/),
 en un pasado como les comenté formé dupla con el chavito, quien decidió seguir camino fuera de Akua
 allá por diciembre del 2025, y en el camino también supo estar con nosotros don Guille Pijuan que sigue
 en Akua haciendo de las suyas en el equipo de CX (Customer Experience).
