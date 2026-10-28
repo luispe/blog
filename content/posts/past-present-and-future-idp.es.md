@@ -25,7 +25,7 @@ comenzamos a diseñar la plataforma interna de desarrollo para Akua.
 
 En el presente mientras escribo esto comparto equipo con [Cristan Ortega (Cris)](https://www.linkedin.com/in/cristian-gabriel-ortega-73635b36/) y [Jeremy Bacher (Jere)](https://www.linkedin.com/in/jerebacher/),
 en un pasado como les comenté formé dupla con el chavito, quien decidió seguir camino fuera de Akua
-allá por diciembre del 2025, y en el camino también supo estar con nosotros don Guille Pijuan que sigue
+allá por diciembre del 2025, y en el camino también supo estar con nosotros don [Guille Pijuan](https://www.linkedin.com/in/guille-pijuan/) que sigue
 en Akua haciendo de las suyas en el equipo de CX (Customer Experience).
 
 Hace un tiempo (casi dos años) contamos un poco del [IDP](https://akua.la/en/blog/idp---por-que-cuando-y-como); hoy
