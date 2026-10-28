@@ -69,7 +69,7 @@ La arquitectura es simple a propósito (otro de los mantras, la simpleza ante to
 
 Así se ve el cuadro completo; de cada pieza hablo en las secciones que siguen:
 
-![Diagrama de arquitectura del data-replicator: desde la entidad replication en Port y los deploys del proyecto, del replicador y del core-stack del tenant, pasando por el slot lógico de Aurora PostgreSQL y el pod en Fargate, hasta el ODS del tenant, las alertas en Coralogix, la alarma de CloudWatch y los consumidores](/images/posts/data-replicator-aurora-ods-por-tenant.svg 'data-replicator: Aurora → ODS por tenant')
+![Diagrama de arquitectura del data-replicator: desde la entidad replication en Port y los deploys del proyecto, del replicador y del core-stack del tenant, pasando por el slot lógico de Aurora PostgreSQL y el pod en Fargate, hasta el ODS del tenant, las alertas en Coralogix, la alarma de CloudWatch y los consumidores](/images/posts/data-replicator.gif 'data-replicator: Aurora → ODS por tenant')
 
 #### Un momento, qué es un slot?
 
@@ -91,7 +91,7 @@ Cada pipeline pasa por cuatro etapas:
 
 El ciclo completo, desvíos incluidos:
 
-![Diagrama de estados de un pipeline: Bootstrap pasa a Full load si los checks están OK o queda Bloqueado si falla el gate; Full load pasa a CDC cuando las tablas quedan active; desde CDC, un corte de red lleva a Reconectando con backoff y vuelve con replay desde el origin, y un kill -9 o cambio de config lleva a Reinicio, que reutiliza el slot y retoma desde el último commit o vuelve a Full load si el bootstrap quedó a medias](/images/posts/data-replicator-vida-de-un-pipeline.svg 'La vida de un pipeline')
+![Diagrama de estados de un pipeline: Bootstrap pasa a Full load si los checks están OK o queda Bloqueado si falla el gate; Full load pasa a CDC cuando las tablas quedan active; desde CDC, un corte de red lleva a Reconectando con backoff y vuelve con replay desde el origin, y un kill -9 o cambio de config lleva a Reinicio, que reutiliza el slot y retoma desde el último commit o vuelve a Full load si el bootstrap quedó a medias](/images/posts/pipeline-lifecycle.gif 'La vida de un pipeline')
 
 ### Exactly-once, o la garantía que DMS no da
 
@@ -112,7 +112,7 @@ COMMIT; -- datos y "hasta dónde llegué", juntos o nada
 
 Paso a paso, con el `kill -9` incluido:
 
-![Diagrama de secuencia entre Aurora, el data-replicator y el ODS: al abrir la sesión el applier hace fencing de sus sesiones previas y llama a origin_session_setup; por cada transacción del origen recibe Begin, cambios y Commit, abre BEGIN con origin_xact_setup, manda el DML pipelineado de a 500, hace COMMIT con datos y posición juntos y recién ahí confirma el LSN a Aurora; tras un kill -9 lee el progreso del origin, obtiene el último commit aplicado y retoma salteando lo ya aplicado](/images/posts/data-replicator-exactly-once.svg 'Exactly-once con replication origins')
+![Diagrama de secuencia entre Aurora, el data-replicator y el ODS: al abrir la sesión el applier hace fencing de sus sesiones previas y llama a origin_session_setup; por cada transacción del origen recibe Begin, cambios y Commit, abre BEGIN con origin_xact_setup, manda el DML pipelineado de a 500, hace COMMIT con datos y posición juntos y recién ahí confirma el LSN a Aurora; tras un kill -9 lee el progreso del origin, obtiene el último commit aplicado y retoma salteando lo ya aplicado](/images/posts/exactly-once.gif 'Exactly-once con replication origins')
 
 Nada es gratis, claro, y esto trae su letra chica:
 
@@ -136,7 +136,7 @@ Y para recuperar una tabla suspendida? un `UPDATE` en la tabla de estado del rep
 
 Visto desde una tabla, el ciclo queda así:
 
-![Diagrama de estados de una tabla replicada: Detectada en el full load o en su primer cambio, pasa a Copiando con COPY bajo snapshot y con el commit queda active recibiendo CDC; un error determinístico la deja en suspended con la razón guardada y alerta P1, un operador la pasa a reload_requested y vuelve a Copiando por un slot temporal; un DROP en el origen no se propaga y la tabla queda como historial](/images/posts/data-replicator-estado-de-una-tabla.svg 'Estado de una tabla replicada')
+![Diagrama de estados de una tabla replicada: Detectada en el full load o en su primer cambio, pasa a Copiando con COPY bajo snapshot y con el commit queda active recibiendo CDC; un error determinístico la deja en suspended con la razón guardada y alerta P1, un operador la pasa a reload_requested y vuelve a Copiando por un slot temporal; un DROP en el origen no se propaga y la tabla queda como historial](/images/posts/table-lifecycle.gif 'Estado de una tabla replicada')
 
 ### Que el silencio también avise
 
@@ -184,7 +184,7 @@ No queríamos un big bang. En los tenants donde DMS seguía vivo, cada pipeline 
 
 De punta a punta, el recorrido es este:
 
-![Diagrama del flujo de shadow y corte en tres fases: en Habilitar, se habilita la entidad replication con target shadow y el deploy del proyecto crea el publisher; en Convivir en shadow, el pipeline hace full load y CDC sobre shadow_<p> mientras AWS DMS sigue escribiendo en public y se compara la paridad; en Corte, un rename atómico con SET SCHEMA en una transacción manda las tablas de DMS a dms_retired_<fecha> y las del shadow a public, se cambia el target a public en Port y el próximo deploy elimina el DMS](/images/posts/data-replicator-shadow-y-corte.svg 'Shadow y corte: de DMS al data-replicator')
+![Diagrama del flujo de shadow y corte en tres fases: en Habilitar, se habilita la entidad replication con target shadow y el deploy del proyecto crea el publisher; en Convivir en shadow, el pipeline hace full load y CDC sobre shadow_<p> mientras AWS DMS sigue escribiendo en public y se compara la paridad; en Corte, un rename atómico con SET SCHEMA en una transacción manda las tablas de DMS a dms_retired_<fecha> y las del shadow a public, se cambia el target a public en Port y el próximo deploy elimina el DMS](/images/posts/shadow-cutover.gif 'Shadow y corte: de DMS al data-replicator')
 
 Cuando todo cierra, el corte es un **rename atómico** en una sola transacción:
 

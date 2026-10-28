@@ -6,3 +6,4 @@ resources/
 # Editor
 .vscode/
 .idea
+node_modules/
