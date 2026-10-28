@@ -66,6 +66,11 @@ data-copied-label="¡Copiado!"
 &lt;li&gt;&lt;strong&gt;CDC&lt;/strong&gt;, arranca exactamente desde el punto consistente del slot, así que entre la carga inicial y los cambios no hay huecos ni duplicados. Cada transacción del origen se aplica como una transacción en el ODS, con statements preparados y &lt;em&gt;pipelineados&lt;/em&gt; –se mandan de a 500 sin esperar respuesta–, así una transacción chica cuesta un round-trip y no seis.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Reinicio&lt;/strong&gt;, reutiliza el slot existente y retoma desde el último commit aplicado. Sin full load, salvo que el bootstrap haya quedado a medias.&lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;El ciclo completo, desvíos incluidos:&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+&lt;img src="https://luispe.github.io/blog/images/posts/data-replicator-vida-de-un-pipeline.svg" title="La vida de un pipeline" alt="Diagrama de estados de un pipeline: Bootstrap pasa a Full load si los checks están OK o queda Bloqueado si falla el gate; Full load pasa a CDC cuando las tablas quedan active; desde CDC, un corte de red lleva a Reconectando con backoff y vuelve con replay desde el origin, y un kill -9 o cambio de config lleva a Reinicio, que reutiliza el slot y retoma desde el último commit o vuelve a Full load si el bootstrap quedó a medias" loading="lazy" /&gt;
+&lt;figcaption&gt;La vida de un pipeline&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
 &lt;h3 data-hextra-search-id="exactly-once-o-la-garantía-que-dms-no-da"&gt;Exactly-once, o la garantía que DMS no da&lt;span class="hx:absolute hx:-mt-20" id="exactly-once-o-la-garantía-que-dms-no-da"&gt;&lt;/span&gt;
 &lt;a href="#exactly-once-o-la-garant%c3%ada-que-dms-no-da" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Acá está el corazón del asunto y lo que nos hace sacar pecho. ¿Se acuerdan del checkpoint que DMS guarda por separado? Nosotros hacemos que &lt;strong&gt;los datos y la posición se commiteen juntos&lt;/strong&gt;, en la misma transacción del ODS, usando los &lt;em&gt;replication origins&lt;/em&gt; de PostgreSQL:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
@@ -89,6 +94,11 @@ data-copied-label="¡Copiado!"
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;p&gt;¿Qué significa esto en la práctica? Que si le metés un &lt;code&gt;kill -9&lt;/code&gt; al pod a mitad de una transacción, o se aplicó todo o no se aplicó nada; y al volver retoma exactamente desde el último commit, salteando lo que ya estaba aplicado. Lo validamos rompiendo cosas a propósito en dev, rewinds del slot y failovers de Aurora incluidos.&lt;/p&gt;
+&lt;p&gt;Paso a paso, con el &lt;code&gt;kill -9&lt;/code&gt; incluido:&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+&lt;img src="https://luispe.github.io/blog/images/posts/data-replicator-exactly-once.svg" title="Exactly-once con replication origins" alt="Diagrama de secuencia entre Aurora, el data-replicator y el ODS: al abrir la sesión el applier hace fencing de sus sesiones previas y llama a origin_session_setup; por cada transacción del origen recibe Begin, cambios y Commit, abre BEGIN con origin_xact_setup, manda el DML pipelineado de a 500, hace COMMIT con datos y posición juntos y recién ahí confirma el LSN a Aurora; tras un kill -9 lee el progreso del origin, obtiene el último commit aplicado y retoma salteando lo ya aplicado" loading="lazy" /&gt;
+&lt;figcaption&gt;Exactly-once con replication origins&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Nada es gratis, claro, y esto trae su letra chica:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Un replication origin por pipeline&lt;/strong&gt; en el ODS, lo que nos obligó a subir &lt;code&gt;max_replication_slots&lt;/code&gt; de 20 (el default) a 100. Es un parámetro estático, osea reboot del writer; DMS no lo necesitaba justamente porque guarda su checkpoint aparte.&lt;/li&gt;
@@ -107,6 +117,11 @@ data-replicator eso era un tope y la transacción que lo superaba dejaba el pipe
 &lt;li&gt;&lt;strong&gt;Corte de red u ODS reiniciado&lt;/strong&gt;, reconexión con backoff y replay desde el origin. Exactly-once mediante, no hay nada que limpiar.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Y para recuperar una tabla suspendida? un &lt;code&gt;UPDATE&lt;/code&gt; en la tabla de estado del replicador pasándola a &lt;code&gt;reload_requested&lt;/code&gt;, y se encarga solo de hacer una copia fresca por un slot temporal.&lt;/p&gt;
+&lt;p&gt;Visto desde una tabla, el ciclo queda así:&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+&lt;img src="https://luispe.github.io/blog/images/posts/data-replicator-estado-de-una-tabla.svg" title="Estado de una tabla replicada" alt="Diagrama de estados de una tabla replicada: Detectada en el full load o en su primer cambio, pasa a Copiando con COPY bajo snapshot y con el commit queda active recibiendo CDC; un error determinístico la deja en suspended con la razón guardada y alerta P1, un operador la pasa a reload_requested y vuelve a Copiando por un slot temporal; un DROP en el origen no se propaga y la tabla queda como historial" loading="lazy" /&gt;
+&lt;figcaption&gt;Estado de una tabla replicada&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
 &lt;h3 data-hextra-search-id="que-el-silencio-también-avise"&gt;Que el silencio también avise&lt;span class="hx:absolute hx:-mt-20" id="que-el-silencio-también-avise"&gt;&lt;/span&gt;
 &lt;a href="#que-el-silencio-tambi%c3%a9n-avise" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Todas las métricas salen por OpenTelemetry a Coralogix con el pipeline como label: estado de cada tabla, lag en segundos y en bytes de WAL retenido, eventos descartados, reconexiones y transacciones aplicadas. Sobre eso montamos tres niveles de alertas:&lt;/p&gt;
 &lt;ul&gt;
@@ -149,6 +164,11 @@ data-copied-label="¡Copiado!"
 &lt;p&gt;Una regla que nos ahorró más de un dolor de cabeza: el deploy del proyecto va &lt;strong&gt;después&lt;/strong&gt; de habilitar la entidad, y se verifica que salió bien mirando que exista el secret del publisher, no porque el pipeline dijo &amp;ldquo;terminó&amp;rdquo;.&lt;/p&gt;
 &lt;h3 data-hextra-search-id="shadow-y-corte-cambiar-el-motor-con-el-auto-andando"&gt;Shadow y corte: cambiar el motor con el auto andando&lt;span class="hx:absolute hx:-mt-20" id="shadow-y-corte-cambiar-el-motor-con-el-auto-andando"&gt;&lt;/span&gt;
 &lt;a href="#shadow-y-corte-cambiar-el-motor-con-el-auto-andando" class="subheading-anchor" aria-label="Enlace permanente a esta sección"&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;No queríamos un big bang. En los tenants donde DMS seguía vivo, cada pipeline escribe en un schema paralelo, &lt;code&gt;shadow_&amp;lt;proyecto&amp;gt;&lt;/code&gt;, con los mismos nombres de tabla que DMS deja en &lt;code&gt;public&lt;/code&gt;. Así conviven sin pisarse, comparamos paridad con tráfico real y los consumidores pueden construir sus índices sobre el shadow con calma.&lt;/p&gt;
+&lt;p&gt;De punta a punta, el recorrido es este:&lt;/p&gt;
+&lt;p&gt;&lt;figure&gt;
+&lt;img src="https://luispe.github.io/blog/images/posts/data-replicator-shadow-y-corte.svg" title="Shadow y corte: de DMS al data-replicator" alt="Diagrama del flujo de shadow y corte en tres fases: en Habilitar, se habilita la entidad replication con target shadow y el deploy del proyecto crea el publisher; en Convivir en shadow, el pipeline hace full load y CDC sobre shadow_ mientras AWS DMS sigue escribiendo en public y se compara la paridad; en Corte, un rename atómico con SET SCHEMA en una transacción manda las tablas de DMS a dms_retired_ y las del shadow a public, se cambia el target a public en Port y el próximo deploy elimina el DMS" loading="lazy" /&gt;
+&lt;figcaption&gt;Shadow y corte: de DMS al data-replicator&lt;/figcaption&gt;
+&lt;/figure&gt;&lt;/p&gt;
 &lt;p&gt;Cuando todo cierra, el corte es un &lt;strong&gt;rename atómico&lt;/strong&gt; en una sola transacción:&lt;/p&gt;
 &lt;div class="hextra-code-block hx:relative hx:mt-6 hx:first:mt-0 hx:group/code"&gt;
 &lt;div&gt;&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sql" data-lang="sql"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;-- simplificado; el de verdad vive en nuestro runbook
