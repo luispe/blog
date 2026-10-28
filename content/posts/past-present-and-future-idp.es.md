@@ -89,6 +89,10 @@ Cada pipeline pasa por cuatro etapas:
 - **CDC**, arranca exactamente desde el punto consistente del slot, así que entre la carga inicial y los cambios no hay huecos ni duplicados. Cada transacción del origen se aplica como una transacción en el ODS, con statements preparados y _pipelineados_ –se mandan de a 500 sin esperar respuesta–, así una transacción chica cuesta un round-trip y no seis.
 - **Reinicio**, reutiliza el slot existente y retoma desde el último commit aplicado. Sin full load, salvo que el bootstrap haya quedado a medias.
 
+El ciclo completo, desvíos incluidos:
+
+![Diagrama de estados de un pipeline: Bootstrap pasa a Full load si los checks están OK o queda Bloqueado si falla el gate; Full load pasa a CDC cuando las tablas quedan active; desde CDC, un corte de red lleva a Reconectando con backoff y vuelve con replay desde el origin, y un kill -9 o cambio de config lleva a Reinicio, que reutiliza el slot y retoma desde el último commit o vuelve a Full load si el bootstrap quedó a medias](/images/posts/data-replicator-vida-de-un-pipeline.svg 'La vida de un pipeline')
+
 ### Exactly-once, o la garantía que DMS no da
 
 Acá está el corazón del asunto y lo que nos hace sacar pecho. ¿Se acuerdan del checkpoint que DMS guarda por separado? Nosotros hacemos que **los datos y la posición se commiteen juntos**, en la misma transacción del ODS, usando los _replication origins_ de PostgreSQL:
@@ -105,6 +109,10 @@ COMMIT; -- datos y "hasta dónde llegué", juntos o nada
 ```
 
 ¿Qué significa esto en la práctica? Que si le metés un `kill -9` al pod a mitad de una transacción, o se aplicó todo o no se aplicó nada; y al volver retoma exactamente desde el último commit, salteando lo que ya estaba aplicado. Lo validamos rompiendo cosas a propósito en dev, rewinds del slot y failovers de Aurora incluidos.
+
+Paso a paso, con el `kill -9` incluido:
+
+![Diagrama de secuencia entre Aurora, el data-replicator y el ODS: al abrir la sesión el applier hace fencing de sus sesiones previas y llama a origin_session_setup; por cada transacción del origen recibe Begin, cambios y Commit, abre BEGIN con origin_xact_setup, manda el DML pipelineado de a 500, hace COMMIT con datos y posición juntos y recién ahí confirma el LSN a Aurora; tras un kill -9 lee el progreso del origin, obtiene el último commit aplicado y retoma salteando lo ya aplicado](/images/posts/data-replicator-exactly-once.svg 'Exactly-once con replication origins')
 
 Nada es gratis, claro, y esto trae su letra chica:
 
@@ -125,6 +133,10 @@ Si DMS fallaba en silencio y a lo grande, acá la idea fue la inversa: fallar en
 - **Corte de red u ODS reiniciado**, reconexión con backoff y replay desde el origin. Exactly-once mediante, no hay nada que limpiar.
 
 Y para recuperar una tabla suspendida? un `UPDATE` en la tabla de estado del replicador pasándola a `reload_requested`, y se encarga solo de hacer una copia fresca por un slot temporal.
+
+Visto desde una tabla, el ciclo queda así:
+
+![Diagrama de estados de una tabla replicada: Detectada en el full load o en su primer cambio, pasa a Copiando con COPY bajo snapshot y con el commit queda active recibiendo CDC; un error determinístico la deja en suspended con la razón guardada y alerta P1, un operador la pasa a reload_requested y vuelve a Copiando por un slot temporal; un DROP en el origen no se propaga y la tabla queda como historial](/images/posts/data-replicator-estado-de-una-tabla.svg 'Estado de una tabla replicada')
 
 ### Que el silencio también avise
 
@@ -169,6 +181,10 @@ Una regla que nos ahorró más de un dolor de cabeza: el deploy del proyecto va 
 ### Shadow y corte: cambiar el motor con el auto andando
 
 No queríamos un big bang. En los tenants donde DMS seguía vivo, cada pipeline escribe en un schema paralelo, `shadow_<proyecto>`, con los mismos nombres de tabla que DMS deja en `public`. Así conviven sin pisarse, comparamos paridad con tráfico real y los consumidores pueden construir sus índices sobre el shadow con calma.
+
+De punta a punta, el recorrido es este:
+
+![Diagrama del flujo de shadow y corte en tres fases: en Habilitar, se habilita la entidad replication con target shadow y el deploy del proyecto crea el publisher; en Convivir en shadow, el pipeline hace full load y CDC sobre shadow_<p> mientras AWS DMS sigue escribiendo en public y se compara la paridad; en Corte, un rename atómico con SET SCHEMA en una transacción manda las tablas de DMS a dms_retired_<fecha> y las del shadow a public, se cambia el target a public en Port y el próximo deploy elimina el DMS](/images/posts/data-replicator-shadow-y-corte.svg 'Shadow y corte: de DMS al data-replicator')
 
 Cuando todo cierra, el corte es un **rename atómico** en una sola transacción:
 
