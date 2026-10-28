@@ -1,0 +1,34 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "La vida de un pipeline",
+    "locale": "es",
+    "output": ".archify/lifecycle-pipeline-20261027-101035/pipeline-lifecycle.html",
+    "quality_profile": "showcase"
+  },
+  "mainPath": ["bootstrap", "fullload", "cdc"],
+  "states": [
+    { "id": "bootstrap", "type": "start", "label": "Bootstrap", "sublabel": "origen + ODS conectados", "tag": "gate", "step": "01" },
+    { "id": "fullload", "type": "active", "label": "Full load", "sublabel": "COPY bajo snapshot del slot", "tag": "1 tx por tabla", "step": "02" },
+    { "id": "cdc", "type": "success", "label": "CDC", "sublabel": "desde el punto del slot", "tag": "exactly-once", "step": "03" },
+    { "id": "blocked", "type": "failure", "label": "Bloqueado", "sublabel": "sin publication o tabla sin PK", "tag": "no arranca" },
+    { "id": "reconnect", "type": "waiting", "label": "Reconectando", "sublabel": "backoff", "tag": "red / ODS" },
+    { "id": "restart", "type": "active", "label": "Reinicio", "sublabel": "reutiliza el slot", "tag": "pod nuevo" }
+  ],
+  "transitions": [
+    { "id": "boot-full", "from": "bootstrap", "to": "fullload", "label": "checks OK", "note": "crea slot exportando snapshot" },
+    { "id": "full-cdc", "from": "fullload", "to": "cdc", "label": "tablas active", "note": "sin huecos ni duplicados", "variant": "emphasis" },
+    { "id": "boot-blocked", "from": "bootstrap", "to": "blocked", "label": "gate falla", "variant": "security" },
+    { "id": "cdc-reconnect", "from": "cdc", "to": "reconnect", "label": "corte de red", "variant": "dashed" },
+    { "id": "reconnect-cdc", "from": "reconnect", "to": "cdc", "label": "replay desde origin" },
+    { "id": "cdc-restart", "from": "cdc", "to": "restart", "label": "kill -9 / config", "variant": "dashed" },
+    { "id": "restart-cdc", "from": "restart", "to": "cdc", "label": "último commit" },
+    { "id": "restart-full", "from": "restart", "to": "fullload", "label": "bootstrap a medias" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Bootstrap", "items": ["La publication la crea la plataforma, no el pod", "Sin replica identity fallarían los UPDATE/DELETE del proyecto"] },
+    { "dot": "emerald", "title": "Full load + CDC", "items": ["TRUNCATE, datos y estado en una sola transacción por tabla", "Statements pipelineados de a 500 por round-trip"] },
+    { "dot": "amber", "title": "Reinicio", "items": ["Sin full load salvo bootstrap incompleto", "Strategy Recreate: un solo applier por pipeline"] }
+  ]
+}

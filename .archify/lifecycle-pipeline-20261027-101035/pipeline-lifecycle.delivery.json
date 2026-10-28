@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "eadf4e81-b2c7-40fe-a653-52669c9b701c",
+  "status": "current",
+  "command": "deliver",
+  "type": "lifecycle",
+  "input": "/Users/luispe/workspace/luispe/blog/.archify/lifecycle-pipeline-20261027-101035/candidate.json",
+  "output": "/Users/luispe/workspace/luispe/blog/.archify/lifecycle-pipeline-20261027-101035/pipeline-lifecycle.html",
+  "specification": {
+    "sha256": "61d3d7c13a774b2518136f768c28a727fefb7d0b49ecd26c8725eee82e932eb6",
+    "bytes": 2531
+  },
+  "artifact": {
+    "sha256": "69e54597cd356731337f990267c442b9b9f931eb12d4ba188c76c748fc38498a",
+    "bytes": 841373
+  }
+}

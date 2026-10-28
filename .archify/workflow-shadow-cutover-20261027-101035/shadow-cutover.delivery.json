@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "81b6099c-4dde-4c46-866a-6d1d4b4024d4",
+  "status": "current",
+  "command": "deliver",
+  "type": "workflow",
+  "input": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/candidate.json",
+  "output": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/shadow-cutover.html",
+  "specification": {
+    "sha256": "29dd3f5b5e2bbaf7b7bbed09022fa99a7d928d686ce010047ed1e44e0ea360a3",
+    "bytes": 3668
+  },
+  "artifact": {
+    "sha256": "51ab2d2f052860eb0246670cc0bbdb80617daf23bb4c1d87a8df4271bf075eb5",
+    "bytes": 849853
+  }
+}

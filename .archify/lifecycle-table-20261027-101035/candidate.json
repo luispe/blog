@@ -1,0 +1,32 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Estado de una tabla replicada",
+    "locale": "es",
+    "output": ".archify/lifecycle-table-20261027-101035/table-lifecycle.html",
+    "quality_profile": "showcase"
+  },
+  "mainPath": ["detected", "copying", "active"],
+  "states": [
+    { "id": "detected", "type": "start", "label": "Detectada", "sublabel": "full load o primer cambio", "step": "01" },
+    { "id": "copying", "type": "active", "label": "Copiando", "sublabel": "COPY bajo snapshot", "tag": "todo o nada", "step": "02" },
+    { "id": "active", "type": "success", "label": "active", "sublabel": "recibe CDC", "tag": "ADD COLUMN se replica", "step": "03" },
+    { "id": "suspended", "type": "failure", "label": "suspended", "sublabel": "razón guardada", "tag": "alerta P1" },
+    { "id": "reload", "type": "waiting", "label": "reload_requested", "sublabel": "UPDATE en tabla de estado", "tag": "manual" },
+    { "id": "history", "type": "neutral", "label": "Historial", "sublabel": "decide una persona", "tag": "no se propaga" }
+  ],
+  "transitions": [
+    { "id": "detected-copying", "from": "detected", "to": "copying", "label": "copia" },
+    { "id": "copying-active", "from": "copying", "to": "active", "label": "commit", "variant": "emphasis" },
+    { "id": "active-suspended", "from": "active", "to": "suspended", "label": "error determinístico", "note": "tipo, constraint, columna faltante u otro dueño", "variant": "security" },
+    { "id": "suspended-reload", "from": "suspended", "to": "reload", "label": "operador" },
+    { "id": "reload-copying", "from": "reload", "to": "copying", "label": "slot temporal" },
+    { "id": "active-history", "from": "active", "to": "history", "label": "DROP en origen", "variant": "dashed" }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Falla acotada", "items": ["Se suspende solo esa tabla; el resto del pipeline sigue", "Nunca se escribe sobre una tabla de otro dueño"] },
+    { "dot": "amber", "title": "Recuperación", "items": ["UPDATE a reload_requested y el replicador hace una copia fresca"] },
+    { "dot": "slate", "title": "Salud del tenant", "items": ["_replicator.table_state: no_activas tiene que ser 0"] }
+  ]
+}

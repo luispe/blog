@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/candidate.json",
+    "sha256": "0beec0e5b5696ebb9928ab9a02b92a68aa66046f6aea1c6ecb5fa4ffc2e7f79f",
+    "bytes": 3779
+  },
+  "artifact": {
+    "path": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/data-replicator.html",
+    "sha256": "5b6ef6492a5c4829e1809aee3bc90eb96e48a4a4a9f3c6bef7daf3ed5c72c217",
+    "bytes": 853287
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/data-replicator.finalize.json",
+    "summaryReceipt": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/data-replicator.finalize-summary.json",
+    "browserCheckReceipt": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/data-replicator.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-27T13:05:23.242Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4570,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

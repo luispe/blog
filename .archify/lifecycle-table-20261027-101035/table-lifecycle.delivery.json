@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "efcbec7e-e6d9-4ed6-aeab-75d1698906ca",
+  "status": "current",
+  "command": "deliver",
+  "type": "lifecycle",
+  "input": "/Users/luispe/workspace/luispe/blog/.archify/lifecycle-table-20261027-101035/candidate.json",
+  "output": "/Users/luispe/workspace/luispe/blog/.archify/lifecycle-table-20261027-101035/table-lifecycle.html",
+  "specification": {
+    "sha256": "0c143658a5f8f176df60d33b4da6680cf69d3551bc2542a819930b9b7b9bac9c",
+    "bytes": 2224
+  },
+  "artifact": {
+    "sha256": "d1f195b5e4a67ddf944d1ced965d43b26cfbbb66a937ebcbb5517a49b4b92893",
+    "bytes": 839126
+  }
+}

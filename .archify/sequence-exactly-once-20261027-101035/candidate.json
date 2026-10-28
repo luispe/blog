@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Exactly-once con replication origins",
+    "locale": "es",
+    "output": ".archify/sequence-exactly-once-20261027-101035/exactly-once.html",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    { "id": "aurora", "type": "database", "label": "Aurora (origen)", "sublabel": "slot + pgoutput" },
+    { "id": "replicator", "type": "backend", "label": "data-replicator", "sublabel": "applier del pipeline" },
+    { "id": "ods", "type": "database", "label": "ODS", "sublabel": "replication origin" }
+  ],
+  "segments": [
+    { "from": 160, "to": 240, "label": "Sesión" },
+    { "from": 250, "to": 470, "label": "Una transacción del origen" },
+    { "from": 480, "to": 600, "label": "Tras un kill -9" }
+  ],
+  "messages": [
+    { "id": "fence", "from": "replicator", "to": "ods", "y": 172, "label": "fencing de sesiones propias", "variant": "security", "note": "un solo applier por pipeline" },
+    { "id": "session-setup", "from": "replicator", "to": "ods", "y": 222, "label": "origin_session_setup(pipeline)" },
+    { "id": "stream", "from": "aurora", "to": "replicator", "y": 270, "label": "Begin · Insert/Update/Delete · Commit", "variant": "emphasis", "note": "buffer hasta 64 MB; si excede, ventanas en la misma tx" },
+    { "id": "begin", "from": "replicator", "to": "ods", "y": 335, "label": "BEGIN + origin_xact_setup(end_lsn, ts)" },
+    { "id": "dml", "from": "replicator", "to": "ods", "y": 370, "label": "DML pipelineado (de a 500)" },
+    { "id": "commit", "from": "replicator", "to": "ods", "y": 405, "label": "COMMIT", "variant": "emphasis", "note": "datos y posición juntos, o nada" },
+    { "id": "ack", "from": "replicator", "to": "aurora", "y": 455, "label": "confirma LSN · libera WAL", "variant": "return" },
+    { "id": "progress", "from": "replicator", "to": "ods", "y": 500, "label": "lee progreso del origin" },
+    { "id": "last", "from": "ods", "to": "replicator", "y": 530, "label": "último commit aplicado", "variant": "return" },
+    { "id": "resume", "from": "replicator", "to": "aurora", "y": 565, "label": "retoma; saltea lo aplicado", "variant": "dashed" }
+  ],
+  "activations": [
+    { "participant": "replicator", "from": 165, "to": 575 },
+    { "participant": "ods", "from": 330, "to": 412 }
+  ],
+  "cards": [
+    { "dot": "rose", "title": "Lo que DMS no garantiza", "items": ["DMS guarda el checkpoint aparte de los datos: un corte entre ambos reaplica filas", "Acá la posición viaja en la misma transacción del ODS"] },
+    { "dot": "amber", "title": "Letra chica", "items": ["Un origin por pipeline: max_replication_slots de 20 a 100 (reboot del writer)", "Deployment con strategy Recreate; KEDA y HPA prohibidos"] }
+  ]
+}

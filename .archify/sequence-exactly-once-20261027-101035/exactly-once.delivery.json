@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "18cb044c-8358-47f5-afc9-48603121d8b2",
+  "status": "current",
+  "command": "deliver",
+  "type": "sequence",
+  "input": "/Users/luispe/workspace/luispe/blog/.archify/sequence-exactly-once-20261027-101035/candidate.json",
+  "output": "/Users/luispe/workspace/luispe/blog/.archify/sequence-exactly-once-20261027-101035/exactly-once.html",
+  "specification": {
+    "sha256": "c91c2a5c8b95368dd860bb022bb10079359800e5f140f28aa9ce6ad96d674f93",
+    "bytes": 2758
+  },
+  "artifact": {
+    "sha256": "06d61de9636437e09e4bc10d8c39abad8aa7f0f4344ca7110f1dca60dbc9bbea",
+    "bytes": 836409
+  }
+}

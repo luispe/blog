@@ -1,0 +1,50 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Shadow y corte: de DMS al data-replicator",
+    "locale": "es",
+    "output": ".archify/workflow-shadow-cutover-20261027-101035/shadow-cutover.html",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    { "id": "plat", "label": "Port y deploys" },
+    { "id": "repl", "label": "data-replicator" },
+    { "id": "ods", "label": "ODS del tenant" },
+    { "id": "dms", "label": "AWS DMS (legado)", "variant": "exception" }
+  ],
+  "phases": [
+    { "id": "setup", "label": "Habilitar", "fromCol": 0, "toCol": 1 },
+    { "id": "shadow", "label": "Convivir en shadow", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "cut", "label": "Corte", "fromCol": 4, "toCol": 5, "variant": "security" }
+  ],
+  "mainPath": ["enable", "deploy", "pipeline", "shadowSchema", "parity", "rename", "retarget", "dmsGone"],
+  "nodes": [
+    { "id": "enable", "lane": "plat", "col": 0, "type": "frontend", "label": "Habilitar replication", "sublabel": "target shadow_<p>" },
+    { "id": "deploy", "lane": "plat", "col": 1, "type": "cloud", "label": "Deploy del proyecto", "sublabel": "crea el publisher", "tag": "verificar secret" },
+    { "id": "pipeline", "lane": "repl", "col": 2, "type": "backend", "label": "Pipeline", "sublabel": "full load + CDC" },
+    { "id": "shadowSchema", "lane": "ods", "col": 2, "type": "database", "label": "shadow_<p>", "sublabel": "mismas tablas" },
+    { "id": "parity", "lane": "ods", "col": 3, "type": "security", "label": "Paridad", "sublabel": "tráfico real + índices" },
+    { "id": "rename", "lane": "ods", "col": 4, "type": "database", "label": "Rename atómico", "sublabel": "SET SCHEMA en 1 tx", "tag": "segundos" },
+    { "id": "retired", "lane": "ods", "col": 5, "type": "database", "label": "dms_retired_<fecha>", "sublabel": "tablas de DMS" },
+    { "id": "retarget", "lane": "plat", "col": 5, "type": "frontend", "label": "target public", "sublabel": "Port + re-sync" },
+    { "id": "dms", "lane": "dms", "col": 2, "type": "external", "label": "AWS DMS", "sublabel": "escribe public" },
+    { "id": "dmsGone", "lane": "dms", "col": 5, "type": "external", "label": "DMS eliminado", "sublabel": "deja de declararse" }
+  ],
+  "edges": [
+    { "id": "enable-deploy", "from": "enable", "to": "deploy" },
+    { "id": "deploy-pipeline", "from": "deploy", "to": "pipeline", "label": "publisher" },
+    { "id": "pipeline-shadow", "from": "pipeline", "to": "shadowSchema", "label": "escribe" },
+    { "id": "shadow-parity", "from": "shadowSchema", "to": "parity" },
+    { "id": "dms-parity", "from": "dms", "to": "parity", "label": "public", "variant": "dashed", "role": "branch" },
+    { "id": "parity-rename", "from": "parity", "to": "rename", "label": "cierra", "variant": "emphasis" },
+    { "id": "rename-retired", "from": "rename", "to": "retired", "label": "a retiro", "role": "branch" },
+    { "id": "rename-retarget", "from": "rename", "to": "retarget", "label": "shadow → public" },
+    { "id": "retarget-dms", "from": "retarget", "to": "dmsGone", "label": "próximo deploy", "variant": "security" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Shadow antes que big bang", "items": ["Cada pipeline escribe en shadow_<p> con los mismos nombres que DMS deja en public", "Los consumidores construyen índices sobre el shadow con calma"] },
+    { "dot": "rose", "title": "Corte reversible", "items": ["SET SCHEMA arrastra índices, constraints y permisos", "Sin full load; rollback simétrico"] },
+    { "dot": "slate", "title": "Estado (inicios de octubre)", "items": ["23 pipelines en dev", "114 en producción cortadas a public"] }
+  ]
+}

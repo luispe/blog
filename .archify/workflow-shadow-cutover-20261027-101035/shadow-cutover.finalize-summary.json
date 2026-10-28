@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "workflow",
+  "quality": "showcase",
+  "specification": {
+    "path": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/candidate.json",
+    "sha256": "29dd3f5b5e2bbaf7b7bbed09022fa99a7d928d686ce010047ed1e44e0ea360a3",
+    "bytes": 3668
+  },
+  "artifact": {
+    "path": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/shadow-cutover.html",
+    "sha256": "51ab2d2f052860eb0246670cc0bbdb80617daf23bb4c1d87a8df4271bf075eb5",
+    "bytes": 849853
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/shadow-cutover.finalize.json",
+    "summaryReceipt": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/shadow-cutover.finalize-summary.json",
+    "browserCheckReceipt": "/Users/luispe/workspace/luispe/blog/.archify/workflow-shadow-cutover-20261027-101035/shadow-cutover.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-27T13:05:23.242Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 4650,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

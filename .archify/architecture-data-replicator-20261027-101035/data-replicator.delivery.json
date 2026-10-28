@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "84895ffa-ca52-404f-956e-7d5a74c62db7",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/candidate.json",
+  "output": "/Users/luispe/workspace/luispe/blog/.archify/architecture-data-replicator-20261027-101035/data-replicator.html",
+  "specification": {
+    "sha256": "0beec0e5b5696ebb9928ab9a02b92a68aa66046f6aea1c6ecb5fa4ffc2e7f79f",
+    "bytes": 3779
+  },
+  "artifact": {
+    "sha256": "5b6ef6492a5c4829e1809aee3bc90eb96e48a4a4a9f3c6bef7daf3ed5c72c217",
+    "bytes": 853287
+  }
+}

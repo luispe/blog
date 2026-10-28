@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "data-replicator: Aurora → ODS por tenant",
+    "locale": "es",
+    "output": ".archify/architecture-data-replicator-20261027-101035/data-replicator.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    { "id": "port", "type": "frontend", "label": "Port", "sublabel": "entidad replication", "tag": "overrides por tenant/entorno", "pos": [430, 40], "size": [200, 64] },
+    { "id": "projectDeploy", "type": "cloud", "label": "Deploy del proyecto", "sublabel": "crea el publisher", "tag": "gate de PK", "pos": [40, 190], "size": [180, 64] },
+    { "id": "replDeploy", "type": "cloud", "label": "Deploy del replicador", "sublabel": "arma config de pipelines", "pos": [430, 190], "size": [200, 64] },
+    { "id": "coreStack", "type": "cloud", "label": "Core-stack del tenant", "sublabel": "usuario del ODS", "pos": [830, 190], "size": [180, 64] },
+    { "id": "aurora", "type": "database", "label": "Aurora PostgreSQL", "sublabel": "base del proyecto", "tag": "publication + slot", "pos": [40, 350], "size": [180, 64] },
+    { "id": "replicator", "type": "backend", "label": "data-replicator", "sublabel": "Rust · 1 pod por tenant", "tag": "Fargate · ~USD 72/mes", "pos": [430, 350], "size": [200, 64] },
+    { "id": "ods", "type": "database", "label": "ODS del tenant", "sublabel": "schema public_<p>", "tag": "origin por pipeline", "pos": [830, 350], "size": [180, 64] },
+    { "id": "cloudwatch", "type": "security", "label": "Alarma CloudWatch", "sublabel": "backstop si muere el pod", "pos": [40, 510], "size": [180, 64] },
+    { "id": "coralogix", "type": "external", "label": "Coralogix", "sublabel": "alertas P1 · P2 · P3", "pos": [430, 510], "size": [200, 64] },
+    { "id": "consumers", "type": "external", "label": "Consumidores", "sublabel": "consultan el ODS", "pos": [830, 510], "size": [180, 64] }
+  ],
+  "connections": [
+    { "id": "port-project", "from": "port", "to": "projectDeploy", "label": "entidad habilitada" },
+    { "id": "port-repl", "from": "port", "to": "replDeploy", "label": "cruza entidades" },
+    { "id": "project-repl", "from": "projectDeploy", "to": "replDeploy", "label": "secret por tag", "variant": "security" },
+    { "id": "project-aurora", "from": "projectDeploy", "to": "aurora", "label": "user + publication" },
+    { "id": "repl-pod", "from": "replDeploy", "to": "replicator", "label": "config pipelines" },
+    { "id": "core-ods", "from": "coreStack", "to": "ods", "label": "max_replication_slots=100" },
+    { "id": "aurora-pod", "from": "aurora", "to": "replicator", "label": "pgoutput (slot lógico)", "variant": "emphasis" },
+    { "id": "pod-ods", "from": "replicator", "to": "ods", "label": "SQL exactly-once", "variant": "emphasis" },
+    { "id": "aurora-cw", "from": "aurora", "to": "cloudwatch", "label": "slot > 10 GiB por 1 h", "variant": "dashed" },
+    { "id": "pod-otel", "from": "replicator", "to": "coralogix", "label": "métricas OTel", "variant": "dashed" },
+    { "id": "ods-consumers", "from": "ods", "to": "consumers", "label": "consultas" }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Camino de datos", "items": ["Un pipeline = una base de origen; corre aislado y supervisado", "Datos y posición se commitean juntos en el ODS", "Reemplaza a AWS DMS (~USD 7.400/mes)"] },
+    { "dot": "cyan", "title": "Autodescubrimiento", "items": ["Port define si está habilitado y a qué schema escribe", "El replicador descubre secrets por tag y los cruza con Port", "Pausar un pipeline es enabled: false"] },
+    { "dot": "rose", "title": "Fallar en voz alta", "items": ["P1 tabla suspendida · P2 lag o pipeline silencioso · P3 reconexiones o WAL retenido", "La alarma de CloudWatch sobrevive al pod"] }
+  ]
+}

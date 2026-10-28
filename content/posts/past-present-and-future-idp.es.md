@@ -67,6 +67,10 @@ Aurora del proyecto ──pgoutput (slot lógico)──▶ data-replicator ─�
 
 La arquitectura es simple a propósito (otro de los mantras, la simpleza ante todo): **un pod por tenant** en Fargate que corre todas los pipelines de ese tenant, donde un pipeline es una base de origen. Ese pod cuesta unos USD 72 por mes. Si un pipeline se rompe las demás ni se enteran, cada uno corre aislado y supervisado por separado.
 
+Así se ve el cuadro completo; de cada pieza hablo en las secciones que siguen:
+
+![Diagrama de arquitectura del data-replicator: desde la entidad replication en Port y los deploys del proyecto, del replicador y del core-stack del tenant, pasando por el slot lógico de Aurora PostgreSQL y el pod en Fargate, hasta el ODS del tenant, las alertas en Coralogix, la alarma de CloudWatch y los consumidores](/images/posts/data-replicator-aurora-ods-por-tenant.svg 'data-replicator: Aurora → ODS por tenant')
+
 #### Un momento, qué es un slot?
 
 Para quien nunca se peleó con la replicación lógica de PostgreSQL, un mini glosario:
@@ -180,7 +184,7 @@ COMMIT;
 
 `SET SCHEMA` arrastra índices, constraints y permisos, así que no hay full load, la ventana es de segundos y el rollback es simétrico (el mismo movimiento al revés). Después se cambia el schema destino en Port, se re-sincroniza y el siguiente deploy del proyecto borra su DMS solo: si la entidad `replication` está habilitada en `public`, el dueño es el replicador y DMS deja de declararse.
 
-Al momento de escribir esto (números de principios de octubre) tenemos 23 pipelines corriendo en dev, 114 en producción ya cortadas definitivamente a `public`.
+Al momento de escribir esto (números finalizando octubre) tenemos 23 pipelines corriendo en dev, 114 en producción ya cortadas definitivamente a `public`.
 
 ## El mañana es un misterio
 
